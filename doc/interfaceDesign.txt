@@ -1,0 +1,84 @@
+Spieler 3 ist an der Reihe
+Er würfelte die Zahl N
+
+Spieler 1: +1 Grain, + 4 Wool
+Spieler 2: +1 Grain, + 2 Stone
+Spieler 3: +1 Grain, + 0 Wool, 0 Clay
+Spieler 4: +1 Grain, + 4 Wool
+
+ODER (7)
+
+Spieler 1: -3 Grain, -1 Wool
+Spieler 3: -5 Stone
+
+-----------Spieler 3-----------
+Bauen & Handeln
+vorhandene Ressourcen
+5 Grain, 4 Wool, 2 Wood, 1 Stone, 0 Clay
+
+What would you like to do?
+Optionen
+ 1: Show
+ 2: Handeln
+ 3: Bauen
+ 4: Zug beenden
+ 
+Enter your Choice: 
+
+-----------Spieler 3-----------
+Handeln
+vorhandene Ressourcen
+5 Grain, 4 Wool, 2 Wood, 1 Stone, 0 Clay
+
+Which Ressource should be changed?
+Optionen
+ 1: Grain 
+ 2: Wool
+ 3: Return to menu
+
+Enter your Choice:
+
+Which Ressource do you want to get?
+Optionen
+ 1: Grain 
+ 2: Wool
+ 3: Wood
+ 4: Stone
+ 5: Clay
+ 6: Return to menu
+ 
+Enter your Choice:
+
+-----------Spieler 3-----------
+Bauen
+vorhandene Ressourcen
+5 Grain, 4 Wool, 2 Wood, 1 Stone, 0 Clay
+
+What do you want to build?
+Optionen
+ 1: Siedlung
+ 2: Strasse
+ 3: Stadt
+ 4: Return to menu
+ 
+Enter your Choice:
+
+
+(Koordinatensystem)
+
+Where do you want to build? [x y]: 12 6
+
+####Falls Strasse gewählt wurde
+Where should the road start? [x y]: 12 6
+Where should the road end? [x y]: 10 6  
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 

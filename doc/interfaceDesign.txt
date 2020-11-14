@@ -74,7 +74,14 @@ Where should the road end? [x y]: 10 6
 
 
 
+-----------Spieler 3-----------
+Bauen Initial
 
+(Koordinatensystem)
+
+Where do you want to build your first settlement? [x y]: 12 6
+Where should the first road start? [x y]: 12 6
+Where should the first road end? [x y]: 10 6  
 
 
 

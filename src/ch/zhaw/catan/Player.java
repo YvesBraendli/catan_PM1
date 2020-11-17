@@ -12,7 +12,7 @@ import ch.zhaw.catan.Config.Faction;
  * Settlements and Cities of the player. - Add or remove Resource-Cards from the
  * player. - Get the faction of the player.
  * 
- * @author yvesb
+ * @author Moser Nadine, Meier Robin, Bràndli Yves
  *
  */
 

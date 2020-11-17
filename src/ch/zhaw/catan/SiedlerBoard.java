@@ -47,7 +47,7 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	 * @param end The point, where the Player wants to end his road.
 	 * @return true, if the building ground for the new street is valid.
 	 */
-	public boolean checkIfValidStreeBuildingGround(Point start, Point end) {
+	public boolean checkIfValidStreetBuildingGround(Point start, Point end) {
 		boolean buildingGroundValid = false;
 		
 		return buildingGroundValid;

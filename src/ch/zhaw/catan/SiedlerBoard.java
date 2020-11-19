@@ -73,7 +73,7 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 		List<String> startRoads = getAdjacentEdges(start);
 		List<String> endRoads = getAdjacentEdges(end);
 		if (((startRoads != null && startRoads.size() < 3) 
-				&& endRoads != null && endRoads.size() < 3) && getEdge(start, end) != null) {
+				&& endRoads != null && endRoads.size() < 3) && getEdge(start, end) == null) {
 			for (int i = 0; i < startRoads.size(); i++) {
 				boolean alreadyBuiltStreet = false;
 				// Richtig mit Cast von Faction zu String?
@@ -82,6 +82,9 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 					setEdge(start, end, faction.toString());
 				}
 			}
+		} else {
+			System.err.println("Es ist nicht möglich, auf diesem Feld zu bauen. "
+					+ "Bitte wählen sie ein anderes Feld aus.");
 		}
 	}
 	

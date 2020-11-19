@@ -53,13 +53,16 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	 *                       settlement.
 	 * @param faction        The faction of the current player.
 	 */
-	public void createSettlement(Point buildingGround, Config.Faction faction) {
+	public boolean createSettlement(Point buildingGround, Config.Faction faction) {
+		boolean successful = false;
 		if (getNeighboursOfCorner(buildingGround) != null || getCorner(buildingGround) != null) {
 			System.err.println("Es ist nicht möglich, auf diesem Feld zu bauen. "
 					+ "Bitte wählen sie ein anderes Feld aus.");
+			successful = true;
 		} else {
 			setCorner(buildingGround, faction.toString() + "S");
 		}
+		return successful;
 	}
 
 	/**
@@ -69,7 +72,8 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	 * @param end     The point, where the Player wants to end his road.
 	 * @param faction The faction of the current player.
 	 */
-	public void createStreet(Point start, Point end, Config.Faction faction) {
+	public boolean createStreet(Point start, Point end, Config.Faction faction) {
+		boolean successful = false;
 		List<String> startRoads = getAdjacentEdges(start);
 		List<String> endRoads = getAdjacentEdges(end);
 		if (((startRoads != null && startRoads.size() < 3) 
@@ -80,12 +84,15 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 				if (((startRoads.get(i).substring(0, 2).equals(faction.toString()))
 					|| (endRoads.get(i).substring(0, 2).equals(faction.toString()))) && !alreadyBuiltStreet) {
 					setEdge(start, end, faction.toString());
+					alreadyBuiltStreet = true;
+					successful = true;
 				}
 			}
 		} else {
 			System.err.println("Es ist nicht möglich, auf diesem Feld zu bauen. "
 					+ "Bitte wählen sie ein anderes Feld aus.");
 		}
+		return successful;
 	}
 	
 	/**

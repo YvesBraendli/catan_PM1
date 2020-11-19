@@ -4,6 +4,7 @@ import ch.zhaw.catan.Config.Faction;
 import ch.zhaw.catan.Config.Resource;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,8 @@ public class SiedlerGame {
 	private Player currentPlayer;
 	private ArrayList<Player> players;
 	private int winPoints;
+	private SiedlerBoard siedlerBoard;
+	private Bank bank;
 
 	/**
 	 * Constructs a SiedlerGame game state object.
@@ -37,10 +40,17 @@ public class SiedlerGame {
 	 *                                  is not between two and four
 	 */
 	public SiedlerGame(int winPoints, int players) {
-		this.winPoints = winPoints;
+		if(winPoints > 2) {
+			this.winPoints = winPoints;
+		}
+		else {
+			throw new IllegalArgumentException();
+		}
 		this.players = new ArrayList<Player>();
 		generatePlayers(players);
 		currentPlayer = this.players.get(0);
+		siedlerBoard = new SiedlerBoard();
+		bank = new Bank();
 	}
 
 	/**
@@ -97,8 +107,7 @@ public class SiedlerGame {
 	 * @return the game board
 	 */
 	public SiedlerBoard getBoard() {
-		// TODO: Implement
-		return null;
+		return siedlerBoard;
 	}
 
 	/**
@@ -118,8 +127,10 @@ public class SiedlerGame {
 	 * @return the amount of resources of this type
 	 */
 	public int getCurrentPlayerResourceStock(Resource resource) {
-		// TODO: Implement
-		return 0;
+		HashMap<Resource, Integer> resources = currentPlayer.getAmountOfResources();	
+		Integer resourceStock = resources.get(resource);
+		if(resourceStock == null) return 0;
+		return resourceStock;
 	}
 
 	/**
@@ -138,6 +149,15 @@ public class SiedlerGame {
 	 */
 	public boolean placeInitialSettlement(Point position, boolean payout) {
 		// TODO: Implement
+		// if(sidlerBoard.placeSettlement(position)){
+	// do everything} else return false;
+		if(payout) {
+			increaseWinningPoints(currentPlayer, 1);
+		}
+		// + winpoints erhöhen
+		// + resourcen auszahlen
+		// + mögliche häuser eins abziehen?
+		
 		return false;
 	}
 
@@ -190,6 +210,11 @@ public class SiedlerGame {
 	 */
 	public boolean buildSettlement(Point position) {
 		// TODO: Implement
+		//TODO: if überprüfen: konnte es gebaut werden?
+		siedlerBoard.createSettlement(position, getCurrentPlayerFaction());
+		increaseWinningPoints(currentPlayer, 1);
+		// resourcen auszahlen!!
+		// resourcen abzeihen!! bezahlung
 		return false;
 	}
 
@@ -229,6 +254,16 @@ public class SiedlerGame {
 	 */
 	public boolean buildRoad(Point roadStart, Point roadEnd) {
 		// TODO: Implement
+		//TODO: if überprüfen: konnte es gebaut werden?
+		// beuahlung!!
+		// if player has bezahlung
+		List<Resource> costs = Config.Structure.ROAD.getCosts();
+		
+		boolean hasBuildRoad = siedlerBoard.createStreet(roadStart, roadEnd, getCurrentPlayerFaction());
+		if(hasBuildRoad) {
+			// abziehen.
+			return true;
+		}
 		return false;
 	}
 
@@ -242,8 +277,12 @@ public class SiedlerGame {
 	 *         successful
 	 */
 	public boolean tradeWithBankFourToOne(Resource offer, Resource want) {
-		// TODO: Implement
-		return false;
+		boolean hasResourcesToTradeWith = currentPlayer.getAmountOfResources().get(offer) >= 4;
+		boolean isTradingSuccessful = false;
+		if(hasResourcesToTradeWith) {
+			isTradingSuccessful = bank.trade(offer, want);
+		}		
+		return isTradingSuccessful;
 	}
 
 	/**
@@ -252,8 +291,11 @@ public class SiedlerGame {
 	 * @return the winner of the game or null, if there is no winner (yet)
 	 */
 	public Faction getWinner() {
-		// TODO: Implement
-		// wer ist der gewinner wenn zwei gleichviele points haben? möglich?
+		for(Player player : players) {
+			if(player.getNumberOfWinningpoints() >= winPoints) {
+				return player.getFaction();
+			}
+		}
 		return null;
 	}
 
@@ -278,6 +320,7 @@ public class SiedlerGame {
 			this.players.add(new Player(Faction.BLUE));
 		case 3:
 			this.players.add(new Player(Faction.GREEN));
+		case 2:
 			this.players.add(new Player(Faction.RED));
 			this.players.add(new Player(Faction.YELLOW));
 			break;
@@ -286,4 +329,8 @@ public class SiedlerGame {
 		}
 	}
 
+	private void increaseWinningPoints(Player player, int increment) {
+		int currentPoints = player.getNumberOfWinningpoints();
+		player.setNumberOfWinningpoints(currentPoints + increment);
+	}
 }

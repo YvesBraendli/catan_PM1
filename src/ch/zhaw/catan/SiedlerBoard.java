@@ -2,6 +2,8 @@ package ch.zhaw.catan;
 
 import java.awt.Point;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import ch.zhaw.catan.Config.Land;
@@ -18,7 +20,7 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	}
 
 	/**
-	 * Returns a map with the specified numbers for each ressource-Field.
+	 * Returns a map with the specified numbers for each resource-Field.
 	 * @return
 	 */
 	public Map<Point, Label> getDiceNumberForFields() {
@@ -26,31 +28,20 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	}
 
 	/**
-	 * Checks if there are settlements around a resource field. If so returns a Map
-	 * with all the settlements for this field and their faction.
+	 * Checks if there are settlements around a resource field. If so returns a List
+	 * with all the settlements for this field.
 	 * 
 	 * @param field The resource field, that needs to be checked, if there are
 	 *              settlements around it.
-	 * @return A Map with the current settlements and their faction for the
-	 *         specified resource field.
+	 * @return A List with all settlement for the specified resource Field.
+	 * 			 Returns an empty list if there are no settlements.
 	 */
-	public Map<Config.Faction, Integer> searchFieldSettlement(Point field) {
-		Map<Config.Faction, Integer> settlementsAroundField = new HashMap<>();
-
+	public List<String> searchFieldSettlement(Point field) {
+		List<String> settlementsAroundField = new LinkedList<>();
+		if (hasField(field)) {
+			settlementsAroundField = getCornersOfField(field);
+		}
 		return settlementsAroundField;
-	}
-
-	/**
-	 * Checks, if a building ground for a new settlement is vaLid.
-	 * 
-	 * @param bulidingGround The point, where the Player wants to build a
-	 *                       settlement.
-	 * @return true, if the building ground for the new settlement is valid.
-	 */
-	public boolean checkIfValidSettlementBuildingGround(Point bulidingGround) {
-		boolean buildingGroundValid = false;
-
-		return buildingGroundValid;
 	}
 
 	/**
@@ -68,13 +59,20 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 
 	/**
 	 * Builds a new settlement at the specified point for the actual player.
+	 * The new settlement is build with the String "faction" and "S" for Settlement
+	 * or "C" for City.
 	 * 
 	 * @param buildingGround The point, where the player wants to build his new
 	 *                       settlement.
 	 * @param faction        The faction of the current player.
 	 */
 	public void buildSettlement(Point buildingGround, Config.Faction faction) {
-
+		if (getNeighboursOfCorner(buildingGround) != null || getCorner(buildingGround) != null) {
+			System.err.println("Es ist nicht möglich, auf diesem Feld zu bauen. "
+					+ "Bitte wählen sie ein anderes Feld aus.");
+		} else {
+			setCorner(buildingGround, "faction" + "S");
+		}
 	}
 
 	/**

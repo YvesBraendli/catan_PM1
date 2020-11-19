@@ -45,19 +45,6 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	}
 
 	/**
-	 * Checks, if a building ground for a new settlement is vaLid.
-	 * 
-	 * @param start The point, where the Player wants to start his road.
-	 * @param end   The point, where the Player wants to end his road.
-	 * @return true, if the building ground for the new street is valid.
-	 */
-	public boolean checkIfValidStreetBuildingGround(Point start, Point end) {
-		boolean buildingGroundValid = false;
-
-		return buildingGroundValid;
-	}
-
-	/**
 	 * Builds a new settlement at the specified point for the actual player.
 	 * The new settlement is build with the String "faction" and "S" for Settlement
 	 * or "C" for City.
@@ -66,12 +53,12 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	 *                       settlement.
 	 * @param faction        The faction of the current player.
 	 */
-	public void buildSettlement(Point buildingGround, Config.Faction faction) {
+	public void createSettlement(Point buildingGround, Config.Faction faction) {
 		if (getNeighboursOfCorner(buildingGround) != null || getCorner(buildingGround) != null) {
 			System.err.println("Es ist nicht möglich, auf diesem Feld zu bauen. "
 					+ "Bitte wählen sie ein anderes Feld aus.");
 		} else {
-			setCorner(buildingGround, "faction" + "S");
+			setCorner(buildingGround, faction.toString() + "S");
 		}
 	}
 
@@ -82,8 +69,20 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	 * @param end     The point, where the Player wants to end his road.
 	 * @param faction The faction of the current player.
 	 */
-	public void buildStreet(Point start, Point end, Config.Faction faction) {
-
+	public void createStreet(Point start, Point end, Config.Faction faction) {
+		List<String> startRoads = getAdjacentEdges(start);
+		List<String> endRoads = getAdjacentEdges(end);
+		if (((startRoads != null && startRoads.size() < 3) 
+				&& endRoads != null && endRoads.size() < 3) && getEdge(start, end) != null) {
+			for (int i = 0; i < startRoads.size(); i++) {
+				boolean alreadyBuiltStreet = false;
+				// Richtig mit Cast von Faction zu String?
+				if (((startRoads.get(i).substring(0, 2).equals(faction.toString()))
+					|| (endRoads.get(i).substring(0, 2).equals(faction.toString()))) && !alreadyBuiltStreet) {
+					setEdge(start, end, faction.toString());
+				}
+			}
+		}
 	}
 	
 	/**

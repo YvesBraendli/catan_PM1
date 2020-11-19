@@ -6,7 +6,7 @@ import org.beryx.textio.TextIO;
 
 public class InputParser {
 
-    private enum BaseActions {
+    public enum BaseActions {
         SHOW("Show Map"), TRADE("Trade with Bank"), BUILD("Build Structure"), END_TURN("End Turn");
     
     	private String name;
@@ -59,11 +59,11 @@ public class InputParser {
     }
     
     public BaseActions showMainMenuAction(TextIO textIO) {
-    	return textIO.newEnumInputReader(BaseActions.class).read("What would you like to do?");
+    	return textIO.newEnumInputReader(BaseActions.class).read("\nWhat would you like to do?");
     }
     
     public Config.Structure  showBuildAction(TextIO textIO) {
-    	return textIO.newEnumInputReader(Config.Structure.class).read("What do you want to build?");
+    	return textIO.newEnumInputReader(Config.Structure.class).read("\nWhat do you want to build?");
     }
     
     public Config.Resource showTradeAction(TextIO textIO) {

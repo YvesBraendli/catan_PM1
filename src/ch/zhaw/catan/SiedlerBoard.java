@@ -14,7 +14,7 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 
 	public SiedlerBoard() {
 		super();
-		initializeBoard();
+		createFields();
 	}
 
 	/**
@@ -85,63 +85,24 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 		return successful;
 	}
 
-	/**
-	 * Creates a new fix board, with fix resource fields and dice numbers for the
-	 * fields for a siedler game.
-	 */
-	private void initializeBoard() {
-		createFields();
-		createFieldNumbers();
-	}
-
 	private void createFields() {
-		int maxFieldCoordinateX = 11;
-		int fieldCoordinateY = 2;
-		for (int x = 4; x < maxFieldCoordinateX; x += 2) {
-			addField(new Point(x, fieldCoordinateY),
-					Config.getStandardLandPlacement().get(new Point(x, fieldCoordinateY)));
-		}
 
-		maxFieldCoordinateX += 1;
-		fieldCoordinateY += 3;
-		for (int x = 3; x < maxFieldCoordinateX; x += 2) {
-			addField(new Point(x, fieldCoordinateY),
-					Config.getStandardLandPlacement().get(new Point(x, fieldCoordinateY)));
+		int maxFieldCoordinateX = 10;
+		int minFieldCoordinateX = 5;
+		int rowCounter = 0;
+		for (int fieldCoordinateY = 2; fieldCoordinateY < 23; fieldCoordinateY += 3) {
+			if (rowCounter <= 3) {
+				maxFieldCoordinateX += 1;
+				minFieldCoordinateX -= 1;
+			} else {
+				maxFieldCoordinateX -= 1;
+				minFieldCoordinateX += 1;
+			}
+			for (int fieldCoordinateX = minFieldCoordinateX; fieldCoordinateX < maxFieldCoordinateX; fieldCoordinateX += 2) {
+				addField(new Point(fieldCoordinateX, fieldCoordinateY),
+						Config.getStandardLandPlacement().get(new Point(fieldCoordinateX, fieldCoordinateY)));
+			}
+			rowCounter++;
 		}
-
-		maxFieldCoordinateX += 1;
-		fieldCoordinateY += 3;
-		for (int x = 2; x < maxFieldCoordinateX; x += 2) {
-			addField(new Point(x, fieldCoordinateY),
-					Config.getStandardLandPlacement().get(new Point(x, fieldCoordinateY)));
-		}
-
-		maxFieldCoordinateX += 1;
-		fieldCoordinateY += 3;
-		for (int x = 1; x < maxFieldCoordinateX; x += 2) {
-			addField(new Point(x, fieldCoordinateY),
-					Config.getStandardLandPlacement().get(new Point(x, fieldCoordinateY)));
-		}
-
-		maxFieldCoordinateX -= 1;
-		fieldCoordinateY += 3;
-		for (int x = 2; x < maxFieldCoordinateX; x += 2) {
-			addField(new Point(x, fieldCoordinateY),
-					Config.getStandardLandPlacement().get(new Point(x, fieldCoordinateY)));
-		}
-
-		maxFieldCoordinateX -= 1;
-		fieldCoordinateY += 3;
-		for (int x = 3; x < maxFieldCoordinateX; x += 2) {
-			addField(new Point(x, fieldCoordinateY),
-					Config.getStandardLandPlacement().get(new Point(x, fieldCoordinateY)));
-		}
-
-		maxFieldCoordinateX -= 1;
-		fieldCoordinateY += 3;
-		for (int x = 4; x < maxFieldCoordinateX; x += 2) {
-			addField(new Point(x, fieldCoordinateY),
-					Config.getStandardLandPlacement().get(new Point(x, fieldCoordinateY)));
-		}
-
+	}
 }

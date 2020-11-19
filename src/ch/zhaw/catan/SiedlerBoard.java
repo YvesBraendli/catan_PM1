@@ -6,71 +6,166 @@ import java.util.Map;
 
 import ch.zhaw.catan.Config.Land;
 import ch.zhaw.hexboard.HexBoard;
+import ch.zhaw.hexboard.Label;
 
 public class SiedlerBoard extends HexBoard<Land, String, String, String> {
-	
-	/**
-	 * Creates a new fix board, with fix resource 
-	 * fields and dice numbers for the fields for a siedler game.
-	 */
-	public void initializeBoard() {
-		
+	Map<Point, Label> diceNumberForFields;
+
+	public SiedlerBoard() {
+		super();
+		diceNumberForFields = new HashMap<>();
+		initializeBoard();
 	}
-	
+
 	/**
-	 * Checks if there are settlements around a resource field.
-	 * If so returns a Map with all the settlements for this field and their faction.
-	 * @param field The resource field, that needs to be checked, if there are settlements around it.
-	 * @return A Map with the current settlements and their faction for the specified resource field.
+	 * Returns a map with the specified numbers for each ressource-Field.
+	 * @return
 	 */
-	public Map<Config.Faction, Integer> searchFieldSettlement (Point field) {
+	public Map<Point, Label> getDiceNumberForFields() {
+		return diceNumberForFields;
+	}
+
+	/**
+	 * Checks if there are settlements around a resource field. If so returns a Map
+	 * with all the settlements for this field and their faction.
+	 * 
+	 * @param field The resource field, that needs to be checked, if there are
+	 *              settlements around it.
+	 * @return A Map with the current settlements and their faction for the
+	 *         specified resource field.
+	 */
+	public Map<Config.Faction, Integer> searchFieldSettlement(Point field) {
 		Map<Config.Faction, Integer> settlementsAroundField = new HashMap<>();
-		
-		
+
 		return settlementsAroundField;
 	}
 
 	/**
 	 * Checks, if a building ground for a new settlement is vaLid.
-	 * @param bulidingGround The point, where the Player wants to build a settlement.
+	 * 
+	 * @param bulidingGround The point, where the Player wants to build a
+	 *                       settlement.
 	 * @return true, if the building ground for the new settlement is valid.
 	 */
 	public boolean checkIfValidSettlementBuildingGround(Point bulidingGround) {
 		boolean buildingGroundValid = false;
-		
+
 		return buildingGroundValid;
 	}
-	
+
 	/**
 	 * Checks, if a building ground for a new settlement is vaLid.
+	 * 
 	 * @param start The point, where the Player wants to start his road.
-	 * @param end The point, where the Player wants to end his road.
+	 * @param end   The point, where the Player wants to end his road.
 	 * @return true, if the building ground for the new street is valid.
 	 */
 	public boolean checkIfValidStreetBuildingGround(Point start, Point end) {
 		boolean buildingGroundValid = false;
-		
+
 		return buildingGroundValid;
 	}
-	
+
 	/**
 	 * Builds a new settlement at the specified point for the actual player.
-	 * @param buildingGround The point, where the player wants to build his new settlement.
+	 * 
+	 * @param buildingGround The point, where the player wants to build his new
+	 *                       settlement.
+	 * @param faction        The faction of the current player.
+	 */
+	public void buildSettlement(Point buildingGround, Config.Faction faction) {
+
+	}
+
+	/**
+	 * Builds a new street between the specified point for the actual player.
+	 * 
+	 * @param start   The point, where the Player wants to start his road.
+	 * @param end     The point, where the Player wants to end his road.
 	 * @param faction The faction of the current player.
 	 */
-	public void buildSettlement (Point buildingGround, Config.Faction faction) {
-		
+	public void buildStreet(Point start, Point end, Config.Faction faction) {
+
 	}
 	
 	/**
-	 * Builds a new street between the specified point for the actual player.
-	 * @param start The point, where the Player wants to start his road.
-	 * @param end The point, where the Player wants to end his road.
-	 * @param faction The faction of the current player.
+	 * Creates a new fix board, with fix resource fields and dice numbers for the
+	 * fields for a siedler game.
 	 */
-	public void buildStreet (Point start, Point end, Config.Faction faction) {
-		
+	private void initializeBoard() {
+		createFields();
+		createFieldNumbers();
 	}
 
-	
+	private void createFields() {
+		addField(new Point(4, 2), Land.WATER);
+		addField(new Point(6, 2), Land.WATER);
+		addField(new Point(8, 2), Land.WATER);
+		addField(new Point(10, 2), Land.WATER);
+
+		addField(new Point(3, 5), Land.WATER);
+		addField(new Point(5, 5), Land.FOREST);
+		addField(new Point(7, 5), Land.MEADOW);
+		addField(new Point(9, 5), Land.MEADOW);
+		addField(new Point(11, 5), Land.WATER);
+
+		addField(new Point(2, 8), Land.WATER);
+		addField(new Point(4, 8), Land.GRAINFIELD);
+		addField(new Point(6, 8), Land.MOUNTAIN);
+		addField(new Point(8, 8), Land.GRAINFIELD);
+		addField(new Point(10, 8), Land.FOREST);
+		addField(new Point(12, 8), Land.WATER);
+
+		addField(new Point(1, 11), Land.WATER);
+		addField(new Point(3, 11), Land.FOREST);
+		addField(new Point(5, 11), Land.CLAYSOIL);
+		addField(new Point(7, 11), Land.DESERT);
+		addField(new Point(9, 11), Land.MOUNTAIN);
+		addField(new Point(11, 11), Land.GRAINFIELD);
+		addField(new Point(13, 11), Land.WATER);
+
+		addField(new Point(2, 14), Land.WATER);
+		addField(new Point(4, 14), Land.GRAINFIELD);
+		addField(new Point(6, 14), Land.MOUNTAIN);
+		addField(new Point(8, 14), Land.FOREST);
+		addField(new Point(10, 14), Land.MEADOW);
+		addField(new Point(12, 14), Land.WATER);
+
+		addField(new Point(3, 17), Land.WATER);
+		addField(new Point(5, 17), Land.CLAYSOIL);
+		addField(new Point(7, 17), Land.MEADOW);
+		addField(new Point(9, 17), Land.CLAYSOIL);
+		addField(new Point(11, 17), Land.WATER);
+
+		addField(new Point(4, 20), Land.WATER);
+		addField(new Point(6, 20), Land.WATER);
+		addField(new Point(8, 20), Land.WATER);
+		addField(new Point(10, 20), Land.WATER);
+	}
+
+	private void createFieldNumbers() {
+		diceNumberForFields.put(new Point(5, 5), new Label('0', '6'));
+		diceNumberForFields.put(new Point(7, 5), new Label('0', '3'));
+		diceNumberForFields.put(new Point(9, 5), new Label('0', '8'));
+		
+		diceNumberForFields.put(new Point(4, 8), new Label('0', '2'));
+		diceNumberForFields.put(new Point(6, 8), new Label('0', '4'));
+		diceNumberForFields.put(new Point(8, 8), new Label('0', '5'));
+		diceNumberForFields.put(new Point(10, 8), new Label('1','0'));
+		
+		diceNumberForFields.put(new Point(3, 11), new Label('0', '5'));
+		diceNumberForFields.put(new Point(5, 11), new Label('0', '9'));
+		diceNumberForFields.put(new Point(9, 11), new Label('0', '6'));
+		diceNumberForFields.put(new Point(11, 11), new Label('0', '9'));
+		
+		diceNumberForFields.put(new Point(4, 14), new Label('1', '0'));
+		diceNumberForFields.put(new Point(6, 14), new Label('1', '1'));
+		diceNumberForFields.put(new Point(8, 14), new Label('0', '3'));
+		diceNumberForFields.put(new Point(10, 14), new Label('1', '2'));
+		
+		diceNumberForFields.put(new Point(5, 17), new Label('0', '8'));
+		diceNumberForFields.put(new Point(7, 17), new Label('0', '4'));
+		diceNumberForFields.put(new Point(9, 17), new Label('1', '1'));
+	}
+
 }

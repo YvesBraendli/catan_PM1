@@ -18,7 +18,7 @@ import java.util.Map;
  * of resources available in the bank and the settlement types.
  * </p>
  * 
- * @author Moser Nadine, Meier Robin, Bràndli Yves
+ * @author Moser Nadine, Meier Robin, Brï¿½ndli Yves
  *
  */
 public class SiedlerGame {
@@ -138,7 +138,7 @@ public class SiedlerGame {
 	 */
 	public boolean placeInitialSettlement(Point position, boolean payout) {
 		// TODO: Implement
-		return false;
+		return true;
 	}
 
 	/**
@@ -151,7 +151,7 @@ public class SiedlerGame {
 	 */
 	public boolean placeInitialRoad(Point roadStart, Point roadEnd) {
 		// TODO: Implement
-		return false;
+		return true;
 	}
 
 	/**
@@ -253,7 +253,7 @@ public class SiedlerGame {
 	 */
 	public Faction getWinner() {
 		// TODO: Implement
-		// wer ist der gewinner wenn zwei gleichviele points haben? möglich?
+		// wer ist der gewinner wenn zwei gleichviele points haben? mï¿½glich?
 		return null;
 	}
 

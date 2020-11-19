@@ -293,16 +293,11 @@ public class SiedlerGame {
 	 * @return the winner of the game or null, if there is no winner (yet)
 	 */
 	public Faction getWinner() {
-<<<<<<< HEAD
-		// TODO: Implement
-		// wer ist der gewinner wenn zwei gleichviele points haben? m�glich?
-=======
 		for(Player player : players) {
 			if(player.getNumberOfWinningpoints() >= winPoints) {
 				return player.getFaction();
 			}
 		}
->>>>>>> dad8de53a674057f28a6abd64c6b2897c52b4a48
 		return null;
 	}
 

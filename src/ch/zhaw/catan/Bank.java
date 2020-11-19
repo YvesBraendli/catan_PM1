@@ -32,9 +32,9 @@ public class Bank {
 	 * @param resourcewanted The resource, the player wants to have.
 	 * @return true, if the trade for one card was successful.
 	 */
-	public boolean trade(Resource resourcegiven, int givencards, Resource resourcewanted) {
+	public boolean trade(Resource resourcegiven, Resource resourcewanted) {
 		boolean tradesuccessful = false;
-		if (givencards == 4 && amountOfResources.get(resourcewanted) >= 1) {
+		if (amountOfResources.get(resourcewanted) >= 1) {
 			tradesuccessful = true;
 			amountOfResources.put(resourcewanted, amountOfResources.get(resourcewanted) - 1);
 		}

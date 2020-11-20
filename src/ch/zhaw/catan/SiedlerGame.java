@@ -2,6 +2,8 @@ package ch.zhaw.catan;
 
 import ch.zhaw.catan.Config.Faction;
 import ch.zhaw.catan.Config.Resource;
+import ch.zhaw.catan.Config.Structure;
+
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,8 +20,8 @@ import java.util.Map;
  * requeste of a certain type, the number of players requesting it, the amount
  * of resources available in the bank and the settlement types.
  * </p>
- * 
- * @author Moser Nadine, Meier Robin, Brï¿½ndli Yves
+ * TODO: überall möglichkeiten für Siedlungen abziehen...
+ * @author Moser Nadine, Meier Robin, Bràndli Yves
  *
  */
 public class SiedlerGame {
@@ -149,12 +151,18 @@ public class SiedlerGame {
 	 */
 	public boolean placeInitialSettlement(Point position, boolean payout) {
 		// TODO: Implement
+		
+		boolean hasBuildSettlement = siedlerBoard.createSettlement(position, getCurrentPlayerFaction());
+		if(!hasBuildSettlement) return false;
+		increaseWinningPoints(currentPlayer, 1);
+	
 
 		// if(sidlerBoard.placeSettlement(position)){
 	// do everything} else return false;
 		if(payout) {
-			increaseWinningPoints(currentPlayer, 1);
+			// resourcen auszahlen
 		}
+		// TODO?? mögliche häuser eins abziehen?
 		// + winpoints erhï¿½hen
 		// + resourcen auszahlen
 		// + mï¿½gliche hï¿½user eins abziehen?
@@ -173,7 +181,9 @@ public class SiedlerGame {
 	 */
 	public boolean placeInitialRoad(Point roadStart, Point roadEnd) {
 		// TODO: Implement
-		return true;
+		boolean hasBuildRoad = siedlerBoard.createStreet(roadStart, roadEnd, getCurrentPlayerFaction());
+		// TODO noch mehr?
+		return hasBuildRoad;
 	}
 
 	/**
@@ -211,6 +221,18 @@ public class SiedlerGame {
 	 * @return true, if the placement was successful
 	 */
 	public boolean buildSettlement(Point position) {
+
+		boolean canPayForSettlement = canPlayerPayForStructure(Structure.SETTLEMENT);
+		if(!canPayForSettlement) return false;
+		
+		boolean hasBuildSettlement = siedlerBoard.createSettlement(position, getCurrentPlayerFaction());
+		
+		if(hasBuildSettlement) {
+			payForConstruct(Structure.SETTLEMENT);
+			increaseWinningPoints(currentPlayer, 1);
+			// TODO: resourcen werden nur ausgezahlt wenn phase 1 bei haus bau oder?
+			return true;
+		}
 		// TODO: Implement
 		//TODO: if ï¿½berprï¿½fen: konnte es gebaut werden?
 		siedlerBoard.createSettlement(position, getCurrentPlayerFaction());
@@ -255,6 +277,10 @@ public class SiedlerGame {
 	 * @return true, if the placement was successful
 	 */
 	public boolean buildRoad(Point roadStart, Point roadEnd) {
+
+		boolean canPayForRoad = canPlayerPayForStructure(Structure.ROAD);
+		if(!canPayForRoad) return false;
+
 		// TODO: Implement
 		//TODO: if ï¿½berprï¿½fen: konnte es gebaut werden?
 		// beuahlung!!
@@ -262,13 +288,40 @@ public class SiedlerGame {
 		List<Resource> costs = Config.Structure.ROAD.getCosts();
 		
 		boolean hasBuildRoad = siedlerBoard.createStreet(roadStart, roadEnd, getCurrentPlayerFaction());
+		
 		if(hasBuildRoad) {
-			// abziehen.
+			payForConstruct(Structure.ROAD);
+			//TODO: ? Für Strassenbau werden bis jeztzt keine Gewinner Punkte vergeben.
 			return true;
 		}
+		
 		return false;
 	}
 
+	private void payForConstruct(Structure structure) {
+		List<Resource> costs = structure.getCosts();
+		for(Resource resource : costs) {
+			currentPlayer.setAmountOfResources(resource, 1, false);
+		}
+	}
+	
+	private boolean canPlayerPayForStructure(Structure structure) {
+		List<Resource> costs = structure.getCosts();
+		
+		Map<Resource, Integer> currentResources = currentPlayer.getAmountOfResources();
+		if(currentResources == null) return false;
+		
+		Integer currentResource;
+		for(Resource resource : costs) {
+			currentResource = currentResources.get(resource);
+			if(currentResource == null) return false;
+			currentResource--;
+			if(currentResource < 0) return false;
+		}
+		
+		return true;
+	}
+	
 	/**
 	 * Trades in {@value #FOUR_TO_ONE_TRADE_OFFER} resources of the offered type for
 	 * {@value #FOUR_TO_ONE_TRADE_WANT} resource of the wanted type.

@@ -1,6 +1,12 @@
 package ch.zhaw.catan;
 
+import java.util.List;
+import java.util.Map;
+
 import org.beryx.textio.TextTerminal;
+
+import ch.zhaw.catan.Config.Faction;
+import ch.zhaw.catan.Config.Resource;
 
 public class Output {
 	public void requestSettlementCoordinates(TextTerminal<?> textTerminal, boolean isInitial) {
@@ -55,5 +61,13 @@ public class Output {
 			int amountOfWool, int amountOfClay, int amountOfGrain) {
 		textTerminal.println("Resources Owned:\n" + amountOfGrain + " Grain, " + amountOfWool + " Wool, " + amountOfWood
 				+ " Wood " + amountOfStone + " Stone, " + amountOfClay + " Clay");
+	}
+	public void printDiceNumber(TextTerminal<?> textTerminal, int diceNumber) {
+		textTerminal.println("The number "+diceNumber+" was rolled.");
+	}
+	public void printPayedOutResources(TextTerminal<?> textTerminal, Map<Faction, List<Resource>> payedOutResources) {
+		for(Map.Entry<Faction, List<Resource>> entry : payedOutResources.entrySet()) {
+			
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package ch.zhaw.catan;
 
 import java.awt.Point;
+import java.util.Random;
 
 import org.beryx.textio.TextIO;
 import org.beryx.textio.TextIoFactory;
@@ -15,6 +16,7 @@ public class GameController {
 	private Output output;
 	private TextIO textIO;
 	private TextTerminal<?> textTerminal;
+	private Random random;
 
 	private static final int WINPOINTS_NEEDED = 5; // Winpoints needed without City Implementation
 	private int numberOfPlayers;
@@ -28,6 +30,7 @@ public class GameController {
 		textIO = TextIoFactory.getTextIO();
 		textTerminal = textIO.getTextTerminal();
 		isRunning = true;
+		random = new Random();
 	}
 
 	public void runGame() {
@@ -35,27 +38,27 @@ public class GameController {
 		numberOfPlayers = inputParser.requestNumberOfPlayers(textIO);
 		siedlerGame = new SiedlerGame(WINPOINTS_NEEDED, numberOfPlayers);
 
-		// Phase 2
-		for (int i = 1; i <= numberOfPlayers; i++) {
-			output.printPlayerStart(textTerminal, siedlerGame.getCurrentPlayerFaction());
-			buildInitialStructures(false);
-			if (i != numberOfPlayers) {
-				siedlerGame.switchToNextPlayer();
-			}
-		}
-		for (int i = numberOfPlayers; i >= 1; i--) {
-			output.printPlayerStart(textTerminal, siedlerGame.getCurrentPlayerFaction());
-			buildInitialStructures(true);
-			if (i != 1) {
-				siedlerGame.switchToPreviousPlayer();
-			}
-		}
+//		// Phase 2
+//		for (int i = 1; i <= numberOfPlayers; i++) {
+//			output.printPlayerStart(textTerminal, siedlerGame.getCurrentPlayerFaction());
+//			buildInitialStructures(false);
+//			if (i != numberOfPlayers) {
+//				siedlerGame.switchToNextPlayer();
+//			}
+//		}
+//		for (int i = numberOfPlayers; i >= 1; i--) {
+//			output.printPlayerStart(textTerminal, siedlerGame.getCurrentPlayerFaction());
+//			buildInitialStructures(true);
+//			if (i != 1) {
+//				siedlerGame.switchToPreviousPlayer();
+//			}
+//		}
 
 		// Phase 3
 		while (isRunning) {
 
 			boolean isUsersTurn = true;
-
+			System.out.println(rollDice());
 			while (isUsersTurn) {
 				// TODO Eimal würlfelelelele
 				output.printPlayerStart(textTerminal, siedlerGame.getCurrentPlayerFaction());
@@ -147,8 +150,8 @@ public class GameController {
 		}
 	}
 
-	private void rollDice() {
-		//TODO Würfl implementememtem
+	private int rollDice() {
+		return random.nextInt((6 - 1) + 1) + 1 + random.nextInt((6 - 1) + 1) + 1;
 	}
 
 	public static void main(String[] args) {

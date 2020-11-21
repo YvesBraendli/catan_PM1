@@ -10,6 +10,19 @@ import org.beryx.textio.TextTerminal;
 import ch.zhaw.catan.Config.Resource;
 import ch.zhaw.catan.Config.Structure;
 
+/**
+ * This class is used to play a game of catan with up to 4 players. The game is
+ * segmented into the following three parts: Phase 1 - setup the game map with
+ * fields with different regions and number values the setup is fixed. Phase 2 -
+ * Each player is allowed to place one settlement and one road, then every
+ * player in reverse order can do it again. Phase 3 - Two dice get rolled and
+ * the resources get payed out with the corresponding field numbers then the
+ * player gets the option to either build or trade resources. This goes on until
+ * a player has amassed 5-7 winpoints by building settlements.
+ * 
+ * @author Moser Nadine, Meier Robin, Brändli Yves
+ *
+ */
 public class GameController {
 	private GameController gameController;
 	private SiedlerGame siedlerGame;
@@ -25,6 +38,9 @@ public class GameController {
 	private boolean settlementBuilt;
 	private boolean roadBuilt;
 
+	/**
+	 * constructor of the GameController class.
+	 */
 	public GameController() {
 		inputParser = new InputParser();
 		output = new Output();
@@ -36,6 +52,9 @@ public class GameController {
 		random = new Random();
 	}
 
+	/**
+	 * runs the game in order of the three phases
+	 */
 	public void runGame() {
 		// Phase 1
 		numberOfPlayers = inputParser.requestNumberOfPlayers(textIO);
@@ -92,6 +111,10 @@ public class GameController {
 
 	}
 
+	/**
+	 * Shows the options which resource should be sold and which resource should be
+	 * bought, then starts the excahnge.
+	 */
 	private void tradeAction() {
 		output.printTradeMenuDelimiter(textTerminal);
 		output.requestResourceSell(textTerminal);
@@ -105,6 +128,10 @@ public class GameController {
 		}
 	}
 
+	/**
+	 * Lets the player choose what he wants to build and starts the corresponding
+	 * action.
+	 */
 	private void buildAction() {
 		output.printBuildMenuDelimiter(textTerminal);
 		outputPrintPlayerResources();
@@ -139,6 +166,9 @@ public class GameController {
 		}
 	}
 
+	/**
+	 * Prints out the current players resources
+	 */
 	private void outputPrintPlayerResources() {
 		output.printPlayerResources(textTerminal, siedlerGame.getCurrentPlayerResourceStock(Resource.WOOD),
 				siedlerGame.getCurrentPlayerResourceStock(Resource.STONE),
@@ -147,6 +177,11 @@ public class GameController {
 				siedlerGame.getCurrentPlayerResourceStock(Resource.GRAIN));
 	}
 
+	/**
+	 * Used to build the initial structures.
+	 * 
+	 * @param payout true if a payout for the structure should be made.
+	 */
 	private void buildInitialStructures(boolean payout) {
 		settlementBuilt = false;
 		roadBuilt = false;
@@ -172,10 +207,20 @@ public class GameController {
 		}
 	}
 
+	/**
+	 * Rolls two six sided dices and adds the result together.
+	 * 
+	 * @return the combined rolled numbers.
+	 */
 	private int rollDice() {
 		return random.nextInt(6) + random.nextInt(6) + 2;
 	}
 
+	/**
+	 * The man method of the program used to start the runGame method.
+	 * 
+	 * @param args not used.
+	 */
 	public static void main(String[] args) {
 		GameController gameController = new GameController();
 		gameController.runGame();

@@ -8,6 +8,7 @@ import org.beryx.textio.TextIoFactory;
 import org.beryx.textio.TextTerminal;
 
 import ch.zhaw.catan.Config.Resource;
+import ch.zhaw.catan.Config.Structure;
 
 public class GameController {
 	private GameController gameController;
@@ -29,17 +30,20 @@ public class GameController {
 		output = new Output();
 		textIO = TextIoFactory.getTextIO();
 		textTerminal = textIO.getTextTerminal();
+		textTerminal.getProperties().setPaneWidth(1000);
+		textTerminal.getProperties().setPaneHeight(740);
 		isRunning = true;
 		random = new Random();
 	}
 
 	public void runGame() {
-
+		// Phase 1
 		numberOfPlayers = inputParser.requestNumberOfPlayers(textIO);
 		siedlerGame = new SiedlerGame(WINPOINTS_NEEDED, numberOfPlayers);
 
 		// Phase 2
 		for (int i = 1; i <= numberOfPlayers; i++) {
+			output.printBoard(textTerminal, siedlerGame.getBoard());
 			output.printPlayerStart(textTerminal, siedlerGame.getCurrentPlayerFaction());
 			buildInitialStructures(false);
 			if (i != numberOfPlayers) {
@@ -47,6 +51,7 @@ public class GameController {
 			}
 		}
 		for (int i = numberOfPlayers; i >= 1; i--) {
+			output.printBoard(textTerminal, siedlerGame.getBoard());
 			output.printPlayerStart(textTerminal, siedlerGame.getCurrentPlayerFaction());
 			buildInitialStructures(true);
 			if (i != 1) {
@@ -58,53 +63,23 @@ public class GameController {
 		while (isRunning) {
 
 			boolean isUsersTurn = true;
+			int rolledNumber = rollDice();
+			output.printPreTurnInfo(textTerminal, siedlerGame.throwDice(rolledNumber), rolledNumber);
 			while (isUsersTurn) {
-				// TODO Eimal würlfelelelele
-				output.printPayedOutResources(textTerminal, siedlerGame.throwDice(rollDice()));
 				output.printPlayerStart(textTerminal, siedlerGame.getCurrentPlayerFaction());
 				outputPrintPlayerResources();
 				switch (inputParser.showMainMenuAction(textIO)) {
 				case SHOW:
-					// TODO Feldli id konsole werfe
+					output.printMapMenuDelimiter(textTerminal);
+					output.printBoard(textTerminal, siedlerGame.getBoard());
 					break;
 
 				case BUILD:
-					outputPrintPlayerResources();
-					switch (inputParser.showBuildAction(textIO)) {
-					case SETTLEMENT:
-						output.requestSettlementCoordinates(textTerminal, false);
-						Point position = inputParser.requestXYCoordinates(textIO);
-						settlementBuilt = siedlerGame.buildSettlement(position);
-						if (!settlementBuilt) {
-							output.errorSettlementNotBuilt(textTerminal);
-						}
-						break;
-					case CITY:
-						// TODO Stadt ghört genau da ane und niergens anders!
-						break;
-					case ROAD:
-						output.requestRoadStartCoordinates(textTerminal, false);
-						Point roadStart = inputParser.requestXYCoordinates(textIO);
-						output.requestRoadEndCoordinates(textTerminal, false);
-						Point roadEnd = inputParser.requestXYCoordinates(textIO);
-						roadBuilt = siedlerGame.buildRoad(roadStart, roadEnd);
-						if (!roadBuilt) {
-							output.errorRoadNotBuilt(textTerminal);
-						}
-						break;
-					}
+					buildAction();
 					break;
 
 				case TRADE:
-					output.requestResourceSell(textTerminal);
-					Config.Resource resourceToSell = inputParser.showTradeAction(textIO);
-					output.requestResourceBuy(textTerminal);
-					Config.Resource resourceToBuy = inputParser.showTradeAction(textIO);
-					if (inputParser.askBuyResource(textIO, resourceToBuy)) {
-						if (siedlerGame.tradeWithBankFourToOne(resourceToSell, resourceToBuy)) {
-							output.errorTradeFailed(textTerminal);
-						}
-					}
+					tradeAction();
 					break;
 
 				case END_TURN:
@@ -115,6 +90,53 @@ public class GameController {
 			}
 		}
 
+	}
+
+	private void tradeAction() {
+		output.printTradeMenuDelimiter(textTerminal);
+		output.requestResourceSell(textTerminal);
+		Config.Resource resourceToSell = inputParser.showTradeAction(textIO);
+		output.requestResourceBuy(textTerminal);
+		Config.Resource resourceToBuy = inputParser.showTradeAction(textIO);
+		if (inputParser.askBuyResource(textIO, resourceToBuy)) {
+			if (siedlerGame.tradeWithBankFourToOne(resourceToSell, resourceToBuy)) {
+				output.errorTradeFailed(textTerminal);
+			}
+		}
+	}
+
+	private void buildAction() {
+		output.printBuildMenuDelimiter(textTerminal);
+		outputPrintPlayerResources();
+		switch (inputParser.showBuildAction(textIO)) {
+		case SETTLEMENT:
+			output.printBoard(textTerminal, siedlerGame.getBoard());
+			output.requestSettlementCoordinates(textTerminal, false);
+			Point position = inputParser.requestXYCoordinates(textIO);
+			if (inputParser.askBuildStructure(textIO, Structure.SETTLEMENT)) {
+				settlementBuilt = siedlerGame.buildSettlement(position);
+				if (!settlementBuilt) {
+					output.errorSettlementNotBuilt(textTerminal);
+				}
+			}
+			break;
+		case CITY:
+			// TODO Stadt ghört genau da ane und niergens anders!
+			break;
+		case ROAD:
+			output.printBoard(textTerminal, siedlerGame.getBoard());
+			output.requestRoadStartCoordinates(textTerminal, false);
+			Point roadStart = inputParser.requestXYCoordinates(textIO);
+			output.requestRoadEndCoordinates(textTerminal, false);
+			Point roadEnd = inputParser.requestXYCoordinates(textIO);
+			if (inputParser.askBuildStructure(textIO, Structure.ROAD)) {
+				roadBuilt = siedlerGame.buildRoad(roadStart, roadEnd);
+				if (!roadBuilt) {
+					output.errorRoadNotBuilt(textTerminal);
+				}
+			}
+			break;
+		}
 	}
 
 	private void outputPrintPlayerResources() {

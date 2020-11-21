@@ -9,6 +9,8 @@ import ch.zhaw.catan.Config.Faction;
 import ch.zhaw.catan.Config.Resource;
 
 public class Output {
+	private SiedlerBoardTextView gameBoardView;
+	
 	public void requestSettlementCoordinates(TextTerminal<?> textTerminal, boolean isInitial) {
 		if (isInitial) {
 			textTerminal.println("Where do you want to build your initial settlement?");
@@ -62,12 +64,70 @@ public class Output {
 		textTerminal.println("Resources Owned:\n" + amountOfGrain + " Grain, " + amountOfWool + " Wool, " + amountOfWood
 				+ " Wood " + amountOfStone + " Stone, " + amountOfClay + " Clay");
 	}
-	public void printDiceNumber(TextTerminal<?> textTerminal, int diceNumber) {
-		textTerminal.println("The number "+diceNumber+" was rolled.");
-	}
-	public void printPayedOutResources(TextTerminal<?> textTerminal, Map<Faction, List<Resource>> payedOutResources) {
+
+	public void printPreTurnInfo(TextTerminal<?> textTerminal, Map<Faction, List<Resource>> payedOutResources, int rolledNumber) {
+		textTerminal.println("\n-----------------------------------");
+		textTerminal.println("The number "+rolledNumber+" was rolled!" );
 		for(Map.Entry<Faction, List<Resource>> entry : payedOutResources.entrySet()) {
+			String resourcesPerPlayers = "Player "+entry.getKey()+": ";
+			int amountOfGrain = 0;
+			int amountOfWool = 0;
+			int amountOfWood = 0;
+			int amountOfStone = 0;
+			int amountOfClay = 0;
 			
+			for(Resource resource: entry.getValue()) {
+				switch(resource) {
+				case GRAIN:
+					amountOfGrain += 1;
+					break;
+				case WOOL:
+					amountOfWool += 1;
+					break;
+				case WOOD:
+					amountOfWood += 1;
+					break;
+				case STONE:
+					amountOfStone += 1;
+					break;
+				case CLAY:
+					amountOfClay += 1;
+					break;
+				}
+			}
+			if(amountOfGrain >= 1) {
+				resourcesPerPlayers += "+"+amountOfGrain+" Grain, ";
+			}
+			if(amountOfWool >= 1) {
+				resourcesPerPlayers += "+"+amountOfWool+" Wool, ";
+			}
+			if(amountOfWood >= 1) {
+				resourcesPerPlayers += "+"+amountOfWood+" Wood, ";
+			}
+			if(amountOfStone >= 1) {
+				resourcesPerPlayers += "+"+amountOfStone+" Stone, ";
+			}
+			if(amountOfClay >= 1) {
+				resourcesPerPlayers += "+"+amountOfClay+" Clay, ";
+			}
+			
+			if(!resourcesPerPlayers.equals("Player "+entry.getKey()+": ")) {
+				textTerminal.println(resourcesPerPlayers);
+			}
 		}
+	}
+	public void printBuildMenuDelimiter(TextTerminal<?> textTerminal) {
+		textTerminal.println("\n-----------Build---------------");	
+	}
+	public void printTradeMenuDelimiter(TextTerminal<?> textTerminal) {
+		textTerminal.println("\n-----------Trade--------------");	
+	}
+	public void printMapMenuDelimiter(TextTerminal<?> textTerminal) {
+		textTerminal.println("\n-----------Map-----------------");	
+	}
+	
+	public void printBoard(TextTerminal<?> textTerminal, SiedlerBoard board) {
+		gameBoardView = new SiedlerBoardTextView(board);
+		textTerminal.println(gameBoardView.toString());
 	}
 }

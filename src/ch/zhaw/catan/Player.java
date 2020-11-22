@@ -72,6 +72,13 @@ public class Player {
 	 *                      are taken away.
 	 */
 	public void setAmountOfResources(Config.Resource resource, int numberOfCards, boolean getsCards) {
+		if (getsCards) {
+			int newValue = amountOfResources.get(resource) + numberOfCards;
+			amountOfResources.put(resource, newValue);
+		} else if (getsCards = false) {
+			int newValue = amountOfResources.get(resource) - numberOfCards;
+			amountOfResources.put(resource, newValue);
+		}
 
 	}
 
@@ -92,7 +99,7 @@ public class Player {
 	 *                      stock of the player.
 	 */
 	public void setCurrentNumberOfRoads(int numberOfRoads) {
-
+		currentNumberOfRoads -= numberOfRoads;
 	}
 
 	/**
@@ -112,7 +119,7 @@ public class Player {
 	 *                            away from the player's stock.
 	 */
 	public void setCurrentNumberOfSettlements(int numberOfSettlements) {
-
+		currentNumberOfSettlements -= numberOfSettlements;
 	}
 
 	/**
@@ -132,7 +139,7 @@ public class Player {
 	 *                       the player's stock.
 	 */
 	public void setCurrentNumberOfCities(int numberOfCities) {
-
+		currentNumberOfCities -= numberOfCities;
 	}
 
 	/**

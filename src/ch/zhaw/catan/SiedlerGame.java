@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 /**
  * This class performs all actions related to modifying the game state.
@@ -24,7 +23,6 @@ import java.util.Map.Entry;
  * requeste of a certain type, the number of players requesting it, the amount
  * of resources available in the bank and the settlement types.
  * </p>
- * TODO: überall möglichkeiten für Siedlungen abziehen...
  * @author Moser Nadine, Meier Robin, Bràndli Yves
  *
  */
@@ -155,19 +153,25 @@ public class SiedlerGame {
 	 * @return true, if the placement was successful
 	 */
 	public boolean placeInitialSettlement(Point position, boolean payout) {
+		if(currentPlayer.getCurrentNumberOfSettlements() <= 0) return false; 
+		
 		boolean hasBuildSettlement = siedlerBoard.createSettlement(position, getCurrentPlayerFaction());
 		if(!hasBuildSettlement) return false;
-		increaseWinningPoints(currentPlayer, 1);
-		// todo: auch?? currentPlayer.setCurrentNumberOfSettlements(1);
-		if(payout) {
-			Map<Point, Land> landPlacements = Config.getStandardLandPlacement();
-			Land currentLand = landPlacements.get(position);			
-			// nur eine resource möglich?
-			// todo_: getSoroucounding fields
-			currentPlayer.setAmountOfResources(currentLand.getResource(), 1, true);
-			
-		}
 		
+		currentPlayer.setCurrentNumberOfSettlements(1);		
+		increaseWinningPoints(currentPlayer, 1);
+
+		if(payout) {
+			
+			Map<Point, Land> landPlacements = Config.getStandardLandPlacement();
+			Land currentLand = landPlacements.get(position);
+			//if(bank.hasAmountOfResources(Config.Structure.SETTLEMENT.getCostsAsMap()){
+				//bank.removeAmountOfResources(Config.Structure.SETTLEMENT.getCostsAsMap());
+				currentPlayer.setAmountOfResources(currentLand.getResource(), 1, true);
+			//}
+			
+		}		
+				
 		return false;
 
 	}
@@ -181,9 +185,11 @@ public class SiedlerGame {
 	 * @return true, if the placement was successful
 	 */
 	public boolean placeInitialRoad(Point roadStart, Point roadEnd) {
+		if(currentPlayer.getCurrentNumberOfRoads() <= 0) return false;
 		boolean hasBuildRoad = siedlerBoard.createStreet(roadStart, roadEnd, getCurrentPlayerFaction());
-		//todo evtl # abzeiehen.
-		
+		if(hasBuildRoad) {
+			currentPlayer.setCurrentNumberOfRoads(1);
+		}	
 		return hasBuildRoad;
 	}
 
@@ -254,7 +260,7 @@ public class SiedlerGame {
 	 * @return true, if the placement was successful
 	 */
 	public boolean buildSettlement(Point position) {
-
+		if(currentPlayer.getCurrentNumberOfSettlements() <= 0) return false; 
 		boolean canPayForSettlement = canPlayerPayForStructure(Structure.SETTLEMENT);
 		if(!canPayForSettlement) return false;
 		
@@ -262,15 +268,16 @@ public class SiedlerGame {
 		
 		if(hasBuildSettlement) {
 			payForConstruct(Structure.SETTLEMENT);
-			increaseWinningPoints(currentPlayer, 1);
 			currentPlayer.setCurrentNumberOfSettlements(1);
-			// TODO: resourcen werden nur ausgezahlt wenn phase 1 bei haus bau oder?
-			// todo_: getSoroucounding fields
-			
-			// TODO: currentPlayer.setAmountOfResources(currentLand.getResource(), 1, true);
-						
+			increaseWinningPoints(currentPlayer, 1);
 			return true;
 		}
+		
+		//if(bank.hasAmountOfResources(Config.Structure.SETTLEMENT.getCostsAsMap()){
+		//	bank.removeAmountOfResources(Config.Structure.SETTLEMENT.getCostsAsMap());
+		//	currentPlayer.setAmountOfResources(currentLand.getResource(), 1, true);
+		//}
+		
 		return false;
 	}
 
@@ -309,7 +316,7 @@ public class SiedlerGame {
 	 * @return true, if the placement was successful
 	 */
 	public boolean buildRoad(Point roadStart, Point roadEnd) {
-
+		if (currentPlayer.getCurrentNumberOfRoads() <= 0) return false;
 		boolean canPayForRoad = canPlayerPayForStructure(Structure.ROAD);
 		if(!canPayForRoad) return false;
 		
@@ -318,7 +325,6 @@ public class SiedlerGame {
 		if(hasBuildRoad) {
 			payForConstruct(Structure.ROAD);
 			currentPlayer.setCurrentNumberOfRoads(1);
-			//TODO: ? Für Strassenbau werden bis jeztzt keine Gewinner Punkte vergeben.
 			return true;
 		}
 		

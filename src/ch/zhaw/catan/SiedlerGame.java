@@ -1,14 +1,18 @@
 package ch.zhaw.catan;
 
 import ch.zhaw.catan.Config.Faction;
+import ch.zhaw.catan.Config.Land;
 import ch.zhaw.catan.Config.Resource;
 import ch.zhaw.catan.Config.Structure;
 
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 /**
  * This class performs all actions related to modifying the game state.
@@ -130,6 +134,7 @@ public class SiedlerGame {
 	 */
 	public int getCurrentPlayerResourceStock(Resource resource) {
 		HashMap<Resource, Integer> resources = currentPlayer.getAmountOfResources();	
+		if (resources == null) return 0;
 		Integer resourceStock = resources.get(resource);
 		if(resourceStock == null) return 0;
 		return resourceStock;
@@ -150,22 +155,18 @@ public class SiedlerGame {
 	 * @return true, if the placement was successful
 	 */
 	public boolean placeInitialSettlement(Point position, boolean payout) {
-		// TODO: Implement
-		
 		boolean hasBuildSettlement = siedlerBoard.createSettlement(position, getCurrentPlayerFaction());
 		if(!hasBuildSettlement) return false;
 		increaseWinningPoints(currentPlayer, 1);
-	
-
-		// if(sidlerBoard.placeSettlement(position)){
-	// do everything} else return false;
+		// todo: auch?? currentPlayer.setCurrentNumberOfSettlements(1);
 		if(payout) {
-			// resourcen auszahlen
+			Map<Point, Land> landPlacements = Config.getStandardLandPlacement();
+			Land currentLand = landPlacements.get(position);			
+			// nur eine resource möglich?
+			// todo_: getSoroucounding fields
+			currentPlayer.setAmountOfResources(currentLand.getResource(), 1, true);
+			
 		}
-		// TODO?? mögliche häuser eins abziehen?
-		// + winpoints erhï¿½hen
-		// + resourcen auszahlen
-		// + mï¿½gliche hï¿½user eins abziehen?
 		
 		return false;
 
@@ -180,9 +181,9 @@ public class SiedlerGame {
 	 * @return true, if the placement was successful
 	 */
 	public boolean placeInitialRoad(Point roadStart, Point roadEnd) {
-		// TODO: Implement
 		boolean hasBuildRoad = siedlerBoard.createStreet(roadStart, roadEnd, getCurrentPlayerFaction());
-		// TODO noch mehr?
+		//todo evtl # abzeiehen.
+		
 		return hasBuildRoad;
 	}
 
@@ -203,7 +204,39 @@ public class SiedlerGame {
 	 */
 	public Map<Faction, List<Resource>> throwDice(int dicethrow) {
 		// TODO: Implement
+		// liste erstrllen mit allen spielern
+		// anzahl von resourcen für jeden spieler speichern.
+		// speiler hat an dieser stelle ein haus oder eine stadt?
+		// hat bank noch resourcen zur verfügung
+		Map<Faction, List<Resource>> payout = new HashMap<Config.Faction, List<Resource>>();
+		
+		for(Player p : players) {
+			payout.put(p.getFaction(), new ArrayList<Resource>());
+		}
+		
+		Map<Point, Integer> diceNumberPlacements = Config.getStandardDiceNumberPlacement();
+	
+		// alle orte die resourcen ausbezahlt bekommen
+		Set<Point> placementToGetResources = new HashSet();
+		
+		for(Map.Entry<Point, Integer> entry: diceNumberPlacements.entrySet()) {
+			if(entry.getValue() != null && entry.getValue() == dicethrow) {
+				placementToGetResources.add(entry.getKey());
+			}
+		}
+		
+		// sammle alle punkte die um diese würfel zahl liegen
+		// strings sind was? factions? und ob settlement oder city? 
+		// wird spöter auch noch für stadt benötigt
+		// List<string> suroundingSettlements = siedlerBoard.searchFieldSettlement(point);
+		
+		// erstelle Liste für spueler mit seinen neuen resourcen
+		// hier mal für currentPlayer
+		
+		List<Resource> neu = new ArrayList<Resource>();
+		
 		return null;
+		
 	}
 
 	/**
@@ -230,15 +263,14 @@ public class SiedlerGame {
 		if(hasBuildSettlement) {
 			payForConstruct(Structure.SETTLEMENT);
 			increaseWinningPoints(currentPlayer, 1);
+			currentPlayer.setCurrentNumberOfSettlements(1);
 			// TODO: resourcen werden nur ausgezahlt wenn phase 1 bei haus bau oder?
+			// todo_: getSoroucounding fields
+			
+			// TODO: currentPlayer.setAmountOfResources(currentLand.getResource(), 1, true);
+						
 			return true;
 		}
-		// TODO: Implement
-		//TODO: if ï¿½berprï¿½fen: konnte es gebaut werden?
-		siedlerBoard.createSettlement(position, getCurrentPlayerFaction());
-		increaseWinningPoints(currentPlayer, 1);
-		// resourcen auszahlen!!
-		// resourcen abzeihen!! bezahlung
 		return false;
 	}
 
@@ -280,17 +312,12 @@ public class SiedlerGame {
 
 		boolean canPayForRoad = canPlayerPayForStructure(Structure.ROAD);
 		if(!canPayForRoad) return false;
-
-		// TODO: Implement
-		//TODO: if ï¿½berprï¿½fen: konnte es gebaut werden?
-		// beuahlung!!
-		// if player has bezahlung
-		List<Resource> costs = Config.Structure.ROAD.getCosts();
 		
 		boolean hasBuildRoad = siedlerBoard.createStreet(roadStart, roadEnd, getCurrentPlayerFaction());
 		
 		if(hasBuildRoad) {
 			payForConstruct(Structure.ROAD);
+			currentPlayer.setCurrentNumberOfRoads(1);
 			//TODO: ? Für Strassenbau werden bis jeztzt keine Gewinner Punkte vergeben.
 			return true;
 		}
@@ -298,30 +325,6 @@ public class SiedlerGame {
 		return false;
 	}
 
-	private void payForConstruct(Structure structure) {
-		List<Resource> costs = structure.getCosts();
-		for(Resource resource : costs) {
-			currentPlayer.setAmountOfResources(resource, 1, false);
-		}
-	}
-	
-	private boolean canPlayerPayForStructure(Structure structure) {
-		List<Resource> costs = structure.getCosts();
-		
-		Map<Resource, Integer> currentResources = currentPlayer.getAmountOfResources();
-		if(currentResources == null) return false;
-		
-		Integer currentResource;
-		for(Resource resource : costs) {
-			currentResource = currentResources.get(resource);
-			if(currentResource == null) return false;
-			currentResource--;
-			if(currentResource < 0) return false;
-		}
-		
-		return true;
-	}
-	
 	/**
 	 * Trades in {@value #FOUR_TO_ONE_TRADE_OFFER} resources of the offered type for
 	 * {@value #FOUR_TO_ONE_TRADE_WANT} resource of the wanted type.
@@ -332,6 +335,7 @@ public class SiedlerGame {
 	 *         successful
 	 */
 	public boolean tradeWithBankFourToOne(Resource offer, Resource want) {
+		if(currentPlayer.getAmountOfResources() == null) return false;
 		boolean hasResourcesToTradeWith = currentPlayer.getAmountOfResources().get(offer) >= 4;
 		boolean isTradingSuccessful = false;
 		if(hasResourcesToTradeWith) {
@@ -388,4 +392,29 @@ public class SiedlerGame {
 		int currentPoints = player.getNumberOfWinningpoints();
 		player.setNumberOfWinningpoints(currentPoints + increment);
 	}
+	
+	private void payForConstruct(Structure structure) {
+		List<Resource> costs = structure.getCosts();
+		for(Resource resource : costs) {
+			currentPlayer.setAmountOfResources(resource, 1, false);
+		}
+	}
+	
+	private boolean canPlayerPayForStructure(Structure structure) {
+		List<Resource> costs = structure.getCosts();
+		
+		Map<Resource, Integer> currentResources = currentPlayer.getAmountOfResources();
+		if(currentResources == null) return false;
+		
+		Integer currentResource;
+		for(Resource resource : costs) {
+			currentResource = currentResources.get(resource);
+			if(currentResource == null) return false;
+			currentResource--;
+			if(currentResource < 0) return false;
+		}
+		
+		return true;
+	}
+	
 }

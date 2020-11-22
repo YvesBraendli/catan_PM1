@@ -45,12 +45,14 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	 */
 	public boolean createSettlement(Point buildingGround, Config.Faction faction) {
 		boolean successful = false;
-		if (getNeighboursOfCorner(buildingGround) != null || getCorner(buildingGround) != null) {
-			System.err.println(
-					"Es ist nicht möglich, auf diesem Feld zu bauen. " + "Bitte wählen sie ein anderes Feld aus.");
-			successful = true;
-		} else {
+		System.out.print(getNeighboursOfCorner(buildingGround));
+		if (getNeighboursOfCorner(buildingGround).isEmpty() && getCorner(buildingGround) == null) {
 			setCorner(buildingGround, faction.toString() + "S");
+			successful = true;
+		} else if (!getNeighboursOfCorner(buildingGround).isEmpty() || getCorner(buildingGround) != null){
+			System.err.println(
+					"Es ist nicht möglich, auf diesem Feld zu bauen. " 
+			+ "Bitte wählen sie ein anderes Feld aus.");
 		}
 		return successful;
 	}

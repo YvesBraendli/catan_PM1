@@ -404,6 +404,8 @@ public class SiedlerGame {
 		for(Resource resource : costs) {
 			currentPlayer.setAmountOfResources(resource, 1, false);
 		}
+		//bank.addAmountOfResources(Config.Structure.SETTLEMENT.getCostsAsMap());
+		
 	}
 	
 	private boolean canPlayerPayForStructure(Structure structure) {

@@ -86,7 +86,7 @@ public class Output {
 	 * @param textTerminal the terminal used for the outputs
 	 */
 	public void errorSettlementNotBuilt(TextTerminal<?> textTerminal) {
-		textTerminal.println("No settlement could be built at this location.");
+		textTerminal.println("No settlement/city could be built at this location.");
 	}
 
 	/**
@@ -231,5 +231,14 @@ public class Output {
 	public void printBoard(TextTerminal<?> textTerminal, SiedlerBoard board) {
 		gameBoardView = new SiedlerBoardTextView(board);
 		textTerminal.println(gameBoardView.toString());
+	}
+	
+	/**
+	 * Prints the winner of the game
+	 * 
+	 * @param textTerminal the terminal used for the outputs
+	 */
+	public void printWinner(TextTerminal<?> textTerminal, Faction winner) {
+		textTerminal.println("Player "+winner+" won the game!");
 	}
 }

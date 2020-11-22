@@ -27,6 +27,7 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	 *         an empty list if there are no settlements.
 	 */
 	public List<String> searchFieldSettlement(Point field) {
+		// HashMap, key: faction, value: int (zu Beginn) oder List(Settlement/City)
 		List<String> settlementsAroundField = new LinkedList<>();
 		if (hasField(field)) {
 			settlementsAroundField = getCornersOfField(field);

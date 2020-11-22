@@ -49,10 +49,9 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 		if (getNeighboursOfCorner(buildingGround).isEmpty() && getCorner(buildingGround) == null) {
 			setCorner(buildingGround, faction.toString() + "S");
 			successful = true;
-		} else if (!getNeighboursOfCorner(buildingGround).isEmpty() || getCorner(buildingGround) != null){
+		} else if (!getNeighboursOfCorner(buildingGround).isEmpty() || getCorner(buildingGround) != null) {
 			System.err.println(
-					"Es ist nicht möglich, auf diesem Feld zu bauen. " 
-			+ "Bitte wählen sie ein anderes Feld aus.");
+					"Es ist nicht möglich, auf diesem Feld zu bauen. " + "Bitte wählen sie ein anderes Feld aus.");
 		}
 		return successful;
 	}
@@ -73,8 +72,16 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 			for (int i = 0; i < startRoads.size(); i++) {
 				boolean alreadyBuiltStreet = false;
 				// Richtig mit Cast von Faction zu String?
-				if (((startRoads.get(i).substring(0, 2).equals(faction.toString()))
-						|| (endRoads.get(i).substring(0, 2).equals(faction.toString()))) && !alreadyBuiltStreet) {
+				if ((startRoads.get(i).substring(0, 2).equals(faction.toString())) && !alreadyBuiltStreet) {
+					setEdge(start, end, faction.toString());
+					alreadyBuiltStreet = true;
+					successful = true;
+				}
+			}
+			for (int i = 0; i < endRoads.size(); i++) {
+				boolean alreadyBuiltStreet = false;
+				// Richtig mit Cast von Faction zu String?
+				if ((endRoads.get(i).substring(0, 2).equals(faction.toString())) && !alreadyBuiltStreet) {
 					setEdge(start, end, faction.toString());
 					alreadyBuiltStreet = true;
 					successful = true;

@@ -169,7 +169,7 @@ public class SiedlerGame {
 				//bank.removeAmountOfResources(Config.Structure.SETTLEMENT.getCostsAsMap());
 				currentPlayer.setAmountOfResources(currentLand.getResource(), 1, true);
 			//}
-			
+			return true;
 		}		
 				
 		return false;

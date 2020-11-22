@@ -46,13 +46,12 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	 */
 	public boolean createSettlement(Point buildingGround, Config.Faction faction) {
 		boolean successful = false;
-		System.out.print(getNeighboursOfCorner(buildingGround));
-		if (getNeighboursOfCorner(buildingGround).isEmpty() && getCorner(buildingGround) == null) {
-			setCorner(buildingGround, faction.toString() + "S");
-			successful = true;
-		} else if (!getNeighboursOfCorner(buildingGround).isEmpty() || getCorner(buildingGround) != null) {
-			System.err.println(
-					"Es ist nicht möglich, auf diesem Feld zu bauen. " + "Bitte wählen sie ein anderes Feld aus.");
+		if (hasCorner(buildingGround)) {
+			System.out.print(getNeighboursOfCorner(buildingGround));
+			if (getNeighboursOfCorner(buildingGround).isEmpty() && getCorner(buildingGround) == null) {
+				setCorner(buildingGround, faction.toString() + "S");
+				successful = true;
+			}
 		}
 		return successful;
 	}
@@ -66,37 +65,33 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	 */
 	public boolean createStreet(Point start, Point end, Config.Faction faction) {
 		boolean successful = false;
-		List<String> startRoads = getAdjacentEdges(start);
-		List<String> endRoads = getAdjacentEdges(end);
-		if (((startRoads != null && startRoads.size() < 3) && endRoads != null && endRoads.size() < 3)
-				&& getEdge(start, end) == null) {
-			for (int i = 0; i < startRoads.size(); i++) {
-				boolean alreadyBuiltStreet = false;
-				// Richtig mit Cast von Faction zu String?
-				if ((startRoads.get(i).substring(0, 2).equals(faction.toString())) && !alreadyBuiltStreet) {
-					setEdge(start, end, faction.toString());
-					alreadyBuiltStreet = true;
-					successful = true;
+		if(hasEdge(start, end)) {
+			List<String> startRoads = getAdjacentEdges(start);
+			List<String> endRoads = getAdjacentEdges(end);
+			if (((startRoads != null && startRoads.size() < 3) && endRoads != null && endRoads.size() < 3)
+					&& getEdge(start, end) == null) {
+				for (int i = 0; i < startRoads.size(); i++) {
+					boolean alreadyBuiltStreet = false;
+					if ((startRoads.get(i).substring(0, 2).equals(faction.toString())) && !alreadyBuiltStreet) {
+						setEdge(start, end, faction.toString());
+						alreadyBuiltStreet = true;
+						successful = true;
+					}
+				}
+				for (int i = 0; i < endRoads.size(); i++) {
+					boolean alreadyBuiltStreet = false;
+					if ((endRoads.get(i).substring(0, 2).equals(faction.toString())) && !alreadyBuiltStreet) {
+						setEdge(start, end, faction.toString());
+						alreadyBuiltStreet = true;
+						successful = true;
+					}
 				}
 			}
-			for (int i = 0; i < endRoads.size(); i++) {
-				boolean alreadyBuiltStreet = false;
-				// Richtig mit Cast von Faction zu String?
-				if ((endRoads.get(i).substring(0, 2).equals(faction.toString())) && !alreadyBuiltStreet) {
-					setEdge(start, end, faction.toString());
-					alreadyBuiltStreet = true;
-					successful = true;
-				}
-			}
-		} else {
-			System.err.println(
-					"Es ist nicht möglich, auf diesem Feld zu bauen. " + "Bitte wählen sie ein anderes Feld aus.");
 		}
 		return successful;
 	}
 
 	private void createFields() {
-
 		int maxFieldCoordinateX = 10;
 		int minFieldCoordinateX = 5;
 		int rowCounter = 0;

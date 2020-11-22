@@ -37,6 +37,7 @@ public class GameController {
 	private boolean isRunning;
 	private boolean settlementBuilt;
 	private boolean roadBuilt;
+	private Point position;
 
 	/**
 	 * constructor of the GameController class.
@@ -113,7 +114,7 @@ public class GameController {
 
 	/**
 	 * Shows the options which resource should be sold and which resource should be
-	 * bought, then starts the excahnge.
+	 * bought, then starts the exchange.
 	 */
 	private void tradeAction() {
 		output.printTradeMenuDelimiter(textTerminal);
@@ -139,16 +140,30 @@ public class GameController {
 		case SETTLEMENT:
 			output.printBoard(textTerminal, siedlerGame.getBoard());
 			output.requestSettlementCoordinates(textTerminal, false);
-			Point position = inputParser.requestXYCoordinates(textIO);
+			position = inputParser.requestXYCoordinates(textIO);
 			if (inputParser.askBuildStructure(textIO, Structure.SETTLEMENT)) {
 				settlementBuilt = siedlerGame.buildSettlement(position);
 				if (!settlementBuilt) {
 					output.errorSettlementNotBuilt(textTerminal);
 				}
+				else {
+					isRunning = checkForWinner();
+				}
 			}
 			break;
 		case CITY:
-			// TODO Stadt ghört genau da ane und niergens anders!
+			output.printBoard(textTerminal, siedlerGame.getBoard());
+			output.requestSettlementCoordinates(textTerminal, false);
+			position = inputParser.requestXYCoordinates(textIO);
+			if (inputParser.askBuildStructure(textIO, Structure.CITY)) {
+				settlementBuilt = siedlerGame.buildCity(position);
+				if (!settlementBuilt) {
+					output.errorSettlementNotBuilt(textTerminal);
+				}
+				else {
+					isRunning = checkForWinner();
+				}
+			}
 			break;
 		case ROAD:
 			output.printBoard(textTerminal, siedlerGame.getBoard());
@@ -214,6 +229,20 @@ public class GameController {
 	 */
 	private int rollDice() {
 		return random.nextInt(6) + random.nextInt(6) + 2;
+	}
+	
+	/**
+	 * Checks if a player won the game and prints out a message
+	 * 
+	 * @return true if the game needs to continue running.
+	 */
+	private boolean checkForWinner() {
+		Config.Faction winner = siedlerGame.getWinner();
+		if(winner != null) {
+			output.printWinner(textTerminal, winner);
+			return false;
+		}
+		return true;
 	}
 
 	/**

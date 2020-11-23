@@ -166,10 +166,8 @@ public class SiedlerGame {
 			Land currentLand = landPlacements.get(position);
 			currentPlayer.setAmountOfResources(currentLand.getResource(), 1, true);
 			return true;
-		}		
-				
-		return false;
-
+		}						
+		return true;
 	}
 
 	/**

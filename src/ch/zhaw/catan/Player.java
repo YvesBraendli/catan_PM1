@@ -3,6 +3,7 @@ package ch.zhaw.catan;
 import java.util.HashMap;
 
 import ch.zhaw.catan.Config.Faction;
+import ch.zhaw.catan.Config.Resource;
 
 /**
  * This class creates a player and holds his specific parameters for the siedler
@@ -31,6 +32,9 @@ public class Player {
 	 */
 	public Player(Faction faction) {
 		this.faction = faction;
+		currentNumberOfSettlements = Config.Structure.SETTLEMENT.getStockPerPlayer();
+		currentNumberOfRoads = Config.Structure.ROAD.getStockPerPlayer();
+		currentNumberOfCities = Config.Structure.CITY.getStockPerPlayer();
 	}
 
 	/**
@@ -58,7 +62,7 @@ public class Player {
 	 * @return The map with the current amount of stock cards per resource for the
 	 *         player.
 	 */
-	public HashMap<Config.Resource, Integer> getAmountOfResources() {
+	public HashMap<Resource, Integer> getAmountOfResources() {
 		return amountOfResources;
 	}
 
@@ -71,7 +75,7 @@ public class Player {
 	 * @param getsCard      True, if the player gets cards and false if the cards
 	 *                      are taken away.
 	 */
-	public void setAmountOfResources(Config.Resource resource, int numberOfCards, boolean getsCards) {
+	public void setAmountOfResources(Resource resource, int numberOfCards, boolean getsCards) {
 		if (getsCards) {
 			int newValue = amountOfResources.get(resource) + numberOfCards;
 			amountOfResources.put(resource, newValue);
@@ -147,7 +151,7 @@ public class Player {
 	 * 
 	 * @return The faction of the current player
 	 */
-	public Config.Faction getFaction() {
+	public Faction getFaction() {
 		return faction;
 	}
 

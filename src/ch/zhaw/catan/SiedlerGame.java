@@ -161,14 +161,10 @@ public class SiedlerGame {
 		currentPlayer.setCurrentNumberOfSettlements(1);		
 		increaseWinningPoints(currentPlayer, 1);
 
-		if(payout) {
-			
+		if(payout) {		
 			Map<Point, Land> landPlacements = Config.getStandardLandPlacement();
 			Land currentLand = landPlacements.get(position);
-			//if(bank.hasAmountOfResources(Config.Structure.SETTLEMENT.getCostsAsMap()){
-				//bank.removeAmountOfResources(Config.Structure.SETTLEMENT.getCostsAsMap());
-				currentPlayer.setAmountOfResources(currentLand.getResource(), 1, true);
-			//}
+			currentPlayer.setAmountOfResources(currentLand.getResource(), 1, true);
 			return true;
 		}		
 				
@@ -208,40 +204,43 @@ public class SiedlerGame {
 	 * @param dicethrow the result of the dice throw
 	 * @return the resources that have been paid to the players
 	 */
-	public Map<Faction, List<Resource>> throwDice(int dicethrow) {
-		// TODO: Implement
-		// liste erstellen mit allen spielern
-		// anzahl von resourcen für jeden spieler speichern.
-		// speiler hat an dieser stelle ein haus oder eine stadt?
-		// hat bank noch resourcen zur verfügung
-		Map<Faction, List<Resource>> payout = new HashMap<Config.Faction, List<Resource>>();
-		
-		for(Player p : players) {
-			payout.put(p.getFaction(), new ArrayList<Resource>());
-		}
-		
+	public Map<Faction, List<Resource>> throwDice(int dicethrow) {		
+		Map<Faction, List<Resource>> payout = new HashMap<Config.Faction, List<Resource>>();		
 		Map<Point, Integer> diceNumberPlacements = Config.getStandardDiceNumberPlacement();
 	
-		// alle orte die resourcen ausbezahlt bekommen
-		Set<Point> placementToGetResources = new HashSet();		
+		Set<Point> placementToGetResources = new HashSet<Point>();		
 		for(Map.Entry<Point, Integer> entry: diceNumberPlacements.entrySet()) {
 			if(entry.getValue() != null && entry.getValue() == dicethrow) {
 				placementToGetResources.add(entry.getKey());
 			}
 		}
 		
-		// sammle alle punkte die um diese würfel zahl liegen
-		// strings sind was? factions? und ob settlement oder city? 
-		// wird spöter auch noch für stadt benötigt
-		// List<string> suroundingSettlements = siedlerBoard.searchFieldSettlement(point);
+		Map<Point, Land> landPlacements = Config.getStandardLandPlacement();
 		
-		// erstelle Liste für spieler mit seinen neuen resourcen
-		// hier mal für currentPlayer
-		
-		List<Resource> neu = new ArrayList<Resource>();
-		
-		return null;
-		
+		for(Point currentField : placementToGetResources) {
+			Land currentLand = landPlacements.get(currentField);
+			Resource currentResource = currentLand.getResource();
+			
+			Map<Faction, Integer> factionsWithSettlementAroundField = siedlerBoard.searchFieldSettlement(currentField);			
+			for(Player player : players) {
+				List<Resource> addedResources = new ArrayList<Resource>();
+				for(Map.Entry<Faction, Integer> faction : factionsWithSettlementAroundField.entrySet()) {
+					if(player.getFaction() == faction.getKey()) {
+						// TODO: refactor
+						// TODO: difference settlement and city
+						Map<Resource, Integer> payoutResoruces = new HashMap<>();
+						payoutResoruces.put(currentResource, 1);
+						boolean isPayoutSuccessful = bank.payoutToDiceThrows(payoutResoruces);	
+						if(!isPayoutSuccessful) {
+							player.setAmountOfResources(currentResource, faction.getValue(), true);
+							addedResources.add(currentResource); // 2 times when city
+						}				
+					}
+				}
+				payout.put(player.getFaction(), addedResources);
+			}			
+		}
+		return payout;		
 	}
 
 	/**
@@ -271,12 +270,6 @@ public class SiedlerGame {
 			increaseWinningPoints(currentPlayer, 1);
 			return true;
 		}
-		
-		//if(bank.hasAmountOfResources(Config.Structure.SETTLEMENT.getCostsAsMap()){
-		//	bank.removeAmountOfResources(Config.Structure.SETTLEMENT.getCostsAsMap());
-		//	currentPlayer.setAmountOfResources(currentLand.getResource(), 1, true);
-		//}
-		
 		return false;
 	}
 
@@ -407,8 +400,7 @@ public class SiedlerGame {
 		for(Resource resource : costs) {
 			currentPlayer.setAmountOfResources(resource, 1, false);
 		}
-		//bank.payCardsToBankStock(structure.getCostsAsMap());
-		
+		bank.payCardsToBankStock(structure.getCostsAsMap());		
 	}
 	
 	private boolean canPlayerPayForStructure(Structure structure) {

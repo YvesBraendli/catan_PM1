@@ -164,6 +164,8 @@ public class SiedlerGame {
 		if(payout) {
 			List<Land> landPlacements = siedlerBoard.getFields(position);
 			for(Land currentLand : landPlacements) {
+				if(currentLand.getResource() == null) continue;
+				System.out.println(currentLand.getResource());
 				currentPlayer.setAmountOfResources(currentLand.getResource(), 1, true);
 			}
 			

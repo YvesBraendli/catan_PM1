@@ -32,6 +32,7 @@ public class Player {
 	 */
 	public Player(Faction faction) {
 		this.faction = faction;
+		amountOfResources = new HashMap<Config.Resource, Integer>();
 		currentNumberOfSettlements = Config.Structure.SETTLEMENT.getStockPerPlayer();
 		currentNumberOfRoads = Config.Structure.ROAD.getStockPerPlayer();
 		currentNumberOfCities = Config.Structure.CITY.getStockPerPlayer();
@@ -76,14 +77,18 @@ public class Player {
 	 *                      are taken away.
 	 */
 	public void setAmountOfResources(Resource resource, int numberOfCards, boolean getsCards) {
-		if (getsCards) {
-			int newValue = amountOfResources.get(resource) + numberOfCards;
-			amountOfResources.put(resource, newValue);
-		} else if (getsCards = false) {
-			int newValue = amountOfResources.get(resource) - numberOfCards;
-			amountOfResources.put(resource, newValue);
+		Integer currentValue = amountOfResources.get(resource);
+		if(currentValue == null) {
+			currentValue = 0;
 		}
-
+		
+		int newValue = currentValue;
+		if (getsCards) {
+			newValue = currentValue.intValue() + numberOfCards;
+		} else {
+			newValue = currentValue.intValue() - numberOfCards;
+		}
+		amountOfResources.put(resource, newValue);
 	}
 
 	/**

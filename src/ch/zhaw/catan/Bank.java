@@ -84,19 +84,19 @@ public class Bank {
 	 * @param resource The resource, the player is returning to the bank.
 	 * @param numberOfCardsGiven The number of Cards, the player is returning to the bank.
 	 */
-	public void payCardsToBankStock (Map<Resource, Integer> resourcesForStructure) {
+	public void payCardsToBankStock (Map<Resource, Long> resourcesForStructure) {
 		if (resourcesForStructure.containsKey(Config.Resource.CLAY)) {
-			amountOfResources.put(Config.Resource.CLAY, amountOfResources.get(Config.Resource.CLAY) + resourcesForStructure.get(Config.Resource.CLAY));
+			amountOfResources.put(Config.Resource.CLAY, amountOfResources.get(Config.Resource.CLAY) + resourcesForStructure.get(Config.Resource.CLAY).intValue());
 		} else if (resourcesForStructure.containsKey(Config.Resource.GRAIN)) {
-			amountOfResources.put(Config.Resource.GRAIN, amountOfResources.get(Config.Resource.GRAIN) + resourcesForStructure.get(Config.Resource.GRAIN));
+			amountOfResources.put(Config.Resource.GRAIN, amountOfResources.get(Config.Resource.GRAIN) + resourcesForStructure.get(Config.Resource.GRAIN).intValue());
 		} else if (resourcesForStructure.containsKey(Config.Resource.CLAY)) {
-			amountOfResources.put(Config.Resource.CLAY, amountOfResources.get(Config.Resource.CLAY) + resourcesForStructure.get(Config.Resource.CLAY));
+			amountOfResources.put(Config.Resource.CLAY, amountOfResources.get(Config.Resource.CLAY) + resourcesForStructure.get(Config.Resource.CLAY).intValue());
 		} else if (resourcesForStructure.containsKey(Config.Resource.STONE)) {
-			amountOfResources.put(Config.Resource.STONE, amountOfResources.get(Config.Resource.STONE) + resourcesForStructure.get(Config.Resource.STONE));
+			amountOfResources.put(Config.Resource.STONE, amountOfResources.get(Config.Resource.STONE) + resourcesForStructure.get(Config.Resource.STONE).intValue());
 		} else if (resourcesForStructure.containsKey(Config.Resource.WOOD)) {
-			amountOfResources.put(Config.Resource.WOOD, amountOfResources.get(Config.Resource.WOOD) + resourcesForStructure.get(Config.Resource.WOOD));
+			amountOfResources.put(Config.Resource.WOOD, amountOfResources.get(Config.Resource.WOOD) + resourcesForStructure.get(Config.Resource.WOOD).intValue());
 		} else if (resourcesForStructure.containsKey(Config.Resource.WOOL)) {
-			amountOfResources.put(Config.Resource.WOOL, amountOfResources.get(Config.Resource.WOOL) + resourcesForStructure.get(Config.Resource.WOOL));
+			amountOfResources.put(Config.Resource.WOOL, amountOfResources.get(Config.Resource.WOOL) + resourcesForStructure.get(Config.Resource.WOOL).intValue());
 		}
 	}
 

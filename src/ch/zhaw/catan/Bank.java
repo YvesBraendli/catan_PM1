@@ -78,5 +78,14 @@ public class Bank {
 		}
 		return successful;
 	}
+	
+	/**
+	 * Increases the number of resource-cards of the bank by the given int-value.
+	 * @param resource The resource, the player is returning to the bank.
+	 * @param numberOfCardsGiven The number of Cards, the player is returning to the bank.
+	 */
+	public void payCardsToBankStock (Resource resource, int numberOfCardsGiven) {
+		amountOfResources.put(resource, amountOfResources.get(resource) + numberOfCardsGiven);
+	}
 
 }

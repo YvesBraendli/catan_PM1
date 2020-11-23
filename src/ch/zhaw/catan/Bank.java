@@ -84,8 +84,20 @@ public class Bank {
 	 * @param resource The resource, the player is returning to the bank.
 	 * @param numberOfCardsGiven The number of Cards, the player is returning to the bank.
 	 */
-	public void payCardsToBankStock (Resource resource, int numberOfCardsGiven) {
-		amountOfResources.put(resource, amountOfResources.get(resource) + numberOfCardsGiven);
+	public void payCardsToBankStock (Map<Resource, Integer> resourcesForStructure) {
+		if (resourcesForStructure.containsKey(Config.Resource.CLAY)) {
+			amountOfResources.put(Config.Resource.CLAY, amountOfResources.get(Config.Resource.CLAY) + resourcesForStructure.get(Config.Resource.CLAY));
+		} else if (resourcesForStructure.containsKey(Config.Resource.GRAIN)) {
+			amountOfResources.put(Config.Resource.GRAIN, amountOfResources.get(Config.Resource.GRAIN) + resourcesForStructure.get(Config.Resource.GRAIN));
+		} else if (resourcesForStructure.containsKey(Config.Resource.CLAY)) {
+			amountOfResources.put(Config.Resource.CLAY, amountOfResources.get(Config.Resource.CLAY) + resourcesForStructure.get(Config.Resource.CLAY));
+		} else if (resourcesForStructure.containsKey(Config.Resource.STONE)) {
+			amountOfResources.put(Config.Resource.STONE, amountOfResources.get(Config.Resource.STONE) + resourcesForStructure.get(Config.Resource.STONE));
+		} else if (resourcesForStructure.containsKey(Config.Resource.WOOD)) {
+			amountOfResources.put(Config.Resource.WOOD, amountOfResources.get(Config.Resource.WOOD) + resourcesForStructure.get(Config.Resource.WOOD));
+		} else if (resourcesForStructure.containsKey(Config.Resource.WOOL)) {
+			amountOfResources.put(Config.Resource.WOOL, amountOfResources.get(Config.Resource.WOOL) + resourcesForStructure.get(Config.Resource.WOOL));
+		}
 	}
 
 }

@@ -336,7 +336,12 @@ public class SiedlerGame {
 	 */
 	public boolean tradeWithBankFourToOne(Resource offer, Resource want) {
 		if(currentPlayer.getAmountOfResources() == null) return false;
-		boolean hasResourcesToTradeWith = currentPlayer.getAmountOfResources().get(offer) >= 4;
+		Integer resourcesToOffer = currentPlayer.getAmountOfResources().get(offer);
+		if(resourcesToOffer == null) {
+			resourcesToOffer = 0;
+		}
+		
+		boolean hasResourcesToTradeWith = resourcesToOffer >= 4;
 		if(hasResourcesToTradeWith) {
 			boolean isTradingSuccessful = bank.trade(offer, want);
 			if(isTradingSuccessful) {

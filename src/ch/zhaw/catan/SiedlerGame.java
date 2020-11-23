@@ -210,7 +210,7 @@ public class SiedlerGame {
 	 */
 	public Map<Faction, List<Resource>> throwDice(int dicethrow) {
 		// TODO: Implement
-		// liste erstrllen mit allen spielern
+		// liste erstellen mit allen spielern
 		// anzahl von resourcen für jeden spieler speichern.
 		// speiler hat an dieser stelle ein haus oder eine stadt?
 		// hat bank noch resourcen zur verfügung
@@ -223,8 +223,7 @@ public class SiedlerGame {
 		Map<Point, Integer> diceNumberPlacements = Config.getStandardDiceNumberPlacement();
 	
 		// alle orte die resourcen ausbezahlt bekommen
-		Set<Point> placementToGetResources = new HashSet();
-		
+		Set<Point> placementToGetResources = new HashSet();		
 		for(Map.Entry<Point, Integer> entry: diceNumberPlacements.entrySet()) {
 			if(entry.getValue() != null && entry.getValue() == dicethrow) {
 				placementToGetResources.add(entry.getKey());
@@ -236,7 +235,7 @@ public class SiedlerGame {
 		// wird spöter auch noch für stadt benötigt
 		// List<string> suroundingSettlements = siedlerBoard.searchFieldSettlement(point);
 		
-		// erstelle Liste für spueler mit seinen neuen resourcen
+		// erstelle Liste für spieler mit seinen neuen resourcen
 		// hier mal für currentPlayer
 		
 		List<Resource> neu = new ArrayList<Resource>();
@@ -343,11 +342,15 @@ public class SiedlerGame {
 	public boolean tradeWithBankFourToOne(Resource offer, Resource want) {
 		if(currentPlayer.getAmountOfResources() == null) return false;
 		boolean hasResourcesToTradeWith = currentPlayer.getAmountOfResources().get(offer) >= 4;
-		boolean isTradingSuccessful = false;
 		if(hasResourcesToTradeWith) {
-			isTradingSuccessful = bank.trade(offer, want);
+			boolean isTradingSuccessful = bank.trade(offer, want);
+			if(isTradingSuccessful) {
+				currentPlayer.setAmountOfResources(offer, 4, false);
+				currentPlayer.setAmountOfResources(offer, 1, true);
+				return true;
+			}
 		}		
-		return isTradingSuccessful;
+		return false;
 	}
 
 	/**
@@ -404,7 +407,7 @@ public class SiedlerGame {
 		for(Resource resource : costs) {
 			currentPlayer.setAmountOfResources(resource, 1, false);
 		}
-		//bank.addAmountOfResources(Config.Structure.SETTLEMENT.getCostsAsMap());
+		//bank.payCardsToBankStock(structure.getCostsAsMap());
 		
 	}
 	

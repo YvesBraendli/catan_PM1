@@ -160,11 +160,13 @@ public class SiedlerGame {
 		
 		currentPlayer.setCurrentNumberOfSettlements(1);		
 		increaseWinningPoints(currentPlayer, 1);
-
-		if(payout) {		
-			Map<Point, Land> landPlacements = Config.getStandardLandPlacement();
-			Land currentLand = landPlacements.get(position);
-			currentPlayer.setAmountOfResources(currentLand.getResource(), 1, true);
+		
+		if(payout) {
+			List<Land> landPlacements = siedlerBoard.getFields(position);
+			for(Land currentLand : landPlacements) {
+				currentPlayer.setAmountOfResources(currentLand.getResource(), 1, true);
+			}
+			
 			return true;
 		}						
 		return true;

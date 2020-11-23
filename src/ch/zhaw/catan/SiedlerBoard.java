@@ -2,13 +2,10 @@ package ch.zhaw.catan;
 
 import java.awt.Point;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import ch.zhaw.catan.Config.Land;
 import ch.zhaw.hexboard.HexBoard;
-import ch.zhaw.hexboard.Label;
 
 public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 
@@ -23,14 +20,27 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	 * 
 	 * @param field The resource field, that needs to be checked, if there are
 	 *              settlements around it.
-	 * @return A List with all settlement for the specified resource Field. Returns
-	 *         an empty list if there are no settlements.
+	 * @return A HashMap with the key for the Factions a list with String values,
+	 *         which represents the settlement.
 	 */
-	public List<String> searchFieldSettlement(Point field) {
-		// HashMap, key: faction, value: int (zu Beginn) oder List(Settlement/City)
-		List<String> settlementsAroundField = new LinkedList<>();
+	public HashMap<Config.Faction, String[]> searchFieldSettlement(Point field) {
+		// HashMap, key: faction, value: String (zu Beginn) oder List(Settlement/City)
+
+		HashMap<Config.Faction, String[]> settlementsAroundField = new HashMap<>();
 		if (hasField(field)) {
-			settlementsAroundField = getCornersOfField(field);
+			List<String> buildingsAroundField = getCornersOfField(field);
+			Config.Faction[] factions = { Config.Faction.BLUE, Config.Faction.GREEN, Config.Faction.RED,
+					Config.Faction.YELLOW };
+			// String faction = Config.Faction.
+			for (int z = 0; z < factions.length; z++) {
+				for (int i = 0; i < buildingsAroundField.size(); i++) {
+					String[] buildingsForFaction = new String[3];
+					if (buildingsAroundField.get(i).substring(0, 2).equals(factions[z].toString())) {
+						buildingsForFaction[0] = buildingsAroundField.get(i);
+					}
+					settlementsAroundField.put(factions[z], buildingsForFaction);
+				}
+			}
 		}
 		return settlementsAroundField;
 	}
@@ -65,7 +75,7 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	 */
 	public boolean createStreet(Point start, Point end, Config.Faction faction) {
 		boolean successful = false;
-		if(hasEdge(start, end)) {
+		if (hasEdge(start, end)) {
 			List<String> startRoads = getAdjacentEdges(start);
 			List<String> endRoads = getAdjacentEdges(end);
 			if (((startRoads != null && startRoads.size() < 3) && endRoads != null && endRoads.size() < 3)

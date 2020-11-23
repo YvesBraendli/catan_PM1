@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.HashMap;
 import java.util.List;
 
+import ch.zhaw.catan.Config.Faction;
 import ch.zhaw.catan.Config.Land;
 import ch.zhaw.hexboard.HexBoard;
 
@@ -23,20 +24,20 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	 * @return A HashMap with the key for the Factions a list with String values,
 	 *         which represents the settlement.
 	 */
-	public HashMap<Config.Faction, String[]> searchFieldSettlement(Point field) {
+	public HashMap<Faction, Integer> searchFieldSettlement(Point field) {
 		// HashMap, key: faction, value: String (zu Beginn) oder List(Settlement/City)
 
-		HashMap<Config.Faction, String[]> settlementsAroundField = new HashMap<>();
+		HashMap<Faction, Integer> settlementsAroundField = new HashMap<>();
 		if (hasField(field)) {
 			List<String> buildingsAroundField = getCornersOfField(field);
-			Config.Faction[] factions = { Config.Faction.BLUE, Config.Faction.GREEN, Config.Faction.RED,
-					Config.Faction.YELLOW };
+			Faction[] factions = { Faction.BLUE, Faction.GREEN, Faction.RED,
+					Faction.YELLOW };
 			// String faction = Config.Faction.
 			for (int z = 0; z < factions.length; z++) {
 				for (int i = 0; i < buildingsAroundField.size(); i++) {
-					String[] buildingsForFaction = new String[3];
+					int buildingsForFaction = 0;
 					if (buildingsAroundField.get(i).substring(0, 2).equals(factions[z].toString())) {
-						buildingsForFaction[0] = buildingsAroundField.get(i);
+						buildingsForFaction += 1;
 					}
 					settlementsAroundField.put(factions[z], buildingsForFaction);
 				}

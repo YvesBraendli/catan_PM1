@@ -30,8 +30,7 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 		HashMap<Faction, Integer> settlementsAroundField = new HashMap<>();
 		if (hasField(field)) {
 			List<String> buildingsAroundField = getCornersOfField(field);
-			Faction[] factions = { Faction.BLUE, Faction.GREEN, Faction.RED,
-					Faction.YELLOW };
+			Faction[] factions = { Faction.BLUE, Faction.GREEN, Faction.RED, Faction.YELLOW };
 			// String faction = Config.Faction.
 			for (int z = 0; z < factions.length; z++) {
 				for (int i = 0; i < buildingsAroundField.size(); i++) {
@@ -74,32 +73,46 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	 * @param end     The point, where the Player wants to end his road.
 	 * @param faction The faction of the current player.
 	 */
-	public boolean createStreet(Point start, Point end, Config.Faction faction) {
-		boolean successful = false;
+	public boolean createStreet(Point start, Point end, Faction faction) {
 		if (hasEdge(start, end)) {
 			List<String> startRoads = getAdjacentEdges(start);
 			List<String> endRoads = getAdjacentEdges(end);
-			if (((startRoads != null && startRoads.size() < 3) && endRoads != null && endRoads.size() < 3)
-					&& getEdge(start, end) == null) {
+			if (startRoads != null && startRoads.size() > 0 && startRoads.size() < 3 && getEdge(start, end) == null) {
 				for (int i = 0; i < startRoads.size(); i++) {
-					boolean alreadyBuiltStreet = false;
-					if ((startRoads.get(i).substring(0, 2).equals(faction.toString())) && !alreadyBuiltStreet) {
+					if ((startRoads.get(i).substring(0, 2).equals(faction.toString()))) {
 						setEdge(start, end, faction.toString());
-						alreadyBuiltStreet = true;
-						successful = true;
-					}
-				}
-				for (int i = 0; i < endRoads.size(); i++) {
-					boolean alreadyBuiltStreet = false;
-					if ((endRoads.get(i).substring(0, 2).equals(faction.toString())) && !alreadyBuiltStreet) {
-						setEdge(start, end, faction.toString());
-						alreadyBuiltStreet = true;
-						successful = true;
+						return true;
 					}
 				}
 			}
+			if (endRoads != null && endRoads.size() > 0 && endRoads.size() < 3 && getEdge(start, end) == null) {
+				for (int i = 0; i < endRoads.size(); i++) {
+					if ((endRoads.get(i).substring(0, 2).equals(faction.toString()))) {
+						setEdge(start, end, faction.toString());
+						return true;
+					}
+				}
+			}
+			if (hasSettlementAtStartOrEnd(start, end, faction)) {
+				setEdge(start, end, faction.toString());
+				return true;
+			}
+
 		}
-		return successful;
+		return false;
+	}
+
+	private boolean hasSettlementAtStartOrEnd(Point start, Point end, Faction faction) {
+		String startCorner = getCorner(start);
+		String endCorner = getCorner(end);
+		boolean hisOwnHouse = false;
+		if (startCorner != null ) {
+			hisOwnHouse = (startCorner.substring(0, 2).equals(faction.toString()));
+		}
+		if (endCorner != null) {
+			hisOwnHouse = (hisOwnHouse || endCorner.substring(0, 2).equals(faction.toString()));
+		}
+		return hisOwnHouse;
 	}
 
 	private void createFields() {

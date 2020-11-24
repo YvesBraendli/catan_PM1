@@ -123,7 +123,7 @@ public class GameController {
 		output.requestResourceBuy(textTerminal);
 		Config.Resource resourceToBuy = inputParser.showTradeAction(textIO);
 		if (inputParser.askBuyResource(textIO, resourceToBuy)) {
-			if (siedlerGame.tradeWithBankFourToOne(resourceToSell, resourceToBuy)) {
+			if (!siedlerGame.tradeWithBankFourToOne(resourceToSell, resourceToBuy)) {
 				output.errorTradeFailed(textTerminal);
 			}
 		}

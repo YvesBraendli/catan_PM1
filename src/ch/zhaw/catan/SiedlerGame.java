@@ -346,7 +346,7 @@ public class SiedlerGame {
 			boolean isTradingSuccessful = bank.trade(offer, want);
 			if(isTradingSuccessful) {
 				currentPlayer.setAmountOfResources(offer, 4, false);
-				currentPlayer.setAmountOfResources(offer, 1, true);
+				currentPlayer.setAmountOfResources(want, 1, true);
 				return true;
 			}
 		}		

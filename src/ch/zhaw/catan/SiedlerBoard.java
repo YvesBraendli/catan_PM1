@@ -56,14 +56,25 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	 */
 	public boolean createSettlement(Point buildingGround, Config.Faction faction) {
 		boolean successful = false;
-		if (hasCorner(buildingGround)) {
-			System.out.print(getNeighboursOfCorner(buildingGround));
+		if (hasCorner(buildingGround) && hasLandAsFieldAround(buildingGround)) {
 			if (getNeighboursOfCorner(buildingGround).isEmpty() && getCorner(buildingGround) == null) {
 				setCorner(buildingGround, faction.toString() + "S");
 				successful = true;
 			}
 		}
 		return successful;
+	}
+
+	private boolean hasLandAsFieldAround(Point buildingGround) {
+		if ((buildingGround.x <= 12 && buildingGround.x >= 2 && buildingGround.y <= 19 && buildingGround.y >= 3)) {
+			if (((buildingGround.x == 12 || buildingGround.x == 2)
+					&& (buildingGround.y == 10 || buildingGround.y == 12))
+					|| ((buildingGround.y == 3 || buildingGround.y == 19)
+							&& (buildingGround.x == 5 || buildingGround.x == 7 || buildingGround.x == 9))) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -106,7 +117,7 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 		String startCorner = getCorner(start);
 		String endCorner = getCorner(end);
 		boolean hisOwnHouse = false;
-		if (startCorner != null ) {
+		if (startCorner != null) {
 			hisOwnHouse = (startCorner.substring(0, 2).equals(faction.toString()));
 		}
 		if (endCorner != null) {

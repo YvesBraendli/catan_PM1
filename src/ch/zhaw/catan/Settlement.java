@@ -11,33 +11,43 @@ import ch.zhaw.catan.Config.Faction;
  */
 
 public class Settlement {
-	private static final int NUMBER_OF_WINNINGPOINTS = 2;
-	private Config.Faction owner;
+	private int numberOfWinningpoints;
+	private int numberOfResourcesForPayout;
+	private String faction;
 	
 	/**
 	 * Constructs a new settlement for the specified owner.
 	 * @param owner The faction of the owner, who created the settlement.
 	 */
 	public Settlement(Faction owner) {
-		this.owner = owner;
+		faction = owner.toString();
+		numberOfResourcesForPayout = 1;
+		numberOfWinningpoints = 1;
 	}
 
 	/**
 	 * Returns the faction of the owner of this settlement.
 	 * @return The faction of the settlement-owner.
 	 */
-	public Config.Faction getOwner() {
-		return owner;
+	public String toString() {
+		return faction;
 	}
 
 	/**
 	 * Returns a number, which stands for the winning points, which the settlement gives to the owner.
 	 * @return The number of winning points for a settlement.
 	 */
-	public static int getNumberOfWinningpoints() {
-		return NUMBER_OF_WINNINGPOINTS;
+	public int getNumberOfWinningpoints() {
+		return numberOfWinningpoints;
 	}
 	
-	
-
+	/**
+	 * Returns a number, which stands for the number of resource-cards, the owner gets with
+	 * every settlement per resource-field.
+	 * @return The number of resource-cards, the owner gets for a settlement.
+	 */
+	public int getNumberOfResourcesForPayout() {
+		return numberOfResourcesForPayout;
+	}
 }
+

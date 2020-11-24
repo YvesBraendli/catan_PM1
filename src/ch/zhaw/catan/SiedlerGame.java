@@ -383,17 +383,13 @@ public class SiedlerGame {
 	}
 
 	private void generatePlayers(int numberOfPlayers) {
-		switch (numberOfPlayers) {
-		case 4:
-			this.players.add(new Player(Faction.BLUE));
-		case 3:
-			this.players.add(new Player(Faction.GREEN));
-		case 2:
-			this.players.add(new Player(Faction.RED));
-			this.players.add(new Player(Faction.YELLOW));
-			break;
-		default:
+		
+		if (numberOfPlayers < 2 || numberOfPlayers > 4 ) {
 			throw new IllegalArgumentException();
+		}
+		
+		for(int i = 0; i < numberOfPlayers; i++) {
+			this.players.add(new Player(Faction.values()[i]));			
 		}
 	}
 

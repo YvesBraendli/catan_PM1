@@ -23,7 +23,7 @@ import java.util.Set;
  * requeste of a certain type, the number of players requesting it, the amount
  * of resources available in the bank and the settlement types.
  * </p>
- * @author Moser Nadine, Meier Robin, Bràndli Yves
+ * @author Moser Nadine, Meier Robin, Brï¿½ndli Yves
  *
  */
 public class SiedlerGame {
@@ -233,7 +233,7 @@ public class SiedlerGame {
 						Map<Resource, Integer> payoutResoruces = new HashMap<>();
 						payoutResoruces.put(currentResource, 1);
 						boolean isPayoutSuccessful = bank.payoutToDiceThrows(payoutResoruces);	
-						if(!isPayoutSuccessful) {
+						if(isPayoutSuccessful) {
 							player.setAmountOfResources(currentResource, faction.getValue(), true);
 							addedResources.add(currentResource); // 2 times when city
 						}				

@@ -230,12 +230,14 @@ public class SiedlerGame {
 					if(player.getFaction() == faction.getKey()) {
 						// TODO: refactor
 						// TODO: difference settlement and city
-						Map<Resource, Integer> payoutResoruces = new HashMap<>();
-						payoutResoruces.put(currentResource, 1);
-						boolean isPayoutSuccessful = bank.payoutToDiceThrows(payoutResoruces);	
+						Map<Resource, Integer> payoutResources = new HashMap<>();
+						payoutResources.put(currentResource, faction.getValue());
+						boolean isPayoutSuccessful = bank.payoutToDiceThrows(payoutResources);	
 						if(isPayoutSuccessful) {
 							player.setAmountOfResources(currentResource, faction.getValue(), true);
-							addedResources.add(currentResource); // 2 times when city
+							for(int i = 0; i < faction.getValue(); i++) {
+								addedResources.add(currentResource); // 2 more times when city
+							}
 						}				
 					}
 				}

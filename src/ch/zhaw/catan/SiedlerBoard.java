@@ -37,7 +37,9 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 					int buildingsForFaction = 0;
 					if (buildingsAroundField.get(i).substring(0, 2).equals(factions[z].toString())) {
 						buildingsForFaction += 1;
-						settlementsAroundField.put(factions[z], buildingsForFaction);
+						Integer currentValue = settlementsAroundField.get(factions[z]);
+						if(currentValue == null) currentValue = 0;
+						settlementsAroundField.put(factions[z], currentValue + buildingsForFaction);
 					}
 				}
 			}

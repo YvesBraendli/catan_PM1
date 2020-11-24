@@ -7,7 +7,7 @@ import ch.zhaw.catan.Config.Land;
 import ch.zhaw.hexboard.HexBoardTextView;
 import ch.zhaw.hexboard.Label;
 
-public class SiedlerBoardTextView extends HexBoardTextView<Land, String, String, String> {
+public class SiedlerBoardTextView extends HexBoardTextView<Land, Settlement, String, String> {
 
   public SiedlerBoardTextView(SiedlerBoard board) {
     super(board);

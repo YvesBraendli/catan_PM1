@@ -8,11 +8,15 @@ import ch.zhaw.catan.Config.Faction;
 import ch.zhaw.catan.Config.Land;
 import ch.zhaw.hexboard.HexBoard;
 
-public class SiedlerBoard extends HexBoard<Land, String, String, String> {
+public class SiedlerBoard extends HexBoard<Land, Settlement, String, String> {
+	
+private Settlement settlement;
+private City city;
 
 	public SiedlerBoard() {
 		super();
 		createFields();
+		
 	}
 
 	/**
@@ -29,13 +33,13 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 
 		HashMap<Faction, Integer> settlementsAroundField = new HashMap<>();
 		if (hasField(field)) {
-			List<String> buildingsAroundField = getCornersOfField(field);
+			List<Settlement> buildingsAroundField = getCornersOfField(field);
 			Faction[] factions = { Faction.BLUE, Faction.GREEN, Faction.RED, Faction.YELLOW };
 			// String faction = Config.Faction.
 			for (int z = 0; z < factions.length; z++) {
 				for (int i = 0; i < buildingsAroundField.size(); i++) {
 					int buildingsForFaction = 0;
-					if (buildingsAroundField.get(i).substring(0, 2).equals(factions[z].toString())) {
+					if (buildingsAroundField.get(i).toString().substring(0, 2).equals(factions[z].toString())) {
 						buildingsForFaction += 1;
 						Integer currentValue = settlementsAroundField.get(factions[z]);
 						if(currentValue == null) currentValue = 0;
@@ -60,7 +64,7 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 		boolean successful = false;
 		if (hasCorner(buildingGround) && hasLandAsFieldAround(buildingGround)) {
 			if (getNeighboursOfCorner(buildingGround).isEmpty() && getCorner(buildingGround) == null) {
-				setCorner(buildingGround, faction.toString() + "S");
+				setCorner(buildingGround, settlement = new Settlement(faction));
 				successful = true;
 			}
 		}
@@ -70,11 +74,12 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	private boolean hasLandAsFieldAround(Point buildingGround) {
 		if ((buildingGround.x <= 12 && buildingGround.x >= 2 && buildingGround.y <= 19 && buildingGround.y >= 3)) {
 			if (((buildingGround.x == 12 || buildingGround.x == 2)
-					&& (buildingGround.y == 10 || buildingGround.y == 12))
+					&& (buildingGround.y == 4 || buildingGround.y == 6 || buildingGround.y == 16 || buildingGround.y == 8))
 					|| ((buildingGround.y == 3 || buildingGround.y == 19)
-							&& (buildingGround.x == 5 || buildingGround.x == 7 || buildingGround.x == 9))) {
-				return true;
+							&& (buildingGround.x == 3 || buildingGround.x == 11))) {
+				return false;
 			}
+			return true;
 		}
 		return false;
 	}
@@ -116,8 +121,14 @@ public class SiedlerBoard extends HexBoard<Land, String, String, String> {
 	}
 
 	private boolean hasSettlementAtStartOrEnd(Point start, Point end, Faction faction) {
-		String startCorner = getCorner(start);
-		String endCorner = getCorner(end);
+		String startCorner = null;
+		String endCorner = null;
+		if (getCorner(start) != null) {
+			startCorner = getCorner(start).toString();
+		}
+		if (getCorner(end) != null) {
+			endCorner = getCorner(end).toString();
+		} 
 		boolean hisOwnHouse = false;
 		if (startCorner != null) {
 			hisOwnHouse = (startCorner.substring(0, 2).equals(faction.toString()));

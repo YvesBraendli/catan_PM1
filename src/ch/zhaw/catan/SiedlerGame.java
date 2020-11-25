@@ -217,7 +217,13 @@ public class SiedlerGame {
 			}
 		}
 		
+		for(Player player : players) {
+			payout.put(player.getFaction(), new ArrayList<Resource>());
+		}
+		
 		Map<Point, Land> landPlacements = Config.getStandardLandPlacement();
+		
+		
 		
 		for(Point currentField : placementToGetResources) {
 			Land currentLand = landPlacements.get(currentField);
@@ -225,11 +231,12 @@ public class SiedlerGame {
 			
 			Map<Faction, Integer> factionsWithSettlementAroundField = siedlerBoard.searchFieldSettlement(currentField);			
 			for(Player player : players) {
-				List<Resource> addedResources = new ArrayList<Resource>();
+				List<Resource> addedResources = payout.get(player.getFaction());
 				for(Map.Entry<Faction, Integer> faction : factionsWithSettlementAroundField.entrySet()) {
 					if(player.getFaction() == faction.getKey()) {
 						// TODO: refactor
 						// TODO: difference settlement and city
+						
 						Map<Resource, Integer> payoutResources = new HashMap<>();
 						payoutResources.put(currentResource, faction.getValue());
 						boolean isPayoutSuccessful = bank.payoutToDiceThrows(payoutResources);	

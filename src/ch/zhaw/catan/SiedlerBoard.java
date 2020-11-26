@@ -1,6 +1,7 @@
 package ch.zhaw.catan;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,6 +49,23 @@ public class SiedlerBoard extends HexBoard<Land, Settlement, String, String> {
 	public HashMap<Faction, Integer> searchFieldSettlement(Point field) {
 		// HashMap, key: faction, value: String (zu Beginn) oder List(Settlement/City)
 
+//		HashMap<Faction, ArrayList<Settlement>> buildings = new HashMap<>();
+//		if (hasField(field)) {
+//			List<Settlement> buildingsAroundField = getCornersOfField(field);
+//			Faction[] factions = { Faction.BLUE, Faction.GREEN, Faction.RED, Faction.YELLOW };
+//			for (Faction faction: factions) {
+//				ArrayList<Settlement> buildingsForFaction = new ArrayList<>();
+//				for (Settlement building: buildingsAroundField) {
+//					if (building.toString().equals(faction.toString())) {
+//						buildingsForFaction.add(building);
+//					}
+//				}
+//				buildings.put(faction, buildingsForFaction);
+//			}
+//		}
+//		return buildings;
+		
+		
 		HashMap<Faction, Integer> settlementsAroundField = new HashMap<>();
 		if (hasField(field)) {
 			List<Settlement> buildingsAroundField = getCornersOfField(field);

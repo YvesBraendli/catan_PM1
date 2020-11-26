@@ -9,14 +9,31 @@ import ch.zhaw.catan.Config.Land;
 import ch.zhaw.hexboard.HexBoard;
 
 public class SiedlerBoard extends HexBoard<Land, Settlement, String, String> {
-	
-private Settlement settlement;
-private City city;
 
 	public SiedlerBoard() {
 		super();
 		createFields();
-		
+
+	}
+
+	/**
+	 * Creates a city, if the player already has a settlement at the specified
+	 * corner.
+	 * 
+	 * @param buildingGround The point-value of the corner, where the player wants
+	 *                       to build a city.
+	 * @param faction        The faction of the current player.
+	 * @return True, if the placement of the city was successful.
+	 */
+	public boolean createCity(Point buildingGround, Faction faction) {
+		if (getCorner(buildingGround) != null) {
+			Settlement settlement = getCorner(buildingGround);
+			if (settlement.toString().equals(faction.toString())) {
+				setCorner(buildingGround, new City(faction));
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -42,7 +59,8 @@ private City city;
 					if (buildingsAroundField.get(i).toString().substring(0, 2).equals(factions[z].toString())) {
 						buildingsForFaction += 1;
 						Integer currentValue = settlementsAroundField.get(factions[z]);
-						if(currentValue == null) currentValue = 0;
+						if (currentValue == null)
+							currentValue = 0;
 						settlementsAroundField.put(factions[z], currentValue + buildingsForFaction);
 					}
 				}
@@ -64,7 +82,7 @@ private City city;
 		boolean successful = false;
 		if (hasCorner(buildingGround) && hasLandAsFieldAround(buildingGround)) {
 			if (getNeighboursOfCorner(buildingGround).isEmpty() && getCorner(buildingGround) == null) {
-				setCorner(buildingGround, settlement = new Settlement(faction));
+				setCorner(buildingGround, new Settlement(faction));
 				successful = true;
 			}
 		}
@@ -73,8 +91,8 @@ private City city;
 
 	private boolean hasLandAsFieldAround(Point buildingGround) {
 		if ((buildingGround.x <= 12 && buildingGround.x >= 2 && buildingGround.y <= 19 && buildingGround.y >= 3)) {
-			if (((buildingGround.x == 12 || buildingGround.x == 2)
-					&& (buildingGround.y == 4 || buildingGround.y == 6 || buildingGround.y == 16 || buildingGround.y == 8))
+			if (((buildingGround.x == 12 || buildingGround.x == 2) && (buildingGround.y == 4 || buildingGround.y == 6
+					|| buildingGround.y == 16 || buildingGround.y == 8))
 					|| ((buildingGround.y == 3 || buildingGround.y == 19)
 							&& (buildingGround.x == 3 || buildingGround.x == 11))) {
 				return false;
@@ -128,7 +146,7 @@ private City city;
 		}
 		if (getCorner(end) != null) {
 			endCorner = getCorner(end).toString();
-		} 
+		}
 		boolean hisOwnHouse = false;
 		if (startCorner != null) {
 			hisOwnHouse = (startCorner.substring(0, 2).equals(faction.toString()));

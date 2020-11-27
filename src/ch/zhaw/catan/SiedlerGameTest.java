@@ -174,6 +174,84 @@ public class SiedlerGameTest {
   }
 
   /**
+   * Testmethod: placeInitialSettlement()
+   * Tests if inital Settlement has been build and no resource were added.
+   */
+  @Test
+  public void requirementplaceInitialSettlementInCountrySideNoPayout() {
+	  // Arrange
+	  initializeSiedlerGame(4, 3);
+	  int stockBefore = getAmountOfResources();
+	  
+	  // Act
+	  boolean hasBuildSettlement = model.placeInitialSettlement(new Point(6,6), false);
+	  int stockAfter = getAmountOfResources();
+	  
+	  // Assert
+	  assertTrue(hasBuildSettlement);
+	  assertEquals(stockBefore, stockAfter);
+  }
+  
+  /**
+   * Testmethod: placeInitialSettlement()
+   * Tests if initial Settlement is not build, when position is invalid. (Position is in water)
+   * Expected: not build
+   */
+  @Test
+  public void requirementplaceInitialSettlementInWaterNoPayout() {
+	  // Arrange
+	  initializeSiedlerGame(4, 3);
+	  int stockBefore = getAmountOfResources();
+	  
+	  // Act
+	  boolean hasBuildSettlement = model.placeInitialSettlement(new Point(0,10), false);
+	  int stockAfter = getAmountOfResources();
+	  
+	  // Assert
+	  assertFalse(hasBuildSettlement);
+	  assertEquals(stockBefore, stockAfter);
+  }
+  
+  /**
+   * Testmethod: placeInitialSettlement()
+   * Tests if initial Settlement is build, when position is valid. no payout (Position next to water)
+   */
+  @Test
+  public void requirementplaceInitialSettlementNextToWaterNoPayout() {
+	  // Arrange
+	  initializeSiedlerGame(4, 3);
+	  int stockBefore = getAmountOfResources();
+	  
+	  // Act
+	  boolean hasBuildSettlement = model.placeInitialSettlement(new Point(3, 7), false);
+	  int stockAfter = getAmountOfResources();
+	  
+	  // Assert
+	  assertTrue(hasBuildSettlement);
+	  assertEquals(stockBefore, stockAfter);
+  }
+  
+  /**
+   * Testmethod: placeInitialSettlement()
+   * Tests if initial Settlement is build, when position is valid and check if payout is correct.
+   */
+  @Test
+  public void requirementplaceInitialSettlementValidPositionWithPayout() {
+	  // Arrange<
+	  initializeSiedlerGame(4, 3);
+	  int stockBefore = getAmountOfResources();
+	  int expectedStock = stockBefore + 3;
+	  
+	  // Act
+	  boolean hasBuildSettlement = model.placeInitialSettlement(new Point(6,6), true);
+	  int stockAfter = getAmountOfResources();
+	  
+	  // Assert
+	  assertTrue(hasBuildSettlement);
+	  assertTrue(expectedStock == stockAfter);
+  }
+  
+  /**
    * Testmethod: GetWinner()
    * Tests if there is a winner.
    * Expected: No FAction returned, because there is no winner yet.
@@ -292,5 +370,14 @@ public class SiedlerGameTest {
       }
     }
     return true;
+  }
+  
+  private int getAmountOfResources() {
+	  int numberOfResources = Resource.values().length;
+	  int sum = 0;
+	  for(int i = 0; i < numberOfResources; i++) {
+		  sum += model.getCurrentPlayerResourceStock(Resource.values()[i]);
+	  }
+	  return sum;
   }
 }

@@ -1,6 +1,8 @@
 package ch.zhaw.catan;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ch.zhaw.catan.Config.Faction;
@@ -12,6 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.engine.discovery.predicates.IsTestFactoryMethod;
 
 public class SiedlerGameTest {
   private SiedlerGame model;
@@ -170,6 +173,81 @@ public class SiedlerGameTest {
     }
   }
 
+  /**
+   * Testmethod: GetWinner()
+   * Tests if there is a winner.
+   * Expected: No FAction returned, because there is no winner yet.
+   */
+  @Test
+  public void requirementGetWinnerWithNoWinner() {
+	  // Arrange
+	  initializeSiedlerGame(4, 3);
+	  boolean hasWinner = false;
+	  
+	  //Act
+	  Faction winnerFaction = model.getWinner();
+	  if(winnerFaction != null) hasWinner = true;
+	  
+	  // Assert
+	  assertFalse(hasWinner);
+  }
+  
+  /**
+   * Testmethod: GetWinner()
+   * Tests if there is a winner.
+   * Expected: Winner Faction returned and is equals to faction from current Player.
+   */
+  @Test
+  public void requirementGetWinnerWithOneWinner() {
+	  // Arrange
+	  initializeSiedlerGame(5, 4);
+	  // set 5 settlements for current Player
+	  model.placeInitialSettlement(new Point(6,6), false);
+	  model.placeInitialSettlement(new Point(8,6), false);
+	  model.placeInitialSettlement(new Point(9,9), false);
+	  model.placeInitialSettlement(new Point(6,10), false);
+	  model.placeInitialSettlement(new Point(4,12), false);
+	  Faction currentFaction = model.getCurrentPlayerFaction();
+	  
+	  // Arrange
+	  Faction winnerFaction = model.getWinner();
+	  
+	  // Assert
+	  assertEquals(currentFaction, winnerFaction);  
+  }
+  
+  /**
+   * Testmethod: GetWinner()
+   * Tests if there is a winner. Case: Multiple Winner, faction from first Player in row is returned.
+   * Expected: Winner Faction from first Player returned and is not equals to faction from current Player.
+   */
+  @Test
+  public void requirementGetWinnerWithMultipleWinner() {
+	  // Arrange
+	  initializeSiedlerGame(5, 4);
+	  // set 5 settlements for current Player
+	  model.placeInitialSettlement(new Point(6,6), false);
+	  model.placeInitialSettlement(new Point(8,6), false);
+	  model.placeInitialSettlement(new Point(9,9), false);
+	  model.placeInitialSettlement(new Point(6,10), false);
+	  model.placeInitialSettlement(new Point(4,12), false);
+	  Faction fristFaction = model.getCurrentPlayerFaction();
+	  model.switchToNextPlayer();
+	  model.placeInitialSettlement(new Point(5,15), false);
+	  model.placeInitialSettlement(new Point(8,12), false);
+	  model.placeInitialSettlement(new Point(7,15), false);
+	  model.placeInitialSettlement(new Point(9,15), false);
+	  model.placeInitialSettlement(new Point(6,18), false);
+	  Faction currentFaction = model.getCurrentPlayerFaction();
+	  
+	  // Arrange
+	  Faction winnerFaction = model.getWinner();
+	  
+	  // Assert
+	  assertEquals(fristFaction, winnerFaction);  
+	  assertNotEquals(currentFaction, winnerFaction);
+  }
+  
   private void bootstrapTestBoardForThreePlayersStandard(int winpoints) {
     initializeSiedlerGame(winpoints, PLAYERS);
 
@@ -187,7 +265,6 @@ public class SiedlerGameTest {
     }
   }
 
- 
   private void initializeSiedlerGame(int winpoints, int players) {
     model = new SiedlerGame(winpoints, players);  
   }

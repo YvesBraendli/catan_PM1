@@ -655,6 +655,130 @@ public class SiedlerGameTest {
 	}
 	
 	/**
+	 * Testmethod: tradeWithBankFourToOne() 
+	 * Tests if trading with bank is well executed.
+	 */
+	@Test
+	public void requirementTradeWithBankFourToOnePlayerAndBankHaveResources() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		
+		// place Settlement with payout and thorw dice to get necessary resources
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.throwDice(5);
+		model.throwDice(5);
+		model.throwDice(5);
+		
+		int amountOfWoodBefore = model.getCurrentPlayerResourceStock(Resource.WOOD);
+		int expectedWoodAfterTrading = amountOfWoodBefore - 4;
+		int amountOfStoneBefore = model.getCurrentPlayerResourceStock(Resource.STONE);
+		int expectedStoneAfterTrading = amountOfStoneBefore + 1;
+		int amountOfClayBefore = model.getCurrentPlayerResourceStock(Resource.CLAY);
+		int amountOfGrainBefore = model.getCurrentPlayerResourceStock(Resource.GRAIN);
+		int amountOfWoolBefore = model.getCurrentPlayerResourceStock(Resource.WOOL);
+		
+		// Act
+		boolean isSuccessful = model.tradeWithBankFourToOne(Resource.WOOD, Resource.STONE);
+		int AmountOfWoodAfterTrading = model.getCurrentPlayerResourceStock(Resource.WOOD);
+		int AmountOfStoneAfterTrading = model.getCurrentPlayerResourceStock(Resource.STONE);
+		int amountOfClayAfter = model.getCurrentPlayerResourceStock(Resource.CLAY);
+		int amountOfGrainAfter = model.getCurrentPlayerResourceStock(Resource.GRAIN);
+		int amountOfWoolAfter = model.getCurrentPlayerResourceStock(Resource.WOOL);
+		
+		// Assert
+		assertTrue(isSuccessful);
+		assertEquals(expectedWoodAfterTrading, AmountOfWoodAfterTrading);
+		assertEquals(expectedStoneAfterTrading, AmountOfStoneAfterTrading);
+		// make sure other resources haven't been changed.
+		assertEquals(amountOfClayBefore, amountOfClayAfter);
+		assertEquals(amountOfGrainBefore, amountOfGrainAfter);
+		assertEquals(amountOfWoolBefore, amountOfWoolAfter);
+	}
+	
+	/**
+	 * Testmethod: tradeWithBankFourToOne() 
+	 * Tests if trading with bank is well executed. Trades 4 resources for one resource of same type.
+	 */
+	@Test
+	public void requirementTradeWithBankFourToOnePlayerAndBankHaveResourcesSameResources() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		
+		// place Settlement with payout and throw dice to get necessary resources
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.throwDice(5);
+		model.throwDice(5);
+		model.throwDice(5);
+		
+		int AmountOfWoodBefore = model.getCurrentPlayerResourceStock(Resource.WOOD);
+		int expectedWoodAfterTrading = AmountOfWoodBefore - 4 + 1;
+
+		int amountOfStoneBefore = model.getCurrentPlayerResourceStock(Resource.STONE);
+		int amountOfClayBefore = model.getCurrentPlayerResourceStock(Resource.CLAY);
+		int amountOfGrainBefore = model.getCurrentPlayerResourceStock(Resource.GRAIN);
+		int amountOfWoolBefore = model.getCurrentPlayerResourceStock(Resource.WOOL);
+		
+		// Act
+		boolean isSuccessful = model.tradeWithBankFourToOne(Resource.WOOD, Resource.WOOD);
+		int AmountOfWoodAfterTrading = model.getCurrentPlayerResourceStock(Resource.WOOD);
+		
+		int AmountOfStoneAfter = model.getCurrentPlayerResourceStock(Resource.STONE);
+		int amountOfClayAfter = model.getCurrentPlayerResourceStock(Resource.CLAY);
+		int amountOfGrainAfter = model.getCurrentPlayerResourceStock(Resource.GRAIN);
+		int amountOfWoolAfter = model.getCurrentPlayerResourceStock(Resource.WOOL);
+		
+		// Assert
+		assertTrue(isSuccessful);
+		assertEquals(expectedWoodAfterTrading, AmountOfWoodAfterTrading);
+		// make sure other resources haven't been changed.
+		assertEquals(amountOfStoneBefore, AmountOfStoneAfter);	
+		assertEquals(amountOfClayBefore, amountOfClayAfter);
+		assertEquals(amountOfGrainBefore, amountOfGrainAfter);
+		assertEquals(amountOfWoolBefore, amountOfWoolAfter);
+	}
+	
+	/**
+	 * Testmethod: tradeWithBankFourToOne() 
+	 * Tests if trading with bank is well executed. Bank has no resource from this type left.
+	 */
+	@Test
+	public void requirementTradeWithBankFourToOneBankHasNotResource() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		
+		// place Settlement with payout and throw dice to get necessary resources
+		model.placeInitialSettlement(new Point(4, 12), true);
+		int availableNumber = Config.INITIAL_RESOURCE_CARDS_BANK.get(Resource.WOOD);
+		for(int i = 0; i < availableNumber; i++) {
+			model.throwDice(5);
+		}
+		
+		int amountOfWoodBefore = model.getCurrentPlayerResourceStock(Resource.WOOD);
+		int amountOfStoneBefore = model.getCurrentPlayerResourceStock(Resource.STONE);
+		int amountOfClayBefore = model.getCurrentPlayerResourceStock(Resource.CLAY);
+		int amountOfGrainBefore = model.getCurrentPlayerResourceStock(Resource.GRAIN);
+		int amountOfWoolBefore = model.getCurrentPlayerResourceStock(Resource.WOOL);
+		
+		// Act
+		boolean isSuccessful = model.tradeWithBankFourToOne(Resource.WOOD, Resource.WOOD);
+		int amountOfWoodAfter = model.getCurrentPlayerResourceStock(Resource.WOOD);
+		int AmountOfStoneAfter = model.getCurrentPlayerResourceStock(Resource.STONE);
+		int amountOfClayAfter = model.getCurrentPlayerResourceStock(Resource.CLAY);
+		int amountOfGrainAfter = model.getCurrentPlayerResourceStock(Resource.GRAIN);
+		int amountOfWoolAfter = model.getCurrentPlayerResourceStock(Resource.WOOL);
+		
+		// Assert
+		assertFalse(isSuccessful);
+		// make sure no amount of resources has changed.
+		assertEquals(amountOfWoodBefore, amountOfWoodAfter);
+		assertEquals(amountOfStoneBefore, AmountOfStoneAfter);	
+		assertEquals(amountOfClayBefore, amountOfClayAfter);
+		assertEquals(amountOfGrainBefore, amountOfGrainAfter);
+		assertEquals(amountOfWoolBefore, amountOfWoolAfter);
+	}
+	
+	
+	/**
 	 * Testmethod: GetWinner() Tests if there is a winner. Expected: No FAction
 	 * returned, because there is no winner yet.
 	 */

@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import org.graalvm.compiler.api.replacements.Snippet.VarargsParameter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.engine.discovery.predicates.IsTestFactoryMethod;
 
@@ -502,6 +504,109 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Testmethod: buildCity() Test if City can be build at a valid position and
+	 * player has Resources.
+	 */
+	@Test
+	public void requirementBuildCityValidPosition() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		model.placeInitialRoad(new Point(6, 6), new Point(6, 4));
+
+		// place Settlement with payout to get necessary resources to build new
+		// city
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 9), true);
+		model.throwDice(10);
+		model.throwDice(4);
+		model.throwDice(4);
+
+		// Act
+		boolean isSuccessful = model.buildCity(new Point(4, 12));
+
+		// Assert
+		assertTrue(isSuccessful);
+	}
+
+	/**
+	 * Testmethod: buildCity() Test if City can be build at a valid position and
+	 * player has not enough Resources.
+	 */
+	@Test
+	public void requirementBuildCityNotEnoughResources() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		model.placeInitialRoad(new Point(6, 6), new Point(6, 4));
+
+		// place Settlement with payout to get necessary resources to build new
+		// city
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 9), true);
+
+		// Act
+		boolean isSuccessful = model.buildCity(new Point(4, 12));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+
+	/**
+	 * Testmethod: buildCity() Test if City can be build at invalid position. (Has
+	 * no Settlement at position)
+	 */
+	@Test
+	public void requirementBuildCityInvalidPosition() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+
+		// place Settlement with payout to get necessary resources to build new
+		// city
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 9), true);
+		model.throwDice(10);
+		model.throwDice(4);
+		model.throwDice(4);
+
+		// Act
+		boolean isSuccessful = model.buildCity(new Point(6, 6));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+
+	/**
+	 * Testmethod: buildCity() Test if City can be build at valid position but user
+	 * has already build all cities possible. 
+	 */
+	@Test
+	public void requirementBuildCityNoCitiesLeftToBuild() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		model.placeInitialSettlement(new Point(8, 12), false);
+		model.placeInitialSettlement(new Point(7, 9), false);
+		model.placeInitialSettlement(new Point(9, 15), false);
+		
+		// place Settlement with payout to get necessary resources to build new
+		// city
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 9), true);
+		model.throwDice(10);
+		model.throwDice(4);
+		model.throwDice(4);
+
+		model.buildCity(new Point(8, 12));
+		model.buildCity(new Point(7, 9));
+		model.buildCity(new Point(9, 15));
+		model.buildCity(new Point(4, 12));
+		
+		// Act
+		boolean isSuccessful = model.buildCity(new Point(5, 9));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+
+	/**
 	 * Testmethod: buildRoad() Test if Road can be build when position is valid and
 	 * player has the resources.
 	 */
@@ -510,13 +615,13 @@ public class SiedlerGameTest {
 		// Arrange
 		initializeSiedlerGame(4, 2);
 		model.placeInitialSettlement(new Point(8, 10), true);
-		
+
 		// place Settlement with payout to get necessary resources to build new Road
 		model.placeInitialSettlement(new Point(4, 12), true);
 
 		// Act
 		boolean isSuccessful = model.buildRoad(new Point(8, 10), new Point(8, 12));
-		
+
 		// Assert
 		assertTrue(isSuccessful);
 	}
@@ -531,17 +636,17 @@ public class SiedlerGameTest {
 		initializeSiedlerGame(4, 2);
 		model.placeInitialSettlement(new Point(7, 9), false);
 		model.placeInitialRoad(new Point(8, 10), new Point(7, 9));
-		
+
 		// place Settlement with payout to get necessary resources to build new Road
 		model.placeInitialSettlement(new Point(4, 12), true);
 
 		// Act
 		boolean isSuccessful = model.buildRoad(new Point(8, 10), new Point(8, 12));
-		
+
 		// Assert
 		assertTrue(isSuccessful);
 	}
-	
+
 	/**
 	 * Testmethod: buildRoad() Test if Road can be build when position is valid and
 	 * player has the resources but no adjacent settlement or road.
@@ -550,20 +655,20 @@ public class SiedlerGameTest {
 	public void requirementBuildRoadValidPositionNoAdjacentSettlementOrRoad() {
 		// Arrange
 		initializeSiedlerGame(4, 2);
-		
+
 		// place Settlement with payout to get necessary resources to build new Road
 		model.placeInitialSettlement(new Point(4, 12), true);
 
 		// Act
 		boolean isSuccessful = model.buildRoad(new Point(8, 10), new Point(8, 12));
-		
+
 		// Assert
 		assertFalse(isSuccessful);
 	}
-	
+
 	/**
-	 * Testmethod: buildRoad() Test if Road can be build when position is valid, has adjacent road but
-	 * player has not the resources.
+	 * Testmethod: buildRoad() Test if Road can be build when position is valid, has
+	 * adjacent road but player has not the resources.
 	 */
 	@Test
 	public void requirementBuildRoadValidPositionAdjacentRoadNoResources() {
@@ -574,13 +679,14 @@ public class SiedlerGameTest {
 
 		// Act
 		boolean isSuccessful = model.buildRoad(new Point(8, 10), new Point(8, 12));
-		
+
 		// Assert
-		assertFalse(isSuccessful);	}
-	
+		assertFalse(isSuccessful);
+	}
+
 	/**
-	 * Testmethod: buildRoad() Test if Road can be build when position is valid, has adjacent settlement but
-	 * player has not the resources.
+	 * Testmethod: buildRoad() Test if Road can be build when position is valid, has
+	 * adjacent settlement but player has not the resources.
 	 */
 	@Test
 	public void requirementBuildRoadValidPositionAdjacentSettlementNoResources() {
@@ -590,13 +696,14 @@ public class SiedlerGameTest {
 
 		// Act
 		boolean isSuccessful = model.buildRoad(new Point(8, 10), new Point(8, 12));
-		
+
 		// Assert
 		assertFalse(isSuccessful);
 	}
-	
+
 	/**
-	 * Testmethod: buildRoad() Test if Road can be build in water, has adjacent settlement.
+	 * Testmethod: buildRoad() Test if Road can be build in water, has adjacent
+	 * settlement.
 	 */
 	@Test
 	public void requirementBuildRoadInWaterHasAdjacentSettlement() {
@@ -606,16 +713,17 @@ public class SiedlerGameTest {
 
 		// place Settlement with payout to get necessary resources to build new Road
 		model.placeInitialSettlement(new Point(4, 12), true);
-		
+
 		// Act
 		boolean isSuccessful = model.buildRoad(new Point(3, 7), new Point(2, 6));
-		
+
 		// Assert
 		assertFalse(isSuccessful);
 	}
-	
+
 	/**
-	 * Testmethod: buildRoad() Test if Road can be build in water, has adjacent road.
+	 * Testmethod: buildRoad() Test if Road can be build in water, has adjacent
+	 * road.
 	 */
 	@Test
 	public void requirementBuildRoadInWaterHasAdjacentRoad() {
@@ -623,19 +731,20 @@ public class SiedlerGameTest {
 		initializeSiedlerGame(4, 2);
 		model.placeInitialSettlement(new Point(3, 9), false);
 		model.placeInitialRoad(new Point(3, 7), new Point(3, 9));
-		
+
 		// place Settlement with payout to get necessary resources to build new Road
 		model.placeInitialSettlement(new Point(4, 12), true);
-		
+
 		// Act
 		boolean isSuccessful = model.buildRoad(new Point(3, 7), new Point(2, 6));
-		
+
 		// Assert
 		assertFalse(isSuccessful);
 	}
-	
+
 	/**
-	 * Testmethod: buildRoad() Test if Road can be build, another road is already build at position.
+	 * Testmethod: buildRoad() Test if Road can be build, another road is already
+	 * build at position.
 	 */
 	@Test
 	public void requirementBuildRoadOtherRoadAlreadyBuild() {
@@ -643,32 +752,32 @@ public class SiedlerGameTest {
 		initializeSiedlerGame(4, 2);
 		model.placeInitialSettlement(new Point(6, 6), false);
 		boolean inital = model.placeInitialRoad(new Point(6, 6), new Point(6, 4));
-		
+
 		// place Settlement with payout to get necessary resources to build new Road
 		model.placeInitialSettlement(new Point(4, 12), true);
-		
+
 		// Act
 		boolean isSuccessful = model.buildRoad(new Point(6, 6), new Point(6, 4));
-		
+
 		// Assert
 		assertFalse(isSuccessful);
 	}
-	
+
 	/**
-	 * Testmethod: tradeWithBankFourToOne() 
-	 * Tests if trading with bank is well executed.
+	 * Testmethod: tradeWithBankFourToOne() Tests if trading with bank is well
+	 * executed.
 	 */
 	@Test
 	public void requirementTradeWithBankFourToOnePlayerAndBankHaveResources() {
 		// Arrange
 		initializeSiedlerGame(4, 2);
-		
+
 		// place Settlement with payout and thorw dice to get necessary resources
 		model.placeInitialSettlement(new Point(4, 12), true);
 		model.throwDice(5);
 		model.throwDice(5);
 		model.throwDice(5);
-		
+
 		int amountOfWoodBefore = model.getCurrentPlayerResourceStock(Resource.WOOD);
 		int expectedWoodAfterTrading = amountOfWoodBefore - 4;
 		int amountOfStoneBefore = model.getCurrentPlayerResourceStock(Resource.STONE);
@@ -676,7 +785,7 @@ public class SiedlerGameTest {
 		int amountOfClayBefore = model.getCurrentPlayerResourceStock(Resource.CLAY);
 		int amountOfGrainBefore = model.getCurrentPlayerResourceStock(Resource.GRAIN);
 		int amountOfWoolBefore = model.getCurrentPlayerResourceStock(Resource.WOOL);
-		
+
 		// Act
 		boolean isSuccessful = model.tradeWithBankFourToOne(Resource.WOOD, Resource.STONE);
 		int AmountOfWoodAfterTrading = model.getCurrentPlayerResourceStock(Resource.WOOD);
@@ -684,7 +793,7 @@ public class SiedlerGameTest {
 		int amountOfClayAfter = model.getCurrentPlayerResourceStock(Resource.CLAY);
 		int amountOfGrainAfter = model.getCurrentPlayerResourceStock(Resource.GRAIN);
 		int amountOfWoolAfter = model.getCurrentPlayerResourceStock(Resource.WOOL);
-		
+
 		// Assert
 		assertTrue(isSuccessful);
 		assertEquals(expectedWoodAfterTrading, AmountOfWoodAfterTrading);
@@ -694,22 +803,22 @@ public class SiedlerGameTest {
 		assertEquals(amountOfGrainBefore, amountOfGrainAfter);
 		assertEquals(amountOfWoolBefore, amountOfWoolAfter);
 	}
-	
+
 	/**
-	 * Testmethod: tradeWithBankFourToOne() 
-	 * Tests if trading with bank is well executed. Trades 4 resources for one resource of same type.
+	 * Testmethod: tradeWithBankFourToOne() Tests if trading with bank is well
+	 * executed. Trades 4 resources for one resource of same type.
 	 */
 	@Test
 	public void requirementTradeWithBankFourToOnePlayerAndBankHaveResourcesSameResources() {
 		// Arrange
 		initializeSiedlerGame(4, 2);
-		
+
 		// place Settlement with payout and throw dice to get necessary resources
 		model.placeInitialSettlement(new Point(4, 12), true);
 		model.throwDice(5);
 		model.throwDice(5);
 		model.throwDice(5);
-		
+
 		int AmountOfWoodBefore = model.getCurrentPlayerResourceStock(Resource.WOOD);
 		int expectedWoodAfterTrading = AmountOfWoodBefore - 4 + 1;
 
@@ -717,48 +826,48 @@ public class SiedlerGameTest {
 		int amountOfClayBefore = model.getCurrentPlayerResourceStock(Resource.CLAY);
 		int amountOfGrainBefore = model.getCurrentPlayerResourceStock(Resource.GRAIN);
 		int amountOfWoolBefore = model.getCurrentPlayerResourceStock(Resource.WOOL);
-		
+
 		// Act
 		boolean isSuccessful = model.tradeWithBankFourToOne(Resource.WOOD, Resource.WOOD);
 		int AmountOfWoodAfterTrading = model.getCurrentPlayerResourceStock(Resource.WOOD);
-		
+
 		int AmountOfStoneAfter = model.getCurrentPlayerResourceStock(Resource.STONE);
 		int amountOfClayAfter = model.getCurrentPlayerResourceStock(Resource.CLAY);
 		int amountOfGrainAfter = model.getCurrentPlayerResourceStock(Resource.GRAIN);
 		int amountOfWoolAfter = model.getCurrentPlayerResourceStock(Resource.WOOL);
-		
+
 		// Assert
 		assertTrue(isSuccessful);
 		assertEquals(expectedWoodAfterTrading, AmountOfWoodAfterTrading);
 		// make sure other resources haven't been changed.
-		assertEquals(amountOfStoneBefore, AmountOfStoneAfter);	
+		assertEquals(amountOfStoneBefore, AmountOfStoneAfter);
 		assertEquals(amountOfClayBefore, amountOfClayAfter);
 		assertEquals(amountOfGrainBefore, amountOfGrainAfter);
 		assertEquals(amountOfWoolBefore, amountOfWoolAfter);
 	}
-	
+
 	/**
-	 * Testmethod: tradeWithBankFourToOne() 
-	 * Tests if trading with bank is well executed. Bank has no resource from this type left.
+	 * Testmethod: tradeWithBankFourToOne() Tests if trading with bank is well
+	 * executed. Bank has no resource from this type left.
 	 */
 	@Test
 	public void requirementTradeWithBankFourToOneBankHasNotResource() {
 		// Arrange
 		initializeSiedlerGame(4, 2);
-		
+
 		// place Settlement with payout and throw dice to get necessary resources
 		model.placeInitialSettlement(new Point(4, 12), true);
 		int availableNumber = Config.INITIAL_RESOURCE_CARDS_BANK.get(Resource.WOOD);
-		for(int i = 0; i < availableNumber; i++) {
+		for (int i = 0; i < availableNumber; i++) {
 			model.throwDice(5);
 		}
-		
+
 		int amountOfWoodBefore = model.getCurrentPlayerResourceStock(Resource.WOOD);
 		int amountOfStoneBefore = model.getCurrentPlayerResourceStock(Resource.STONE);
 		int amountOfClayBefore = model.getCurrentPlayerResourceStock(Resource.CLAY);
 		int amountOfGrainBefore = model.getCurrentPlayerResourceStock(Resource.GRAIN);
 		int amountOfWoolBefore = model.getCurrentPlayerResourceStock(Resource.WOOL);
-		
+
 		// Act
 		boolean isSuccessful = model.tradeWithBankFourToOne(Resource.WOOD, Resource.WOOD);
 		int amountOfWoodAfter = model.getCurrentPlayerResourceStock(Resource.WOOD);
@@ -766,18 +875,17 @@ public class SiedlerGameTest {
 		int amountOfClayAfter = model.getCurrentPlayerResourceStock(Resource.CLAY);
 		int amountOfGrainAfter = model.getCurrentPlayerResourceStock(Resource.GRAIN);
 		int amountOfWoolAfter = model.getCurrentPlayerResourceStock(Resource.WOOL);
-		
+
 		// Assert
 		assertFalse(isSuccessful);
 		// make sure no amount of resources has changed.
 		assertEquals(amountOfWoodBefore, amountOfWoodAfter);
-		assertEquals(amountOfStoneBefore, AmountOfStoneAfter);	
+		assertEquals(amountOfStoneBefore, AmountOfStoneAfter);
 		assertEquals(amountOfClayBefore, amountOfClayAfter);
 		assertEquals(amountOfGrainBefore, amountOfGrainAfter);
 		assertEquals(amountOfWoolBefore, amountOfWoolAfter);
 	}
-	
-	
+
 	/**
 	 * Testmethod: GetWinner() Tests if there is a winner. Expected: No FAction
 	 * returned, because there is no winner yet.

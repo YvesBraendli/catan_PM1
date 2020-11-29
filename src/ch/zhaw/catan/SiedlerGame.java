@@ -437,12 +437,13 @@ public class SiedlerGame {
 		Map<Resource, Integer> currentResources = currentPlayer.getAmountOfResources();
 		if(currentResources == null) return false;
 		
-		Integer currentResource;
+		Integer currentAmountOfResource;
 		for(Resource resource : costs) {
-			currentResource = currentResources.get(resource);
-			if(currentResource == null) return false;
-			currentResource--;
-			if(currentResource < 0) return false;
+			currentAmountOfResource = currentResources.get(resource);
+			if(currentAmountOfResource == null) return false;
+			currentAmountOfResource--;
+			if(currentAmountOfResource < 0) return false;
+			currentResources.put(resource, currentAmountOfResource);
 		}
 		
 		return true;

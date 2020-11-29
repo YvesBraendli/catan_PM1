@@ -46,45 +46,22 @@ public class SiedlerBoard extends HexBoard<Land, Settlement, String, String> {
 	 * @return A HashMap with the key for the Factions a list with String values,
 	 *         which represents the settlement.
 	 */
-	public HashMap<Faction, Integer> searchFieldSettlement(Point field) {
-		// HashMap, key: faction, value: String (zu Beginn) oder List(Settlement/City)
-
-//		HashMap<Faction, ArrayList<Settlement>> buildings = new HashMap<>();
-//		if (hasField(field)) {
-//			List<Settlement> buildingsAroundField = getCornersOfField(field);
-//			Faction[] factions = { Faction.BLUE, Faction.GREEN, Faction.RED, Faction.YELLOW };
-//			for (Faction faction: factions) {
-//				ArrayList<Settlement> buildingsForFaction = new ArrayList<>();
-//				for (Settlement building: buildingsAroundField) {
-//					if (building.toString().equals(faction.toString())) {
-//						buildingsForFaction.add(building);
-//					}
-//				}
-//				buildings.put(faction, buildingsForFaction);
-//			}
-//		}
-//		return buildings;
-		
-		
-		HashMap<Faction, Integer> settlementsAroundField = new HashMap<>();
+	public HashMap<Faction, ArrayList<Settlement>> searchFieldSettlement(Point field) {
+		HashMap<Faction, ArrayList<Settlement>> buildings = new HashMap<>();
 		if (hasField(field)) {
 			List<Settlement> buildingsAroundField = getCornersOfField(field);
 			Faction[] factions = { Faction.BLUE, Faction.GREEN, Faction.RED, Faction.YELLOW };
-			// String faction = Config.Faction.
-			for (int z = 0; z < factions.length; z++) {
-				for (int i = 0; i < buildingsAroundField.size(); i++) {
-					int buildingsForFaction = 0;
-					if (buildingsAroundField.get(i).toString().substring(0, 2).equals(factions[z].toString())) {
-						buildingsForFaction += 1;
-						Integer currentValue = settlementsAroundField.get(factions[z]);
-						if (currentValue == null)
-							currentValue = 0;
-						settlementsAroundField.put(factions[z], currentValue + buildingsForFaction);
+			for (Faction faction: factions) {
+				ArrayList<Settlement> buildingsForFaction = new ArrayList<>();
+				for (Settlement building: buildingsAroundField) {
+					if (building.toString().equals(faction.toString())) {
+						buildingsForFaction.add(building);
 					}
 				}
+				buildings.put(faction, buildingsForFaction);
 			}
 		}
-		return settlementsAroundField;
+		return buildings;
 	}
 
 	/**

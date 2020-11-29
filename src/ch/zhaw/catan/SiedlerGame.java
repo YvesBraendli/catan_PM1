@@ -223,27 +223,24 @@ public class SiedlerGame {
 		
 		Map<Point, Land> landPlacements = Config.getStandardLandPlacement();
 		
-		
-		
 		for(Point currentField : placementToGetResources) {
 			Land currentLand = landPlacements.get(currentField);
 			Resource currentResource = currentLand.getResource();
+				
+			HashMap<Faction, ArrayList<Settlement>> factionsWithSettlementAroundField = siedlerBoard.searchFieldSettlement(currentField);
 			
-			Map<Faction, Integer> factionsWithSettlementAroundField = siedlerBoard.searchFieldSettlement(currentField);			
 			for(Player player : players) {
 				List<Resource> addedResources = payout.get(player.getFaction());
-				for(Map.Entry<Faction, Integer> faction : factionsWithSettlementAroundField.entrySet()) {
+				for(Map.Entry<Faction, ArrayList<Settlement>> faction : factionsWithSettlementAroundField.entrySet()) {
 					if(player.getFaction() == faction.getKey()) {
-						// TODO: refactor
-						// TODO: difference settlement and city
-						
 						Map<Resource, Integer> payoutResources = new HashMap<>();
-						payoutResources.put(currentResource, faction.getValue());
+						int sum = getAmoundOfNewWinningPoints(faction.getValue());
+						payoutResources.put(currentResource, sum);
 						boolean isPayoutSuccessful = bank.payoutToDiceThrows(payoutResources);	
 						if(isPayoutSuccessful) {
-							player.setAmountOfResources(currentResource, faction.getValue(), true);
-							for(int i = 0; i < faction.getValue(); i++) {
-								addedResources.add(currentResource); // 2 more times when city
+							player.setAmountOfResources(currentResource, sum, true);
+							for(int i = 0; i < sum; i++) {
+								addedResources.add(currentResource);
 							}
 						}				
 					}
@@ -254,6 +251,14 @@ public class SiedlerGame {
 		return payout;		
 	}
 
+	private int getAmoundOfNewWinningPoints(List<Settlement> buildings) {
+		int sum = 0;
+		for(Settlement building : buildings) {
+			sum = sum + building.getNumberOfWinningpoints();
+		}
+		return sum;
+	}
+	
 	/**
 	 * Builds a settlement at the specified position on the board.
 	 * 

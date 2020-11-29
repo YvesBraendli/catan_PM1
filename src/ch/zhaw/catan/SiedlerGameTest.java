@@ -288,15 +288,15 @@ public class SiedlerGameTest {
 	@Test
 	public void requirementPlaceInitialRoadNoOwnHouseAdjacent() {
 		// Arrange
-		  initializeSiedlerGame(5, 2);
-		  model.placeInitialSettlement(new Point(6,6), false);
-		  model.switchToNextPlayer();
-		  
-		  // Act
-		  boolean isSuccessful = model.placeInitialRoad(new Point(6,4), new Point(6,6));
-		  
-		  // Assert
-		  assertFalse(isSuccessful);	
+		initializeSiedlerGame(5, 2);
+		model.placeInitialSettlement(new Point(6, 6), false);
+		model.switchToNextPlayer();
+
+		// Act
+		boolean isSuccessful = model.placeInitialRoad(new Point(6, 4), new Point(6, 6));
+
+		// Assert
+		assertFalse(isSuccessful);
 	}
 
 	/**
@@ -305,16 +305,16 @@ public class SiedlerGameTest {
 	 */
 	public void requirementPlaceInitialRoadPlaceAlreadyUsed() {
 		// Arrange
-		  initializeSiedlerGame(5, 2);
-		  model.placeInitialSettlement(new Point(6,6), false);
-		  model.placeInitialRoad(new Point(6,4), new Point(6,6));
-		  model.switchToNextPlayer();
-		  
-		  // Act
-		  boolean isSuccessful = model.placeInitialRoad(new Point(6,4), new Point(6,6));
-		  
-		  // Assert
-		  assertFalse(isSuccessful);
+		initializeSiedlerGame(5, 2);
+		model.placeInitialSettlement(new Point(6, 6), false);
+		model.placeInitialRoad(new Point(6, 4), new Point(6, 6));
+		model.switchToNextPlayer();
+
+		// Act
+		boolean isSuccessful = model.placeInitialRoad(new Point(6, 4), new Point(6, 6));
+
+		// Assert
+		assertFalse(isSuccessful);
 	}
 
 	/**
@@ -327,14 +327,15 @@ public class SiedlerGameTest {
 		model.placeInitialSettlement(new Point(6, 6), false);
 
 		// Act
-		boolean isSuccessful = model.placeInitialRoad(new Point(2,4), new Point(2,6));
+		boolean isSuccessful = model.placeInitialRoad(new Point(2, 4), new Point(2, 6));
 
 		// Assert
 		assertFalse(isSuccessful);
 	}
-	
+
 	/**
-	 * Testmethod: placeInitialRoad() Tests if initial Road is build, whe start and end point arent possible for a road.
+	 * Testmethod: placeInitialRoad() Tests if initial Road is build, whe start and
+	 * end point arent possible for a road.
 	 */
 	@Test
 	public void requirementPlaceInitialRoadInvalidStartAndEnd() {
@@ -343,12 +344,163 @@ public class SiedlerGameTest {
 		model.placeInitialSettlement(new Point(6, 6), false);
 
 		// Act
-		boolean isSuccessful = model.placeInitialRoad(new Point(6,6), new Point(8,12));
+		boolean isSuccessful = model.placeInitialRoad(new Point(6, 6), new Point(8, 12));
 
 		// Assert
 		assertFalse(isSuccessful);
 	}
 
+	/**
+	 * Testmethod: buildSettlement() Test if Settlement can be build at a valid
+	 * position and player has Resources.
+	 */
+	@Test
+	public void requirementBuildSettlementValidPosition() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		model.placeInitialRoad(new Point(6, 6), new Point(6, 4));
+
+		// place Settlement with payout to get necessary resources to build new
+		// settlement
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 15), true);
+
+		// Act
+		boolean isSuccessful = model.buildSettlement(new Point(6, 6));
+
+		// Assert
+		assertTrue(isSuccessful);
+	}
+
+	/**
+	 * Testmethod: buildSettlement() Test if Settlement can be build at a valid
+	 * position but player has no Resources.
+	 */
+	@Test
+	public void requirementBuildSettlementNoResources() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		model.placeInitialRoad(new Point(6, 6), new Point(6, 4));
+
+		// Act
+		boolean isSuccessful = model.buildSettlement(new Point(6, 6));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+
+	/**
+	 * Testmethod: buildSettlement() Test if Settlement can be build at a valid
+	 * position and player has Resources, but no adjacent road.
+	 */
+	@Test
+	public void requirementBuildSettlementNoAdjacentRoad() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+
+		// place Settlement with payout to get necessary resources to build new
+		// settlement
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 15), true);
+
+		// Act
+		boolean isSuccessful = model.buildSettlement(new Point(6, 6));
+
+		// Assert
+		assertTrue(isSuccessful);
+	}
+
+	/**
+	 * Testmethod: buildSettlement() Test if Settlement can be build at an invalid
+	 * position.
+	 */
+	@Test
+	public void requirementBuildSettlementInWater() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		// place Settlement with payout to get necessary resources to build new
+		// settlement
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 15), true);
+
+		// Act
+		boolean isSuccessful = model.buildSettlement(new Point(1, 10));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+
+	/**
+	 * Testmethod: buildSettlement() 
+	 * Test if Settlement can be build when oponent settlment is adjacent.
+	 */
+	@Test
+	public void requirementBuildSettlementOponentSettlementAdjacent() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+
+		model.placeInitialSettlement(new Point(8, 12), true);
+		
+		model.switchToNextPlayer();
+		// place Settlement with payout to get necessary resources to build new
+		// settlement
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 15), true);
+
+		// Act
+		boolean isSuccessful = model.buildSettlement(new Point(8, 10));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+
+	/**
+	 * Testmethod: buildSettlement() 
+	 * Test if Settlement can be build when own settlement is adjacent.
+	 */
+	@Test
+	public void requirementBuildSettlementOwnSettlementAdjacent() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+
+		model.placeInitialSettlement(new Point(8, 12), true);
+		
+		// place Settlement with payout to get necessary resources to build new
+		// settlement
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 15), true);
+
+		// Act
+		boolean isSuccessful = model.buildSettlement(new Point(8, 10));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+
+	/**
+	 * Testmethod: buildSettlement() 
+	 * Test if Settlement can be build when settlement is already build at chosen position.
+	 */
+	@Test
+	public void requirementBuildSettlementPositionAllreadyUsed() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+
+		model.placeInitialSettlement(new Point(8, 10), true);
+		
+		model.switchToNextPlayer();
+		// place Settlement with payout to get necessary resources to build new
+		// settlement
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 15), true);
+
+		// Act
+		boolean isSuccessful = model.buildSettlement(new Point(8, 10));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+	
 	/**
 	 * Testmethod: GetWinner() Tests if there is a winner. Expected: No FAction
 	 * returned, because there is no winner yet.

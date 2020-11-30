@@ -66,14 +66,32 @@ public class SiedlerBoard extends HexBoard<Land, Settlement, String, String> {
 
 	/**
 	 * Builds a new settlement at the specified point for the actual player. The new
-	 * settlement is build with the String "faction" and "S" for Settlement or "C"
-	 * for City.
+	 * settlement is build with an instance of the class settlement.
 	 * 
 	 * @param buildingGround The point, where the player wants to build his new
 	 *                       settlement.
 	 * @param faction        The faction of the current player.
 	 */
 	public boolean createSettlement(Point buildingGround, Config.Faction faction) {
+		boolean successful = false;
+		if (hasCorner(buildingGround) && hasLandAsFieldAround(buildingGround) && getAdjacentEdges(buildingGround) != null) {
+			if (getNeighboursOfCorner(buildingGround).isEmpty() && getCorner(buildingGround) == null) {
+				setCorner(buildingGround, new Settlement(faction));
+				successful = true;
+			}
+		}
+		return successful;
+	}
+	
+	/**
+	 * Builds a new initial settlement at the specified point for the actual player. The new
+	 * settlement is build with an instance of the class settlement.
+	 * 
+	 * @param buildingGround The point, where the player wants to build his new
+	 *                       settlement.
+	 * @param faction        The faction of the current player.
+	 */
+	public boolean createInitialSettlement(Point buildingGround, Config.Faction faction) {
 		boolean successful = false;
 		if (hasCorner(buildingGround) && hasLandAsFieldAround(buildingGround)) {
 			if (getNeighboursOfCorner(buildingGround).isEmpty() && getCorner(buildingGround) == null) {

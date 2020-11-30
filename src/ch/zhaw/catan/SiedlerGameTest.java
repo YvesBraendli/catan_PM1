@@ -14,9 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.graalvm.compiler.api.replacements.Snippet.VarargsParameter;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.engine.discovery.predicates.IsTestFactoryMethod;
 
 public class SiedlerGameTest {
 	private SiedlerGame model;
@@ -360,7 +358,9 @@ public class SiedlerGameTest {
 	public void requirementBuildSettlementValidPosition() {
 		// Arrange
 		initializeSiedlerGame(4, 2);
+		model.placeInitialSettlement(new Point(6, 6), true);
 		model.placeInitialRoad(new Point(6, 6), new Point(6, 4));
+		model.placeInitialRoad(new Point(6, 4), new Point(5, 3));
 
 		// place Settlement with payout to get necessary resources to build new
 		// settlement
@@ -368,7 +368,7 @@ public class SiedlerGameTest {
 		model.placeInitialSettlement(new Point(5, 15), true);
 
 		// Act
-		boolean isSuccessful = model.buildSettlement(new Point(6, 6));
+		boolean isSuccessful = model.buildSettlement(new Point(5, 3));
 
 		// Assert
 		assertTrue(isSuccessful);
@@ -382,10 +382,12 @@ public class SiedlerGameTest {
 	public void requirementBuildSettlementNoResources() {
 		// Arrange
 		initializeSiedlerGame(4, 2);
+		model.placeInitialSettlement(new Point(6, 6), false);
 		model.placeInitialRoad(new Point(6, 6), new Point(6, 4));
+		model.placeInitialRoad(new Point(6, 4), new Point(5, 3));
 
 		// Act
-		boolean isSuccessful = model.buildSettlement(new Point(6, 6));
+		boolean isSuccessful = model.buildSettlement(new Point(5, 3));
 
 		// Assert
 		assertFalse(isSuccessful);
@@ -409,7 +411,7 @@ public class SiedlerGameTest {
 		boolean isSuccessful = model.buildSettlement(new Point(6, 6));
 
 		// Assert
-		assertTrue(isSuccessful);
+		assertFalse(isSuccessful);
 	}
 
 	/**
@@ -442,8 +444,11 @@ public class SiedlerGameTest {
 		initializeSiedlerGame(4, 2);
 
 		model.placeInitialSettlement(new Point(8, 12), true);
-
 		model.switchToNextPlayer();
+
+		model.placeInitialSettlement(new Point(9, 9), false);
+		model.placeInitialRoad(new Point(9, 9), new Point(8, 10));
+
 		// place Settlement with payout to get necessary resources to build new
 		// settlement
 		model.placeInitialSettlement(new Point(4, 12), true);
@@ -464,8 +469,9 @@ public class SiedlerGameTest {
 	public void requirementBuildSettlementOwnSettlementAdjacent() {
 		// Arrange
 		initializeSiedlerGame(4, 2);
-
 		model.placeInitialSettlement(new Point(8, 12), true);
+		model.placeInitialSettlement(new Point(9, 9), false);
+		model.placeInitialRoad(new Point(9, 9), new Point(8, 10));
 
 		// place Settlement with payout to get necessary resources to build new
 		// settlement
@@ -489,7 +495,7 @@ public class SiedlerGameTest {
 		initializeSiedlerGame(4, 2);
 
 		model.placeInitialSettlement(new Point(8, 10), true);
-
+		model.placeInitialRoad(new Point(8, 10), new Point(8, 12));
 		model.switchToNextPlayer();
 		// place Settlement with payout to get necessary resources to build new
 		// settlement
@@ -497,7 +503,7 @@ public class SiedlerGameTest {
 		model.placeInitialSettlement(new Point(5, 15), true);
 
 		// Act
-		boolean isSuccessful = model.buildSettlement(new Point(8, 10));
+		boolean isSuccessful = model.buildSettlement(new Point(8, 12));
 
 		// Assert
 		assertFalse(isSuccessful);
@@ -576,7 +582,7 @@ public class SiedlerGameTest {
 
 	/**
 	 * Testmethod: buildCity() Test if City can be build at valid position but user
-	 * has already build all cities possible. 
+	 * has already build all cities possible.
 	 */
 	@Test
 	public void requirementBuildCityNoCitiesLeftToBuild() {
@@ -585,7 +591,7 @@ public class SiedlerGameTest {
 		model.placeInitialSettlement(new Point(8, 12), false);
 		model.placeInitialSettlement(new Point(7, 9), false);
 		model.placeInitialSettlement(new Point(9, 15), false);
-		
+
 		// place Settlement with payout to get necessary resources to build new
 		// city
 		model.placeInitialSettlement(new Point(4, 12), true);
@@ -598,7 +604,7 @@ public class SiedlerGameTest {
 		model.buildCity(new Point(7, 9));
 		model.buildCity(new Point(9, 15));
 		model.buildCity(new Point(4, 12));
-		
+
 		// Act
 		boolean isSuccessful = model.buildCity(new Point(5, 9));
 

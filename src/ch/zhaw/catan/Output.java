@@ -250,4 +250,13 @@ public class Output {
 	public void printWinner(Faction winner) {
 		textTerminal.println("Player "+winner+" won the game!");
 	}
+	
+	public void printThiefMessage() {
+		textTerminal.print("Oh No! The thief arrived. Players with more than 7 ressources got half of them stolen. :(\nWhere should the thief be placed?\n");
+	}
+	
+	public void errorThiefPosition() {
+		textTerminal.print("Thief could not be placed at this location.\n");
+	}
+	
 }

@@ -33,6 +33,7 @@ public class GameController {
 	private static final int DICEROLL_ADDITION = 2;
 	private static final int NUMBER_OF_DICESIDES = 6;
 	private static final int WINPOINTS_NEEDED = 5; // Winpoints needed without City Implementation
+	private static final int DICENUMBER_WHICH_TRIGGERS_THIEF = 7;
 	private int numberOfPlayers;
 	private boolean isRunning;
 	private boolean isSettlementBuilt;
@@ -87,6 +88,9 @@ public class GameController {
 			boolean isUsersTurn = true;
 			int rolledNumber = rollDice();
 			output.printPreTurnInfo(siedlerGame.throwDice(rolledNumber), rolledNumber);
+			if(rolledNumber == DICENUMBER_WHICH_TRIGGERS_THIEF ) {
+				thiefAction();
+			}
 			while (isUsersTurn) {
 				output.printPlayerStart(siedlerGame.getCurrentPlayerFaction());
 				outputPrintPlayerResources();
@@ -112,6 +116,22 @@ public class GameController {
 				}
 			}
 
+	}
+
+	/**
+	 * Steals player resources and sets thief on field.
+	 */
+	private void thiefAction() {
+		output.printThiefMessage();
+		boolean isThiefSet = false;
+		while(!isThiefSet) {
+			if(siedlerGame.placeThiefAndStealCard(inputParser.requestXYCoordinates())) {
+				isThiefSet = true;
+			}
+			else {
+				output.errorThiefPosition();
+			}
+		}
 	}
 
 	/**

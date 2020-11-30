@@ -29,7 +29,7 @@ public class SiedlerBoard extends HexBoard<Land, Settlement, String, String> {
 	public boolean createCity(Point buildingGround, Faction faction) {
 		if (getCorner(buildingGround) != null && !(getCorner(buildingGround) instanceof City)) {
 			Settlement settlement = getCorner(buildingGround);
-			if (settlement.toString().equals(faction.toString())) {
+			if (settlement.getFaction() == faction) {
 				setCorner(buildingGround, new City(faction));
 				return true;
 			}

@@ -395,6 +395,30 @@ public class SiedlerGameTest {
 
 	/**
 	 * Testmethod: buildSettlement() Test if Settlement can be build at a valid
+	 * position but player has no settlements left to build.
+	 */
+	@Test
+	public void requirementBuildSettlementNoSettlementsLeftToBuild() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		model.placeInitialSettlement(new Point(6, 6), true);
+		model.placeInitialSettlement(new Point(7, 9), true);
+		model.placeInitialSettlement(new Point(8, 12), true);
+
+		// place Settlement with payout to get necessary resources to build new
+		// settlement
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 15), true);
+
+		// Act
+		boolean isSuccessful = model.buildSettlement(new Point(7, 15));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+
+	/**
+	 * Testmethod: buildSettlement() Test if Settlement can be build at a valid
 	 * position and player has Resources, but no adjacent road.
 	 */
 	@Test
@@ -416,7 +440,8 @@ public class SiedlerGameTest {
 
 	/**
 	 * Testmethod: buildSettlement() Test if Settlement can be build at a invalid
-	 * position and player has Resources, but all adjacentRoads are from other players.
+	 * position and player has Resources, but all adjacentRoads are from other
+	 * players.
 	 */
 	@Test
 	public void requirementBuildSettlementAdjacentRoadFromOtherPlayers() {
@@ -435,11 +460,48 @@ public class SiedlerGameTest {
 
 		// Act
 		boolean isSuccessful = model.buildSettlement(new Point(6, 6));
-		
+
 		// Assert
 		assertFalse(isSuccessful);
 	}
-	
+
+	/**
+	 * Testmethod: buildSettlement() Test if Settlement can be build at a valid
+	 * position but player has no Roads left to build.
+	 */
+	@Test
+	public void requirementBuildRoadNoRoadsLeftToBuild() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		model.placeInitialSettlement(new Point(2, 10), true);
+		model.placeInitialRoad(new Point(2, 10), new Point(3, 9));
+		model.placeInitialRoad(new Point(3, 9), new Point(3, 7));
+		model.placeInitialRoad(new Point(3, 7), new Point(4, 6));
+		model.placeInitialRoad(new Point(4, 6), new Point(4, 4));
+		model.placeInitialRoad(new Point(4, 4), new Point(5, 3));
+		model.placeInitialRoad(new Point(5, 3), new Point(6, 4));
+		model.placeInitialRoad(new Point(6, 4), new Point(6, 6));
+		model.placeInitialRoad(new Point(6, 6), new Point(7, 7));
+		model.placeInitialRoad(new Point(7, 7), new Point(7, 9));
+		model.placeInitialRoad(new Point(7, 9), new Point(8, 10));
+		model.placeInitialRoad(new Point(8, 10), new Point(8, 12));
+		model.placeInitialRoad(new Point(8, 12), new Point(9, 13));
+		model.placeInitialRoad(new Point(9, 13), new Point(10, 12));
+		model.placeInitialRoad(new Point(10, 12), new Point(10, 10));
+		model.placeInitialRoad(new Point(10, 10), new Point(11, 9));
+
+		// place Settlement with payout to get necessary resources to build new
+		// settlement
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 15), true);
+
+		// Act
+		boolean isSuccessful = model.placeInitialRoad(new Point(11, 7), new Point(11, 9));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+
 	/**
 	 * Testmethod: buildSettlement() Test if Settlement can be build at an invalid
 	 * position.
@@ -561,7 +623,8 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildCity() Test if City can be build at a invalid position because city is already there.
+	 * Testmethod: buildCity() Test if City can be build at a invalid position
+	 * because city is already there.
 	 */
 	@Test
 	public void requirementBuildCityAlreadyBuildCityAtPosition() {
@@ -589,7 +652,7 @@ public class SiedlerGameTest {
 		// Assert
 		assertFalse(isSuccessful);
 	}
-	
+
 	/**
 	 * Testmethod: buildCity() Test if City can be build at a valid position and
 	 * player has not enough Resources.
@@ -707,6 +770,29 @@ public class SiedlerGameTest {
 
 		// Assert
 		assertTrue(isSuccessful);
+	}
+
+	/**
+	 * Testmethod: buildRoad() Test if Road can be build when position is invalid,
+	 * because only adjacent road is from other player. and no own settlement is
+	 * adjacent.
+	 */
+	@Test
+	public void requirementBuildRoadValidPositionAdjacentRoadOnlyFromOtherPlayer() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		model.placeInitialSettlement(new Point(9, 9), false);
+		model.placeInitialRoad(new Point(8, 10), new Point(9, 9));
+		model.placeInitialRoad(new Point(8, 10), new Point(7, 9));
+
+		// place Settlement with payout to get necessary resources to build new Road
+		model.placeInitialSettlement(new Point(4, 12), true);
+
+		// Act
+		boolean isSuccessful = model.buildRoad(new Point(8, 10), new Point(7, 9));
+
+		// Assert
+		assertFalse(isSuccessful);
 	}
 
 	/**
@@ -923,6 +1009,42 @@ public class SiedlerGameTest {
 		for (int i = 0; i < availableNumber; i++) {
 			model.throwDice(5);
 		}
+
+		int amountOfWoodBefore = model.getCurrentPlayerResourceStock(Resource.WOOD);
+		int amountOfStoneBefore = model.getCurrentPlayerResourceStock(Resource.STONE);
+		int amountOfClayBefore = model.getCurrentPlayerResourceStock(Resource.CLAY);
+		int amountOfGrainBefore = model.getCurrentPlayerResourceStock(Resource.GRAIN);
+		int amountOfWoolBefore = model.getCurrentPlayerResourceStock(Resource.WOOL);
+
+		// Act
+		boolean isSuccessful = model.tradeWithBankFourToOne(Resource.WOOD, Resource.WOOD);
+		int amountOfWoodAfter = model.getCurrentPlayerResourceStock(Resource.WOOD);
+		int AmountOfStoneAfter = model.getCurrentPlayerResourceStock(Resource.STONE);
+		int amountOfClayAfter = model.getCurrentPlayerResourceStock(Resource.CLAY);
+		int amountOfGrainAfter = model.getCurrentPlayerResourceStock(Resource.GRAIN);
+		int amountOfWoolAfter = model.getCurrentPlayerResourceStock(Resource.WOOL);
+
+		// Assert
+		assertFalse(isSuccessful);
+		// make sure no amount of resources has changed.
+		assertEquals(amountOfWoodBefore, amountOfWoodAfter);
+		assertEquals(amountOfStoneBefore, AmountOfStoneAfter);
+		assertEquals(amountOfClayBefore, amountOfClayAfter);
+		assertEquals(amountOfGrainBefore, amountOfGrainAfter);
+		assertEquals(amountOfWoolBefore, amountOfWoolAfter);
+	}
+
+	/**
+	 * Testmethod: tradeWithBankFourToOne() Tests if trading with bank is well
+	 * executed. Player has not enough resource from this type.
+	 */
+	@Test
+	public void requirementTradeWithBankFourToOnePlayerHasNotEnoughResource() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+
+		// place Settlement with payout and throw dice to get necessary resources
+		model.placeInitialSettlement(new Point(4, 12), true);
 
 		int amountOfWoodBefore = model.getCurrentPlayerResourceStock(Resource.WOOD);
 		int amountOfStoneBefore = model.getCurrentPlayerResourceStock(Resource.STONE);

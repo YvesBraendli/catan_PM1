@@ -27,7 +27,7 @@ public class SiedlerBoard extends HexBoard<Land, Settlement, String, String> {
 	 * @return True, if the placement of the city was successful.
 	 */
 	public boolean createCity(Point buildingGround, Faction faction) {
-		if (getCorner(buildingGround) != null) {
+		if (getCorner(buildingGround) != null && !(getCorner(buildingGround) instanceof City)) {
 			Settlement settlement = getCorner(buildingGround);
 			if (settlement.toString().equals(faction.toString())) {
 				setCorner(buildingGround, new City(faction));
@@ -74,7 +74,7 @@ public class SiedlerBoard extends HexBoard<Land, Settlement, String, String> {
 	 */
 	public boolean createSettlement(Point buildingGround, Config.Faction faction) {
 		boolean successful = false;
-		if (hasCorner(buildingGround) && hasLandAsFieldAround(buildingGround) && getAdjacentEdges(buildingGround) != null) {
+		if (hasCorner(buildingGround) && hasLandAsFieldAround(buildingGround) && !(getAdjacentEdges(buildingGround).isEmpty())) {
 			if (getNeighboursOfCorner(buildingGround).isEmpty() && getCorner(buildingGround) == null) {
 				setCorner(buildingGround, new Settlement(faction));
 				successful = true;

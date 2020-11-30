@@ -24,19 +24,19 @@ import ch.zhaw.catan.Config.Structure;
  *
  */
 public class GameController {
-	private GameController gameController;
 	private SiedlerGame siedlerGame;
 	private InputParser inputParser;
 	private Output output;
 	private TextIO textIO;
 	private TextTerminal<?> textTerminal;
 	private Random random;
-
+	private static final int DICEROLL_ADDITION = 2;
+	private static final int NUMBER_OF_DICESIDES = 6;
 	private static final int WINPOINTS_NEEDED = 5; // Winpoints needed without City Implementation
 	private int numberOfPlayers;
 	private boolean isRunning;
-	private boolean settlementBuilt;
-	private boolean roadBuilt;
+	private boolean isSettlementBuilt;
+	private boolean isRoadBuilt;
 	private Point position;
 
 	/**
@@ -89,26 +89,26 @@ public class GameController {
 				output.printPlayerStart(textTerminal, siedlerGame.getCurrentPlayerFaction());
 				outputPrintPlayerResources();
 				switch (inputParser.showMainMenuAction(textIO)) {
-				case SHOW:
-					output.printMapMenuDelimiter(textTerminal);
-					output.printBoard(textTerminal, siedlerGame.getBoard());
-					break;
-
-				case BUILD:
-					buildAction();
-					break;
-
-				case TRADE:
-					tradeAction();
-					break;
-
-				case END_TURN:
-					siedlerGame.switchToNextPlayer();
-					isUsersTurn = false;
-					break;
+					case SHOW:
+						output.printMapMenuDelimiter(textTerminal);
+						output.printBoard(textTerminal, siedlerGame.getBoard());
+						break;
+	
+					case BUILD:
+						buildAction();
+						break;
+	
+					case TRADE:
+						tradeAction();
+						break;
+	
+					case END_TURN:
+						siedlerGame.switchToNextPlayer();
+						isUsersTurn = false;
+						break;
+					}
 				}
 			}
-		}
 
 	}
 
@@ -137,47 +137,49 @@ public class GameController {
 		output.printBuildMenuDelimiter(textTerminal);
 		outputPrintPlayerResources();
 		switch (inputParser.showBuildAction(textIO)) {
-		case SETTLEMENT:
-			output.printBoard(textTerminal, siedlerGame.getBoard());
-			output.requestSettlementCoordinates(textTerminal, false);
-			position = inputParser.requestXYCoordinates(textIO);
-			if (inputParser.askBuildStructure(textIO, Structure.SETTLEMENT)) {
-				settlementBuilt = siedlerGame.buildSettlement(position);
-				if (!settlementBuilt) {
-					output.errorSettlementNotBuilt(textTerminal);
+			case SETTLEMENT:
+				output.printBoard(textTerminal, siedlerGame.getBoard());
+				output.requestSettlementCoordinates(textTerminal, false);
+				position = inputParser.requestXYCoordinates(textIO);
+				if (inputParser.askBuildStructure(textIO, Structure.SETTLEMENT)) {
+					isSettlementBuilt = siedlerGame.buildSettlement(position);
+					checkIfStructureIsBuilt();
 				}
-				else {
-					isRunning = checkForWinner();
+				break;
+			case CITY:
+				output.printBoard(textTerminal, siedlerGame.getBoard());
+				output.requestSettlementCoordinates(textTerminal, false);
+				position = inputParser.requestXYCoordinates(textIO);
+				if (inputParser.askBuildStructure(textIO, Structure.CITY)) {
+					isSettlementBuilt = siedlerGame.buildCity(position);
+					checkIfStructureIsBuilt();
 				}
+				break;
+			case ROAD:
+				output.printBoard(textTerminal, siedlerGame.getBoard());
+				output.requestRoadStartCoordinates(textTerminal, false);
+				Point roadStart = inputParser.requestXYCoordinates(textIO);
+				output.requestRoadEndCoordinates(textTerminal, false);
+				Point roadEnd = inputParser.requestXYCoordinates(textIO);
+				if (inputParser.askBuildStructure(textIO, Structure.ROAD)) {
+					isRoadBuilt = siedlerGame.buildRoad(roadStart, roadEnd);
+					if (!isRoadBuilt) {
+						output.errorRoadNotBuilt(textTerminal);
+					}
+				}
+				break;
 			}
-			break;
-		case CITY:
-			output.printBoard(textTerminal, siedlerGame.getBoard());
-			output.requestSettlementCoordinates(textTerminal, false);
-			position = inputParser.requestXYCoordinates(textIO);
-			if (inputParser.askBuildStructure(textIO, Structure.CITY)) {
-				settlementBuilt = siedlerGame.buildCity(position);
-				if (!settlementBuilt) {
-					output.errorSettlementNotBuilt(textTerminal);
-				}
-				else {
-					isRunning = checkForWinner();
-				}
-			}
-			break;
-		case ROAD:
-			output.printBoard(textTerminal, siedlerGame.getBoard());
-			output.requestRoadStartCoordinates(textTerminal, false);
-			Point roadStart = inputParser.requestXYCoordinates(textIO);
-			output.requestRoadEndCoordinates(textTerminal, false);
-			Point roadEnd = inputParser.requestXYCoordinates(textIO);
-			if (inputParser.askBuildStructure(textIO, Structure.ROAD)) {
-				roadBuilt = siedlerGame.buildRoad(roadStart, roadEnd);
-				if (!roadBuilt) {
-					output.errorRoadNotBuilt(textTerminal);
-				}
-			}
-			break;
+	}
+
+	/**
+	 * Checks if either a city or settlement was built
+	 */
+	private void checkIfStructureIsBuilt() {
+		if (!isSettlementBuilt) {
+			output.errorSettlementNotBuilt(textTerminal);
+		}
+		else {
+			isRunning = isStillRunning();
 		}
 	}
 
@@ -198,25 +200,25 @@ public class GameController {
 	 * @param payout true if a payout for the structure should be made.
 	 */
 	private void buildInitialStructures(boolean payout) {
-		settlementBuilt = false;
-		roadBuilt = false;
+		isSettlementBuilt = false;
+		isRoadBuilt = false;
 
-		while (!settlementBuilt) {
+		while (!isSettlementBuilt) {
 			output.requestSettlementCoordinates(textTerminal, true);
 			Point position = inputParser.requestXYCoordinates(textIO);
-			settlementBuilt = siedlerGame.placeInitialSettlement(position, payout);
-			if (!settlementBuilt) {
+			isSettlementBuilt = siedlerGame.placeInitialSettlement(position, payout);
+			if (!isSettlementBuilt) {
 				output.errorSettlementNotBuilt(textTerminal);
 			}
 		}
 
-		while (!roadBuilt) {
+		while (!isRoadBuilt) {
 			output.requestRoadStartCoordinates(textTerminal, true);
 			Point roadStart = inputParser.requestXYCoordinates(textIO);
 			output.requestRoadEndCoordinates(textTerminal, true);
 			Point roadEnd = inputParser.requestXYCoordinates(textIO);
-			roadBuilt = siedlerGame.placeInitialRoad(roadStart, roadEnd);
-			if (!roadBuilt) {
+			isRoadBuilt = siedlerGame.placeInitialRoad(roadStart, roadEnd);
+			if (!isRoadBuilt) {
 				output.errorRoadNotBuilt(textTerminal);
 			}
 		}
@@ -228,7 +230,7 @@ public class GameController {
 	 * @return the combined rolled numbers.
 	 */
 	private int rollDice() {
-		return random.nextInt(6) + random.nextInt(6) + 2;
+		return random.nextInt(NUMBER_OF_DICESIDES) + random.nextInt(NUMBER_OF_DICESIDES) + DICEROLL_ADDITION;
 	}
 	
 	/**
@@ -236,7 +238,7 @@ public class GameController {
 	 * 
 	 * @return true if the game needs to continue running.
 	 */
-	private boolean checkForWinner() {
+	private boolean isStillRunning() {
 		Config.Faction winner = siedlerGame.getWinner();
 		if(winner != null) {
 			output.printWinner(textTerminal, winner);
@@ -246,12 +248,11 @@ public class GameController {
 	}
 
 	/**
-	 * The man method of the program used to start the runGame method.
+	 * The main method of the program used to start the runGame method.
 	 * 
 	 * @param args not used.
 	 */
 	public static void main(String[] args) {
-		GameController gameController = new GameController();
-		gameController.runGame();
+		new GameController().runGame();
 	}
 }

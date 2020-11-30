@@ -144,7 +144,8 @@ public class SiedlerBoard extends HexBoard<Land, Settlement, String, String> {
 					}
 				}
 			}
-			if (hasSettlementAtStartOrEnd(start, end, faction) && hasLandAsFieldAround(start) && hasLandAsFieldAround(end)) {
+			if (hasSettlementAtStartOrEnd(start, end, faction) && hasLandAsFieldAround(start) 
+					&& getEdge(start, end) == null && hasLandAsFieldAround(end)) {
 				setEdge(start, end, faction.toString());
 				return true;
 			}

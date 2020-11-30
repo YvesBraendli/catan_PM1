@@ -415,7 +415,7 @@ public class SiedlerGame {
 		stealResourcesFromPlayers();
 		
 		//set Thief
-		Faction factionWithThief = Faction.BLUE;
+		Faction factionWithThief = getCurrentPlayerFaction();
 		// Faction factionWithThief = siedlerBoard.setThief(field);
 		
 		// if faction is null, thief isn't adjacent to a settlement or city
@@ -441,7 +441,7 @@ public class SiedlerGame {
 			int amountToRemove = amountOfResources / 2;
 			
 			for(int i = 0; i < amountToRemove; i++) {
-				Resource selectedRandomResource = Resource.CLAY;
+				Resource selectedRandomResource = Resource.STONE;
 				//Resource selectedRandomResource = player.getRandomResource();
 				Long currentResourceForBank = resourcesForBank.get(selectedRandomResource);
 				if(currentResourceForBank == null) currentResourceForBank = (long)0;

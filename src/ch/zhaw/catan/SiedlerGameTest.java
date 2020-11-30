@@ -16,6 +16,12 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * This class test the methods from SiedlerGame.java.
+ * 
+ * @author Moser Nadine, Meier Robin, Brändli Yves
+ *
+ */
 public class SiedlerGameTest {
 	private SiedlerGame model;
 	private static final int WIN_POINTS_5 = 5;

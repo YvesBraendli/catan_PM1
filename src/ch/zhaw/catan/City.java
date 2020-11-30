@@ -13,7 +13,6 @@ import ch.zhaw.catan.Config.Faction;
  */
 public class City extends Settlement {
 	
-	private int additionalCityWinningPoints;
 	private int additionalCityResourceCardsForPayout;
 
 	
@@ -23,16 +22,7 @@ public class City extends Settlement {
 	 */
 	public City(Faction owner) {
 		super(owner);
-		additionalCityWinningPoints = 1;
 		additionalCityResourceCardsForPayout = 1;
-	}
-	
-	/**
-	 * Returns the number of winning points, which the player gets for the city.
-	 * @return The number of winning points.
-	 */
-	public int getNumberOfWinningpoints() {
-		return super.getNumberOfWinningpoints() + additionalCityWinningPoints;
 	}
 	
 	/**

@@ -126,7 +126,8 @@ public class SiedlerBoard extends HexBoard<Land, Settlement, String, String> {
 		if (hasEdge(start, end)) {
 			List<String> startRoads = getAdjacentEdges(start);
 			List<String> endRoads = getAdjacentEdges(end);
-			if (startRoads != null && startRoads.size() > 0 && startRoads.size() < 3 && getEdge(start, end) == null) {
+			if (startRoads != null && startRoads.size() > 0 && startRoads.size() < 3 && getEdge(start, end) == null 
+					&& hasLandAsFieldAround(start) && hasLandAsFieldAround(end)) {
 				for (int i = 0; i < startRoads.size(); i++) {
 					if ((startRoads.get(i).substring(0, 2).equals(faction.toString()))) {
 						setEdge(start, end, faction.toString());
@@ -134,7 +135,8 @@ public class SiedlerBoard extends HexBoard<Land, Settlement, String, String> {
 					}
 				}
 			}
-			if (endRoads != null && endRoads.size() > 0 && endRoads.size() < 3 && getEdge(start, end) == null) {
+			if (endRoads != null && endRoads.size() > 0 && endRoads.size() < 3 && getEdge(start, end) == null 
+					&& hasLandAsFieldAround(start) && hasLandAsFieldAround(end)) {
 				for (int i = 0; i < endRoads.size(); i++) {
 					if ((endRoads.get(i).substring(0, 2).equals(faction.toString()))) {
 						setEdge(start, end, faction.toString());
@@ -142,7 +144,7 @@ public class SiedlerBoard extends HexBoard<Land, Settlement, String, String> {
 					}
 				}
 			}
-			if (hasSettlementAtStartOrEnd(start, end, faction)) {
+			if (hasSettlementAtStartOrEnd(start, end, faction) && hasLandAsFieldAround(start) && hasLandAsFieldAround(end)) {
 				setEdge(start, end, faction.toString());
 				return true;
 			}

@@ -1,6 +1,7 @@
 package ch.zhaw.catan;
 
 import java.awt.Point;
+import java.util.Random;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -116,8 +117,20 @@ public class SiedlerBoard extends HexBoard<Land, Settlement, String, String> {
 		return false;
 	}
 	
+	/**
+	 * Sets the thief to a new corner, which has to has a settlement.
+	 * 
+	 * @param field The Point value of the field, in which the player wants to put the thief.
+	 * @return The faction of the player from whom cards are stolen by the thief or null, if there is no
+	 * building around the specified field.
+	 */
 	public Faction setThief(Point field) {
-		
+		List<Settlement> buildingsAroundField = getCornersOfField(field);
+		if (buildingsAroundField.isEmpty()) return null;
+		Random random = new Random();
+		int index = random.nextInt(buildingsAroundField.size());
+		Faction faction = buildingsAroundField.get(index).getFaction();
+		return faction;
 	}
 
 	/**

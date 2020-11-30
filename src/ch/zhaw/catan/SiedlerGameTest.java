@@ -415,6 +415,32 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Testmethod: buildSettlement() Test if Settlement can be build at a invalid
+	 * position and player has Resources, but all adjacentRoads are from other players.
+	 */
+	@Test
+	public void requirementBuildSettlementAdjacentRoadFromOtherPlayers() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+
+		model.placeInitialSettlement(new Point(5, 3), true);
+		model.placeInitialRoad(new Point(6, 4), new Point(5, 3));
+		model.placeInitialRoad(new Point(6, 6), new Point(6, 4));
+		model.switchToNextPlayer();
+
+		// place Settlement with payout to get necessary resources to build new
+		// settlement
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 15), true);
+
+		// Act
+		boolean isSuccessful = model.buildSettlement(new Point(6, 6));
+		
+		// Assert
+		assertFalse(isSuccessful);
+	}
+	
+	/**
 	 * Testmethod: buildSettlement() Test if Settlement can be build at an invalid
 	 * position.
 	 */
@@ -534,6 +560,36 @@ public class SiedlerGameTest {
 		assertTrue(isSuccessful);
 	}
 
+	/**
+	 * Testmethod: buildCity() Test if City can be build at a invalid position because city is already there.
+	 */
+	@Test
+	public void requirementBuildCityAlreadyBuildCityAtPosition() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		model.placeInitialRoad(new Point(6, 6), new Point(6, 4));
+
+		// place Settlement with payout to get necessary resources to build new
+		// city
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 9), true);
+		model.throwDice(10);
+		model.throwDice(4);
+		model.throwDice(4);
+		model.throwDice(10);
+		model.throwDice(4);
+		model.throwDice(4);
+		model.throwDice(10);
+		model.throwDice(4);
+		model.throwDice(4);
+		model.buildCity(new Point(4, 12));
+		// Act
+		boolean isSuccessful = model.buildCity(new Point(4, 12));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+	
 	/**
 	 * Testmethod: buildCity() Test if City can be build at a valid position and
 	 * player has not enough Resources.

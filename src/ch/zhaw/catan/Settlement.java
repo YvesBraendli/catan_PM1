@@ -12,14 +12,16 @@ import ch.zhaw.catan.Config.Faction;
 
 public class Settlement {
 	private int numberOfResourcesForPayout;
-	private String faction;
+	private String owner;
+	private Faction faction;
 	
 	/**
 	 * Constructs a new settlement for the specified owner.
 	 * @param owner The faction of the owner, who created the settlement.
 	 */
-	public Settlement(Faction owner) {
-		faction = owner.toString();
+	public Settlement(Faction faction) {
+		this.faction = faction;
+		owner = faction.toString();
 		numberOfResourcesForPayout = 1;
 	}
 
@@ -27,8 +29,9 @@ public class Settlement {
 	 * Returns the faction of the owner of this settlement.
 	 * @return The faction of the settlement-owner.
 	 */
+	@Override
 	public String toString() {
-		return faction;
+		return owner;
 	}
 	
 	/**
@@ -38,6 +41,14 @@ public class Settlement {
 	 */
 	public int getNumberOfResourcesForPayout() {
 		return numberOfResourcesForPayout;
+	}
+	
+	/**
+	 * Returns the faction value for the owner of the building.
+	 * @return The faction of the owner.
+	 */
+	public Faction getFaction() {
+		return faction;
 	}
 }
 

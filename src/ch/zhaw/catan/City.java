@@ -32,5 +32,15 @@ public class City extends Settlement {
 	public int getNumberOfResourcesForPayout() {
 		return super.getNumberOfResourcesForPayout() + additionalCityResourceCardsForPayout;
 	}
+	
+	/**
+	 * Returns the faction of the owner of this settlement.
+	 * @return The faction of the settlement-owner.
+	 */
+	@Override
+	public String toString() {
+		return super.toString().toUpperCase();
+	}
+	
 
 }

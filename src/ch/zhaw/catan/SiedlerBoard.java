@@ -74,7 +74,8 @@ public class SiedlerBoard extends HexBoard<Land, Settlement, String, String> {
 	 */
 	public boolean createSettlement(Point buildingGround, Config.Faction faction) {
 		boolean successful = false;
-		if (hasCorner(buildingGround) && hasLandAsFieldAround(buildingGround) && !(getAdjacentEdges(buildingGround).isEmpty())) {
+		if (hasCorner(buildingGround) && hasLandAsFieldAround(buildingGround) 
+				&& !(getAdjacentEdges(buildingGround).isEmpty()) && getAdjacentEdges(buildingGround).contains(faction.toString())) {
 			if (getNeighboursOfCorner(buildingGround).isEmpty() && getCorner(buildingGround) == null) {
 				setCorner(buildingGround, new Settlement(faction));
 				successful = true;
@@ -113,6 +114,10 @@ public class SiedlerBoard extends HexBoard<Land, Settlement, String, String> {
 			return true;
 		}
 		return false;
+	}
+	
+	public Faction setThief(Point field) {
+		
 	}
 
 	/**

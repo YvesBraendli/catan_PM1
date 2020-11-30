@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -27,7 +28,7 @@ import java.util.Set;
  *
  */
 public class SiedlerGame {
-
+	private static final int MIN_AMOUNT_CARDS = 8;
 	private Player currentPlayer;
 	private ArrayList<Player> players;
 	private int winPoints;
@@ -252,8 +253,11 @@ public class SiedlerGame {
 	}
 
 	private int getAmoundOfNewWinningPoints(List<Settlement> buildings) {
+
 		int sum = 0;
 		for(Settlement building : buildings) {
+			// todo: scip if thief is next to building
+			//siedlerboard.getthiefposition();
 			sum = sum + building.getNumberOfWinningpoints();
 		}
 		return sum;
@@ -404,9 +408,61 @@ public class SiedlerGame {
 	 */
 	public boolean placeThiefAndStealCard(Point field) {
 		// TODO: Implement (or longest road functionality)
-		return false;
+		
+		// ist feld ok? nicht - auch nicht abziehen, gleich zurück
+		boolean isValidField = siedlerBoard.hasField(field);
+		if(!isValidField) return false;
+		
+		stealResourcesFromPlayers();
+		
+		//set Thief
+		Faction factionWithThief = Faction.BLUE;
+		// Faction factionWithThief = siedlerBoard.setThief(field);
+		
+		// if faction is null, thief isn't adjacent to a settlement or city
+		if(factionWithThief == null) return true;
+		
+		for(Player player : players) {
+			if(player.getFaction() == factionWithThief && player != currentPlayer) {
+				Resource resource = Resource.CLAY;
+				// Resource resource = player.getRandomResource();
+				player.setAmountOfResources(resource, 1, false);
+				currentPlayer.setAmountOfResources(resource, 1, true);
+				break;
+			}
+		}
+		return true;
 	}
 
+	private void stealResourcesFromPlayers() {
+		HashMap<Resource, Long> resourcesForBank = new HashMap<Config.Resource, Long>();		
+		for(Player player : players) {
+			int amountOfResources = getAmountOfResources(player);
+			if(amountOfResources < MIN_AMOUNT_CARDS) continue;
+			int amountToRemove = amountOfResources / 2;
+			
+			for(int i = 0; i < amountToRemove; i++) {
+				Resource selectedRandomResource = Resource.CLAY;
+				//Resource selectedRandomResource = player.getRandomResource();
+				Long currentResourceForBank = resourcesForBank.get(selectedRandomResource);
+				if(currentResourceForBank == null) currentResourceForBank = (long)0;
+				resourcesForBank.put(selectedRandomResource, currentResourceForBank + 1);
+			}
+		}
+		bank.payCardsToBankStock(resourcesForBank);
+	}
+	
+	private int getAmountOfResources(Player player) {
+		HashMap<Config.Resource, Integer> resources = player.getAmountOfResources();
+		int sum = 0;
+		for (Entry<Resource, Integer> resource : resources.entrySet()) {
+			if(resource.getValue() != null) {
+				sum = sum + resource.getValue();
+			}
+		}
+		return sum;
+	}
+	
 	private void generatePlayers(int numberOfPlayers) {
 		
 		if (numberOfPlayers < 2 || numberOfPlayers > 4 ) {

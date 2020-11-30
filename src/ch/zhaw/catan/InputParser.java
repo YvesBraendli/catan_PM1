@@ -28,6 +28,15 @@ public class InputParser {
 	      return name;
 	    }
     }
+    private TextIO textIO;
+    
+    /**
+     *  Constructor of the InputParser Class
+     * @param textIO the terminal
+     */
+    public InputParser(TextIO textIO) {
+    	this.textIO = textIO;
+    }
     
     /**
      * Requests X and Y coordinates
@@ -35,7 +44,7 @@ public class InputParser {
      * @param textIO the reader for the inputs
      * @return a Point containing X and Y coordinates
      */
-    public Point requestXYCoordinates(TextIO textIO) {
+    public Point requestXYCoordinates() {
 
     	int x = textIO.newIntInputReader()
     			.withMinVal(0)
@@ -56,7 +65,7 @@ public class InputParser {
      * @param structureType the type of structure the player wants to build
      * @return true if the player wants to build the structure
      */
-    public boolean askBuildStructure(TextIO textIO, Config.Structure structureType) {
+    public boolean askBuildStructure(Config.Structure structureType) {
     	  return textIO.newBooleanInputReader()
                   .withTrueInput("Yes")
                   .withFalseInput("No")
@@ -71,7 +80,7 @@ public class InputParser {
      * @param resourceType the type of resource the player wants to buy
      * @return true if the player wants to buy the resource
      */
-    public boolean askBuyResource(TextIO textIO, Config.Resource resourceType) {
+    public boolean askBuyResource(Config.Resource resourceType) {
   	  return textIO.newBooleanInputReader()
                 .withTrueInput("Yes")
                 .withFalseInput("No")
@@ -85,7 +94,7 @@ public class InputParser {
      * @param textIO the reader for the inputs
      * @return the number of players
      */
-    public int requestNumberOfPlayers(TextIO textIO) {
+    public int requestNumberOfPlayers() {
     	return textIO.newIntInputReader()
     			.withMinVal(2)
     			.withMaxVal(4)
@@ -98,7 +107,7 @@ public class InputParser {
      * @param textIO the reader for the inputs
      * @return the action which the player wants to perform in the main menu
      */
-    public BaseActions showMainMenuAction(TextIO textIO) {
+    public BaseActions showMainMenuAction() {
     	return textIO.newEnumInputReader(BaseActions.class).read("\nWhat would you like to do?");
     }
     
@@ -108,7 +117,7 @@ public class InputParser {
      * @param textIO the reader for the inputs
      * @return the structure a player wants to build
      */
-    public Config.Structure  showBuildAction(TextIO textIO) {
+    public Config.Structure  showBuildAction() {
     	return textIO.newEnumInputReader(Config.Structure.class).read("\nWhat do you want to build?");
     }
     
@@ -118,7 +127,7 @@ public class InputParser {
      * @param textIO the reader for the inputs
      * @return the resource a player wants to buy/sell
      */
-    public Config.Resource showTradeAction(TextIO textIO) {
+    public Config.Resource showTradeAction() {
     	return textIO.newEnumInputReader(Config.Resource.class).read();
     }  
 }

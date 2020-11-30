@@ -17,6 +17,15 @@ import ch.zhaw.catan.Config.Resource;
  */
 public class Output {
 	private SiedlerBoardTextView gameBoardView;
+	private TextTerminal<?> textTerminal;
+	
+	/**
+	 *  The constructor for the Output class
+	 * @param textTerminal the terminal
+	 */
+	public Output(TextTerminal<?> textTerminal) {
+		this.textTerminal = textTerminal;
+	}
 
 	/**
 	 * String that asks where a settlement should be built.
@@ -24,7 +33,7 @@ public class Output {
 	 * @param textTerminal the terminal used for the outputs
 	 * @param isInitial    true if the structure is built during phase 2.
 	 */
-	public void requestSettlementCoordinates(TextTerminal<?> textTerminal, boolean isInitial) {
+	public void requestSettlementCoordinates(boolean isInitial) {
 		if (isInitial) {
 			textTerminal.println("Where do you want to build your initial settlement?");
 		} else {
@@ -38,7 +47,7 @@ public class Output {
 	 * @param textTerminal the terminal used for the outputs
 	 * @param isInitial    true if the structure is built during phase 2.
 	 */
-	public void requestRoadStartCoordinates(TextTerminal<?> textTerminal, boolean isInitial) {
+	public void requestRoadStartCoordinates(boolean isInitial) {
 		if (isInitial) {
 			textTerminal.println("Where should your initial road start?");
 		} else {
@@ -52,7 +61,7 @@ public class Output {
 	 * @param textTerminal the terminal used for the outputs
 	 * @param isInitial    true if the structure is built during phase 2.
 	 */
-	public void requestRoadEndCoordinates(TextTerminal<?> textTerminal, boolean isInitial) {
+	public void requestRoadEndCoordinates(boolean isInitial) {
 		if (isInitial) {
 			textTerminal.println("Where should your initial road end?");
 		} else {
@@ -65,7 +74,7 @@ public class Output {
 	 * 
 	 * @param textTerminal the terminal used for the outputs
 	 */
-	public void requestResourceSell(TextTerminal<?> textTerminal) {
+	public void requestResourceSell() {
 		textTerminal.println("\nWhich resource do you want to sell?");
 	}
 
@@ -74,7 +83,7 @@ public class Output {
 	 * 
 	 * @param textTerminal the terminal used for the outputs
 	 */
-	public void requestResourceBuy(TextTerminal<?> textTerminal) {
+	public void requestResourceBuy() {
 		textTerminal.println("\nWhich resource do you want to buy?");
 	}
 
@@ -85,7 +94,7 @@ public class Output {
 	 * 
 	 * @param textTerminal the terminal used for the outputs
 	 */
-	public void errorSettlementNotBuilt(TextTerminal<?> textTerminal) {
+	public void errorSettlementNotBuilt() {
 		textTerminal.println("No settlement/city could be built at this location.");
 	}
 
@@ -96,7 +105,7 @@ public class Output {
 	 * 
 	 * @param textTerminal the terminal used for the outputs
 	 */
-	public void errorRoadNotBuilt(TextTerminal<?> textTerminal) {
+	public void errorRoadNotBuilt() {
 		textTerminal.println("No road could be built at this location.");
 	}
 
@@ -106,7 +115,7 @@ public class Output {
 	 * 
 	 * @param textTerminal the terminal used for the outputs
 	 */
-	public void errorTradeFailed(TextTerminal<?> textTerminal) {
+	public void errorTradeFailed() {
 		textTerminal.println("This trade failed, please check your resources.");
 	}
 
@@ -116,7 +125,7 @@ public class Output {
 	 * @param textTerminal  the terminal used for the outputs
 	 * @param currentPlayer the current player faction
 	 */
-	public void printPlayerStart(TextTerminal<?> textTerminal, Config.Faction currentPlayer) {
+	public void printPlayerStart(Config.Faction currentPlayer) {
 		textTerminal.println("\n-----------Player " + currentPlayer + "----------");
 	}
 
@@ -130,7 +139,7 @@ public class Output {
 	 * @param amountOfClay  amount of Clay the player owns
 	 * @param amountOfGrain amount of Grain the player owns
 	 */
-	public void printPlayerResources(TextTerminal<?> textTerminal, int amountOfWood, int amountOfStone,
+	public void printPlayerResources(int amountOfWood, int amountOfStone,
 			int amountOfWool, int amountOfClay, int amountOfGrain) {
 		textTerminal.println("Resources Owned:\n" + amountOfGrain + " Grain, " + amountOfWool + " Wool, " + amountOfWood
 				+ " Wood " + amountOfStone + " Stone, " + amountOfClay + " Clay");
@@ -143,7 +152,7 @@ public class Output {
 	 * @param payedOutResources the payed out resources
 	 * @param rolledNumber      the rolled dice number
 	 */
-	public void printPreTurnInfo(TextTerminal<?> textTerminal, Map<Faction, List<Resource>> payedOutResources,
+	public void printPreTurnInfo(Map<Faction, List<Resource>> payedOutResources,
 			int rolledNumber) {
 		textTerminal.println("\n-----------------------------------");
 		textTerminal.println("The number " + rolledNumber + " was rolled!");
@@ -201,7 +210,7 @@ public class Output {
 	 * 
 	 * @param textTerminal the terminal used for the outputs
 	 */
-	public void printBuildMenuDelimiter(TextTerminal<?> textTerminal) {
+	public void printBuildMenuDelimiter() {
 		textTerminal.println("\n-----------Build---------------");
 	}
 
@@ -210,7 +219,7 @@ public class Output {
 	 * 
 	 * @param textTerminal the terminal used for the outputs
 	 */
-	public void printTradeMenuDelimiter(TextTerminal<?> textTerminal) {
+	public void printTradeMenuDelimiter() {
 		textTerminal.println("\n-----------Trade--------------");
 	}
 
@@ -219,7 +228,7 @@ public class Output {
 	 * 
 	 * @param textTerminal the terminal used for the outputs
 	 */
-	public void printMapMenuDelimiter(TextTerminal<?> textTerminal) {
+	public void printMapMenuDelimiter() {
 		textTerminal.println("\n-----------Map-----------------");
 	}
 
@@ -228,7 +237,7 @@ public class Output {
 	 * 
 	 * @param textTerminal the terminal used for the outputs
 	 */
-	public void printBoard(TextTerminal<?> textTerminal, SiedlerBoard board) {
+	public void printBoard(SiedlerBoard board) {
 		gameBoardView = new SiedlerBoardTextView(board);
 		textTerminal.println(gameBoardView.toString());
 	}
@@ -238,7 +247,7 @@ public class Output {
 	 * 
 	 * @param textTerminal the terminal used for the outputs
 	 */
-	public void printWinner(TextTerminal<?> textTerminal, Faction winner) {
+	public void printWinner(Faction winner) {
 		textTerminal.println("Player "+winner+" won the game!");
 	}
 }

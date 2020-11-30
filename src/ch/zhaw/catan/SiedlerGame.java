@@ -156,7 +156,7 @@ public class SiedlerGame {
 	public boolean placeInitialSettlement(Point position, boolean payout) {
 		if(currentPlayer.getCurrentNumberOfSettlements() <= 0) return false; 
 		
-		boolean hasBuildSettlement = siedlerBoard.createSettlement(position, getCurrentPlayerFaction());
+		boolean hasBuildSettlement = siedlerBoard.createInitialSettlement(position, getCurrentPlayerFaction());
 		if(!hasBuildSettlement) return false;
 		
 		currentPlayer.setCurrentNumberOfSettlements(1);		
@@ -235,7 +235,7 @@ public class SiedlerGame {
 				for(Map.Entry<Faction, ArrayList<Settlement>> faction : factionsWithSettlementAroundField.entrySet()) {
 					if(player.getFaction() == faction.getKey()) {
 						Map<Resource, Integer> payoutResources = new HashMap<>();
-						int sum = getAmoundOfNewWinningPoints(faction.getValue());
+						int sum = getAmountOfResourcesForPayout(faction.getValue());
 						payoutResources.put(currentResource, sum);
 						boolean isPayoutSuccessful = bank.payoutToDiceThrows(payoutResources);	
 						if(isPayoutSuccessful) {
@@ -252,13 +252,12 @@ public class SiedlerGame {
 		return payout;		
 	}
 
-	private int getAmoundOfNewWinningPoints(List<Settlement> buildings) {
-
+	private int getAmountOfResourcesForPayout(List<Settlement> buildings) {
 		int sum = 0;
 		for(Settlement building : buildings) {
 			// todo: scip if thief is next to building
 			//siedlerboard.getthiefposition();
-			sum = sum + building.getNumberOfWinningpoints();
+			sum = sum + building.getNumberOfResourcesForPayout();
 		}
 		return sum;
 	}

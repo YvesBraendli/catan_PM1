@@ -11,7 +11,6 @@ import ch.zhaw.catan.Config.Faction;
  */
 
 public class Settlement {
-	private int numberOfWinningpoints;
 	private int numberOfResourcesForPayout;
 	private String faction;
 	
@@ -22,7 +21,6 @@ public class Settlement {
 	public Settlement(Faction owner) {
 		faction = owner.toString();
 		numberOfResourcesForPayout = 1;
-		numberOfWinningpoints = 1;
 	}
 
 	/**
@@ -31,14 +29,6 @@ public class Settlement {
 	 */
 	public String toString() {
 		return faction;
-	}
-
-	/**
-	 * Returns a number, which stands for the winning points, which the settlement gives to the owner.
-	 * @return The number of winning points for a settlement.
-	 */
-	public int getNumberOfWinningpoints() {
-		return numberOfWinningpoints;
 	}
 	
 	/**

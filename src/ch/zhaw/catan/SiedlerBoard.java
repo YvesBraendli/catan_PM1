@@ -11,18 +11,15 @@ import ch.zhaw.catan.Config.Land;
 import ch.zhaw.hexboard.HexBoard;
 
 public class SiedlerBoard extends HexBoard<Land, Settlement, String, String> {
-private Point thiefPositionField;
-private Point thiefPositionCorner;
+private Point thiefPosition;
 
-public static void main (String args[]) {
-	new SiedlerBoard().setThief(new Point(5,5));
-}
+//public static void main (String args[]) {
+//	new SiedlerBoard().setThief(new Point(5,5));
+//}
 	public SiedlerBoard() {
 		super();
 		createFields();
-		thiefPositionCorner = new Point(7,9);
-		thiefPositionField = new Point(7,11);
-		addFieldAnnotation(new Point(7,11), new Point(7,9), "Thief");
+		thiefPosition = new Point(7,9);
 
 	}
 
@@ -133,23 +130,12 @@ public static void main (String args[]) {
 	 * building around the specified field.
 	 */
 	public Faction setThief(Point field) {
-		Point[] validCorners = {new Point (field.x-1, field.y+1), new Point (field.x-1, field.y+1), 
-				new Point (field.x+1, field.y+1), new Point (field.x+1, field.y-1),
-				new Point (field.x, field.y+2), new Point (field.x, field.y-2),};
+		thiefPosition = field;
 		Random random = new Random();
-		int index = random.nextInt(7);
-		Point corner = validCorners[index];
-
-
-		
-		addFieldAnnotation(field, corner, "Thief");
-		addFieldAnnotation(thiefPositionField, thiefPositionCorner, "");
-		thiefPositionCorner = corner;
-		thiefPositionField = field;
-		
-		if(getCorner(corner) == null) return null;
-		Faction faction = getCorner(corner).getFaction();
-		System.out.println(faction);
+		List<Settlement> buildingsAroundField = getCornersOfField(field);
+		if (buildingsAroundField.isEmpty()) return null;
+		int index = random.nextInt(buildingsAroundField.size());
+		Faction faction = buildingsAroundField.get(index).getFaction();
 		return faction;
 	}
 

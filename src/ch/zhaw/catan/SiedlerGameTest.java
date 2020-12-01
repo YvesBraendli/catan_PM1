@@ -330,10 +330,10 @@ public class SiedlerGameTest {
 	public void requirementPlaceInitialRoadPositionInWater() {
 		// Arrange
 		initializeSiedlerGame(5, 2);
-		model.placeInitialSettlement(new Point(6, 6), false);
+		model.placeInitialSettlement(new Point(4, 4), false);
 
 		// Act
-		boolean isSuccessful = model.placeInitialRoad(new Point(2, 4), new Point(2, 6));
+		boolean isSuccessful = model.placeInitialRoad(new Point(4, 4), new Point(3, 3));
 
 		// Assert
 		assertFalse(isSuccessful);
@@ -1174,7 +1174,8 @@ public class SiedlerGameTest {
 
 	/**
 	 * Testmethod: placeThiefAndStealCard() Tests if thief is set and player gets
-	 * right amount of resources removed and added to bank. (odd amount of resources)
+	 * right amount of resources removed and added to bank. (odd amount of
+	 * resources)
 	 */
 	@Test
 	public void requirementPlaceThiefAndStealCurrentPlayerHasMoreThanSevenResources() {
@@ -1255,7 +1256,7 @@ public class SiedlerGameTest {
 	 * resources.
 	 */
 	@Test
-	public void requirementPlaceThiefAndSteaTwoHasMoreThanSevenResources() {
+	public void requirementPlaceThiefAndStealTwoHasMoreThanSevenResources() {
 		// Arrange
 		initializeSiedlerGame(5, 2);
 		model.placeInitialSettlement(new Point(6, 6), true);
@@ -1322,6 +1323,130 @@ public class SiedlerGameTest {
 		// Assert
 		assertFalse(isSuccessful);
 		assertEquals(currentAmountOfResources, resultAmountOfResources);
+	}
+
+	/**
+	 * Testmethod: placeThiefAndStealCard() Tests if thief is set, and only own
+	 * settlement is around field with thief.
+	 * 
+	 */
+	@Test
+	public void requirementPlaceThiefAndStealOneSettlementFromCurrentPlayer() {
+		// Arrange
+		initializeSiedlerGame(5, 2);
+		model.placeInitialSettlement(new Point(5, 9), true);
+		int expectedAmountOfResourcesCurrentPlayer = getAmountOfResources();
+
+		// Act
+		boolean isSuccessful = model.placeThiefAndStealCard(new Point(5, 11));
+		int resultAmountOfResourcesCurrentPlayer = getAmountOfResources();
+
+		// Assert
+		assertTrue(isSuccessful);
+		assertEquals(expectedAmountOfResourcesCurrentPlayer, resultAmountOfResourcesCurrentPlayer);
+	}
+
+	/**
+	 * Testmethod: placeThiefAndStealCard() Tests if thief is set, and resource is
+	 * stolen from other player.
+	 * 
+	 */
+	@Test
+	public void requirementPlaceThiefAndStealOneSettlementFromOtherPlayer() {
+		// Arrange
+		initializeSiedlerGame(5, 2);
+		model.placeInitialSettlement(new Point(5, 9), true);
+		int expectedAmountOfResourcesOtherPlayer = getAmountOfResources() - 1;
+		model.switchToNextPlayer();
+		int expectedAmountOfResourcesCurrentPlayer = getAmountOfResources() + 1;
+
+		// Act
+		boolean isSuccessful = model.placeThiefAndStealCard(new Point(5, 11));
+		int resultAmountOfResourcesCurrentPlayer = getAmountOfResources();
+		model.switchToNextPlayer();
+		int resultAmountOfResourcesOtherPlayer = getAmountOfResources();
+
+		// Assert
+		assertTrue(isSuccessful);
+		assertEquals(expectedAmountOfResourcesCurrentPlayer, resultAmountOfResourcesCurrentPlayer);
+		assertEquals(expectedAmountOfResourcesOtherPlayer, resultAmountOfResourcesOtherPlayer);
+	}
+
+	/**
+	 * Testmethod: placeThiefAndStealCard() Tests if thief is set, and resource is
+	 * stolen from other player. other player has no resources.
+	 */
+	@Test
+	public void requirementPlaceThiefAndStealOneSettlementFromOtherPlayerWithNoResources() {
+		// Arrange
+		initializeSiedlerGame(5, 2);
+		model.placeInitialSettlement(new Point(5, 9), false);
+		int expectedAmountOfResourcesOtherPlayer = 0;
+		model.switchToNextPlayer();
+		int expectedAmountOfResourcesCurrentPlayer = getAmountOfResources() + 0;
+
+		// Act
+		boolean isSuccessful = model.placeThiefAndStealCard(new Point(5, 11));
+		int resultAmountOfResourcesCurrentPlayer = getAmountOfResources();
+		model.switchToNextPlayer();
+		int resultAmountOfResourcesOtherPlayer = getAmountOfResources();
+
+		// Assert
+		assertTrue(isSuccessful);
+		assertEquals(expectedAmountOfResourcesCurrentPlayer, resultAmountOfResourcesCurrentPlayer);
+		assertEquals(expectedAmountOfResourcesOtherPlayer, resultAmountOfResourcesOtherPlayer);
+	}
+
+	/**
+	 * Testmethod: placeThiefAndStealCard() Tests if thief is set, and resource is
+	 * stolen from other player. other player has no more resources (they were
+	 * already stolen).
+	 */
+	@Test
+	public void requirementPlaceThiefAndStealOneSettlementFromOtherPlayerWithNoMoreResources() {
+		// Arrange
+		initializeSiedlerGame(5, 2);
+		model.placeInitialSettlement(new Point(5, 9), true);
+		int currentAmountOfOtherPlayer = getAmountOfResources();
+		int expectedAmountOfResourcesOtherPlayer = 0;
+		model.switchToNextPlayer();
+		int expectedAmountOfResourcesCurrentPlayer = getAmountOfResources() + currentAmountOfOtherPlayer;
+
+		// Act
+		boolean isSuccessful = model.placeThiefAndStealCard(new Point(5, 11));
+		isSuccessful = isSuccessful && model.placeThiefAndStealCard(new Point(5, 11));
+		isSuccessful = isSuccessful && model.placeThiefAndStealCard(new Point(6, 8));
+		isSuccessful = isSuccessful && model.placeThiefAndStealCard(new Point(5, 11));
+		isSuccessful = isSuccessful && model.placeThiefAndStealCard(new Point(6, 8));
+		isSuccessful = isSuccessful && model.placeThiefAndStealCard(new Point(5, 11));
+		int resultAmountOfResourcesCurrentPlayer = getAmountOfResources();
+		model.switchToNextPlayer();
+		int resultAmountOfResourcesOtherPlayer = getAmountOfResources();
+
+		// Assert
+		assertTrue(isSuccessful);
+		assertEquals(expectedAmountOfResourcesCurrentPlayer, resultAmountOfResourcesCurrentPlayer);
+		assertEquals(expectedAmountOfResourcesOtherPlayer, resultAmountOfResourcesOtherPlayer);
+	}
+
+	/**
+	 * Testmethod: placeThiefAndStealCard() Tests if thief is set and player gets
+	 * right amount of resources removed and added to bank. No Settlements are
+	 * around thief field.
+	 */
+	@Test
+	public void requirementPlaceThiefAndStealNoSettlementsAroundThiefField() {
+		// Arrange
+		initializeSiedlerGame(5, 4);
+		int expectedAmountOfResources = getAmountOfResources();
+
+		// Act
+		boolean isSuccessful = model.placeThiefAndStealCard(new Point(5, 11));
+		int resultAmountOfResources = getAmountOfResources();
+
+		// Assert
+		assertTrue(isSuccessful);
+		assertEquals(expectedAmountOfResources, resultAmountOfResources);
 	}
 
 	private void bootstrapTestBoardForThreePlayersStandard(int winpoints) {

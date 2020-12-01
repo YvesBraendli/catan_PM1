@@ -169,9 +169,7 @@ public class SiedlerGame {
 		if (payout) {
 			List<Land> landPlacements = siedlerBoard.getFields(position);
 			for (Land currentLand : landPlacements) {
-				if (currentLand.getResource() == null)
-					continue;
-				System.out.println(currentLand.getResource());
+				if (currentLand.getResource() == null) continue;
 				currentPlayer.setAmountOfResources(currentLand.getResource(), 1, true);
 			}
 
@@ -436,8 +434,9 @@ public class SiedlerGame {
 			return true;
 
 		for (Player player : players) {
-			if (player.getFaction() == factionWithThief && player != currentPlayer) {
+			if (player.getFaction() == factionWithThief) {
 				Resource resource = player.selectRandomResource();
+				if(resource == null) break;
 				player.setAmountOfResources(resource, 1, false);
 				currentPlayer.setAmountOfResources(resource, 1, true);
 				break;

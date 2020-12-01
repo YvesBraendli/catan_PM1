@@ -10,12 +10,24 @@ import ch.zhaw.catan.Config.Faction;
 import ch.zhaw.catan.Config.Land;
 import ch.zhaw.hexboard.HexBoard;
 
+/**
+ * This class is a subclass of HexBoard. It is used to get, add and prepare parameters from 
+ * siedlerGame to hexBoard or the other way around. It has the following functions:
+ * - Add or get Settlements or Cities as corner-values.
+ * - Add or get Streets as Edge values.
+ * - Initialize the fields for a siedler game.
+ * - Get all buildings around a field.
+ * - Get, set and save the field-value for the position of the thief.
+ * @author Moser Nadine, Meier Robin, Brändli Yves
+ * @version 1.0
+ *
+ */
 public class SiedlerBoard extends HexBoard<Land, Settlement, String, String> {
 private Point thiefPosition;
 
-//public static void main (String args[]) {
-//	new SiedlerBoard().setThief(new Point(5,5));
-//}
+/**
+ * Constructor for the class SiedlerBoard.
+ */
 	public SiedlerBoard() {
 		super();
 		createFields();
@@ -44,15 +56,15 @@ private Point thiefPosition;
 	}
 
 	/**
-	 * Checks if there are settlements around a resource field. If so returns a List
+	 * Checks if there are buildings around a resource field. If so returns a List
 	 * with all the settlements for this field.
 	 * 
 	 * @param field The resource field, that needs to be checked, if there are
-	 *              settlements around it.
-	 * @return A HashMap with the key for the Factions a list with String values,
-	 *         which represents the settlement.
+	 *              buildings around it.
+	 * @return A HashMap with the key for the Factions a list with settlements which are
+	 * located around the field.
 	 */
-	public HashMap<Faction, ArrayList<Settlement>> searchFieldSettlement(Point field) {
+	public HashMap<Faction, ArrayList<Settlement>> searchFieldBuildings(Point field) {
 		HashMap<Faction, ArrayList<Settlement>> buildings = new HashMap<>();
 		if (hasField(field)) {
 			List<Settlement> buildingsAroundField = getCornersOfField(field);
@@ -123,7 +135,8 @@ private Point thiefPosition;
 	}
 	
 	/**
-	 * Sets the thief to a new corner, which has to has a settlement.
+	 * Sets the thief to a new field-value. If there are buildings around this field,
+	 * a random building is chosen as return value.
 	 * 
 	 * @param field The Point value of the field, in which the player wants to put the thief.
 	 * @return The faction of the player from whom cards are stolen by the thief or null, if there is no
@@ -139,6 +152,10 @@ private Point thiefPosition;
 		return faction;
 	}
 
+	/**
+	 * Returns the point value of the thiefPosition.
+	 * @return The current position of the thief as a point value.
+	 */
 	public Point getThief () {
 		return thiefPosition;
 	}

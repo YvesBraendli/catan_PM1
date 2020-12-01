@@ -228,7 +228,7 @@ public class SiedlerGame {
 			Land currentLand = landPlacements.get(currentField);
 			Resource currentResource = currentLand.getResource();
 				
-			HashMap<Faction, ArrayList<Settlement>> factionsWithSettlementAroundField = siedlerBoard.searchFieldSettlement(currentField);
+			HashMap<Faction, ArrayList<Settlement>> factionsWithSettlementAroundField = siedlerBoard.searchFieldBuildings(currentField);
 			
 			for(Player player : players) {
 				List<Resource> addedResources = payout.get(player.getFaction());

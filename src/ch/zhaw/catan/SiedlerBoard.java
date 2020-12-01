@@ -45,7 +45,7 @@ private Point thiefPosition;
 	 * @return True, if the placement of the city was successful.
 	 */
 	public boolean createCity(Point buildingGround, Faction faction) {
-		if (getCorner(buildingGround) != null && !(getCorner(buildingGround) instanceof City)) {
+		if (hasCorner(buildingGround) && getCorner(buildingGround) != null && !(getCorner(buildingGround) instanceof City)) {
 			Settlement settlement = getCorner(buildingGround);
 			if (settlement.getFaction() == faction) {
 				setCorner(buildingGround, new City(faction));

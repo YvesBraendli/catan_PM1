@@ -24,6 +24,7 @@ import java.util.Set;
  * requeste of a certain type, the number of players requesting it, the amount
  * of resources available in the bank and the settlement types.
  * </p>
+ * 
  * @author Moser Nadine, Meier Robin, Br�ndli Yves
  *
  */
@@ -46,10 +47,9 @@ public class SiedlerGame {
 	 *                                  is not between two and four
 	 */
 	public SiedlerGame(int winPoints, int players) {
-		if(winPoints > 2) {
+		if (winPoints > 2) {
 			this.winPoints = winPoints;
-		}
-		else {
+		} else {
 			throw new IllegalArgumentException();
 		}
 		this.players = new ArrayList<Player>();
@@ -132,10 +132,12 @@ public class SiedlerGame {
 	 * @return the amount of resources of this type
 	 */
 	public int getCurrentPlayerResourceStock(Resource resource) {
-		HashMap<Resource, Integer> resources = currentPlayer.getAmountOfResources();	
-		if (resources == null) return 0;
+		HashMap<Resource, Integer> resources = currentPlayer.getAmountOfResources();
+		if (resources == null)
+			return 0;
 		Integer resourceStock = resources.get(resource);
-		if(resourceStock == null) return 0;
+		if (resourceStock == null)
+			return 0;
 		return resourceStock;
 	}
 
@@ -154,24 +156,27 @@ public class SiedlerGame {
 	 * @return true, if the placement was successful
 	 */
 	public boolean placeInitialSettlement(Point position, boolean payout) {
-		if(currentPlayer.getCurrentNumberOfSettlements() <= 0) return false; 
-		
+		if (currentPlayer.getCurrentNumberOfSettlements() <= 0)
+			return false;
+
 		boolean hasBuildSettlement = siedlerBoard.createInitialSettlement(position, getCurrentPlayerFaction());
-		if(!hasBuildSettlement) return false;
-		
-		currentPlayer.setCurrentNumberOfSettlements(1);		
+		if (!hasBuildSettlement)
+			return false;
+
+		currentPlayer.setCurrentNumberOfSettlements(1);
 		increaseWinningPoints(currentPlayer, 1);
-		
-		if(payout) {
+
+		if (payout) {
 			List<Land> landPlacements = siedlerBoard.getFields(position);
-			for(Land currentLand : landPlacements) {
-				if(currentLand.getResource() == null) continue;
+			for (Land currentLand : landPlacements) {
+				if (currentLand.getResource() == null)
+					continue;
 				System.out.println(currentLand.getResource());
 				currentPlayer.setAmountOfResources(currentLand.getResource(), 1, true);
 			}
-			
+
 			return true;
-		}						
+		}
 		return true;
 	}
 
@@ -184,11 +189,12 @@ public class SiedlerGame {
 	 * @return true, if the placement was successful
 	 */
 	public boolean placeInitialRoad(Point roadStart, Point roadEnd) {
-		if(currentPlayer.getCurrentNumberOfRoads() <= 0) return false;
+		if (currentPlayer.getCurrentNumberOfRoads() <= 0)
+			return false;
 		boolean hasBuildRoad = siedlerBoard.createStreet(roadStart, roadEnd, getCurrentPlayerFaction());
-		if(hasBuildRoad) {
+		if (hasBuildRoad) {
 			currentPlayer.setCurrentNumberOfRoads(1);
-		}	
+		}
 		return hasBuildRoad;
 	}
 
@@ -207,61 +213,66 @@ public class SiedlerGame {
 	 * @param dicethrow the result of the dice throw
 	 * @return the resources that have been paid to the players
 	 */
-	public Map<Faction, List<Resource>> throwDice(int dicethrow) {		
-		Map<Faction, List<Resource>> payout = new HashMap<Config.Faction, List<Resource>>();		
+	public Map<Faction, List<Resource>> throwDice(int dicethrow) {
+		Map<Faction, List<Resource>> payout = new HashMap<Config.Faction, List<Resource>>();
 		Map<Point, Integer> diceNumberPlacements = Config.getStandardDiceNumberPlacement();
-	
-		Set<Point> placementToGetResources = new HashSet<Point>();		
-		for(Map.Entry<Point, Integer> entry: diceNumberPlacements.entrySet()) {
-			if(entry.getValue() != null && entry.getValue() == dicethrow) {
+
+		Set<Point> placementToGetResources = new HashSet<Point>();
+		for (Map.Entry<Point, Integer> entry : diceNumberPlacements.entrySet()) {
+			if (entry.getValue() != null && entry.getValue() == dicethrow) {
 				placementToGetResources.add(entry.getKey());
 			}
 		}
-		
-		for(Player player : players) {
+
+		for (Player player : players) {
 			payout.put(player.getFaction(), new ArrayList<Resource>());
 		}
-		
+
+		Point thiefPosition = siedlerBoard.getThief();
 		Map<Point, Land> landPlacements = Config.getStandardLandPlacement();
-		
-		for(Point currentField : placementToGetResources) {
+
+		for (Point currentField : placementToGetResources) {
+			if (currentField.x == thiefPosition.x 
+					&& currentField.y == thiefPosition.y) continue;
+
 			Land currentLand = landPlacements.get(currentField);
 			Resource currentResource = currentLand.getResource();
-				
-			HashMap<Faction, ArrayList<Settlement>> factionsWithSettlementAroundField = siedlerBoard.searchFieldBuildings(currentField);
-			
-			for(Player player : players) {
+
+			HashMap<Faction, ArrayList<Settlement>> factionsWithSettlementAroundField = siedlerBoard
+					.searchFieldBuildings(currentField);
+
+			for (Player player : players) {
 				List<Resource> addedResources = payout.get(player.getFaction());
-				for(Map.Entry<Faction, ArrayList<Settlement>> faction : factionsWithSettlementAroundField.entrySet()) {
-					if(player.getFaction() == faction.getKey()) {
+				for (Map.Entry<Faction, ArrayList<Settlement>> faction : factionsWithSettlementAroundField.entrySet()) {
+					if (player.getFaction() == faction.getKey()) {
 						Map<Resource, Integer> payoutResources = new HashMap<>();
 						int amountOfCurrentResource = getAmountOfResourcesForPayout(faction.getValue());
 						payoutResources.put(currentResource, amountOfCurrentResource);
-						boolean isPayoutSuccessful = bank.payoutToDiceThrows(payoutResources);	
-						if(isPayoutSuccessful) {
+						boolean isPayoutSuccessful = bank.payoutToDiceThrows(payoutResources);
+						if (isPayoutSuccessful) {
 							player.setAmountOfResources(currentResource, amountOfCurrentResource, true);
-							for(int i = 0; i < amountOfCurrentResource; i++) {
+							for (int i = 0; i < amountOfCurrentResource; i++) {
 								addedResources.add(currentResource);
 							}
-						}				
+						}
 					}
 				}
 				payout.put(player.getFaction(), addedResources);
-			}			
+			}
 		}
-		return payout;		
+		return payout;
 	}
 
 	private int getAmountOfResourcesForPayout(List<Settlement> buildings) {
 		int sum = 0;
-		for(Settlement building : buildings) {
+		for (Settlement building : buildings) {
 			// todo: scip if thief is next to building
-			//siedlerboard.getthiefposition();
+			// siedlerboard.getthiefposition();
 			sum = sum + building.getNumberOfResourcesForPayout();
 		}
 		return sum;
 	}
-	
+
 	/**
 	 * Builds a settlement at the specified position on the board.
 	 * 
@@ -277,13 +288,15 @@ public class SiedlerGame {
 	 * @return true, if the placement was successful
 	 */
 	public boolean buildSettlement(Point position) {
-		if(currentPlayer.getCurrentNumberOfSettlements() <= 0) return false; 
+		if (currentPlayer.getCurrentNumberOfSettlements() <= 0)
+			return false;
 		boolean canPayForSettlement = canPlayerPayForStructure(Structure.SETTLEMENT);
-		if(!canPayForSettlement) return false;
-		
+		if (!canPayForSettlement)
+			return false;
+
 		boolean hasBuildSettlement = siedlerBoard.createSettlement(position, getCurrentPlayerFaction());
-		
-		if(hasBuildSettlement) {
+
+		if (hasBuildSettlement) {
 			payForConstruct(Structure.SETTLEMENT);
 			currentPlayer.setCurrentNumberOfSettlements(1);
 			increaseWinningPoints(currentPlayer, 1);
@@ -307,13 +320,15 @@ public class SiedlerGame {
 	 * @return true, if the placement was successful
 	 */
 	public boolean buildCity(Point position) {
-		if(currentPlayer.getCurrentNumberOfCities() <= 0) return false;
+		if (currentPlayer.getCurrentNumberOfCities() <= 0)
+			return false;
 		boolean canPayForCity = canPlayerPayForStructure(Structure.CITY);
-		if(!canPayForCity) return false;
-		
+		if (!canPayForCity)
+			return false;
+
 		boolean hasBuildCity = siedlerBoard.createCity(position, getCurrentPlayerFaction());
-		
-		if(hasBuildCity) {
+
+		if (hasBuildCity) {
 			payForConstruct(Structure.CITY);
 			currentPlayer.setCurrentNumberOfCities(1);
 			increaseWinningPoints(currentPlayer, 2);
@@ -338,18 +353,20 @@ public class SiedlerGame {
 	 * @return true, if the placement was successful
 	 */
 	public boolean buildRoad(Point roadStart, Point roadEnd) {
-		if (currentPlayer.getCurrentNumberOfRoads() <= 0) return false;
+		if (currentPlayer.getCurrentNumberOfRoads() <= 0)
+			return false;
 		boolean canPayForRoad = canPlayerPayForStructure(Structure.ROAD);
-		if(!canPayForRoad) return false;
-		
+		if (!canPayForRoad)
+			return false;
+
 		boolean hasBuildRoad = siedlerBoard.createStreet(roadStart, roadEnd, getCurrentPlayerFaction());
-		
-		if(hasBuildRoad) {
+
+		if (hasBuildRoad) {
 			payForConstruct(Structure.ROAD);
 			currentPlayer.setCurrentNumberOfRoads(1);
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -363,21 +380,22 @@ public class SiedlerGame {
 	 *         successful
 	 */
 	public boolean tradeWithBankFourToOne(Resource offer, Resource want) {
-		if(currentPlayer.getAmountOfResources() == null) return false;
+		if (currentPlayer.getAmountOfResources() == null)
+			return false;
 		Integer resourcesToOffer = currentPlayer.getAmountOfResources().get(offer);
-		if(resourcesToOffer == null) {
+		if (resourcesToOffer == null) {
 			resourcesToOffer = 0;
 		}
-		
+
 		boolean hasResourcesToTradeWith = resourcesToOffer >= MIN_AMOUNT_FOR_OFFER;
-		if(hasResourcesToTradeWith) {
+		if (hasResourcesToTradeWith) {
 			boolean isTradingSuccessful = bank.trade(offer, want);
-			if(isTradingSuccessful) {
+			if (isTradingSuccessful) {
 				currentPlayer.setAmountOfResources(offer, MIN_AMOUNT_FOR_OFFER, false);
 				currentPlayer.setAmountOfResources(want, 1, true);
 				return true;
 			}
-		}		
+		}
 		return false;
 	}
 
@@ -387,8 +405,8 @@ public class SiedlerGame {
 	 * @return the winner of the game or null, if there is no winner (yet)
 	 */
 	public Faction getWinner() {
-		for(Player player : players) {
-			if(player.getNumberOfWinningpoints() >= winPoints) {
+		for (Player player : players) {
+			if (player.getNumberOfWinningpoints() >= winPoints) {
 				return player.getFaction();
 			}
 		}
@@ -407,17 +425,19 @@ public class SiedlerGame {
 	 */
 	public boolean placeThiefAndStealCard(Point field) {
 		boolean isValidField = siedlerBoard.hasField(field);
-		if(!isValidField) return false;
-		
+		if (!isValidField)
+			return false;
+
 		stealResourcesFromPlayers();
-		
+
 		Faction factionWithThief = siedlerBoard.setThief(field);
-		
+
 		// if faction is null, thief isn't adjacent to a settlement or city
-		if(factionWithThief == null) return true;
-		
-		for(Player player : players) {
-			if(player.getFaction() == factionWithThief && player != currentPlayer) {
+		if (factionWithThief == null)
+			return true;
+
+		for (Player player : players) {
+			if (player.getFaction() == factionWithThief && player != currentPlayer) {
 				Resource resource = player.selectRandomResource();
 				player.setAmountOfResources(resource, 1, false);
 				currentPlayer.setAmountOfResources(resource, 1, true);
@@ -428,43 +448,45 @@ public class SiedlerGame {
 	}
 
 	private void stealResourcesFromPlayers() {
-		HashMap<Resource, Long> resourcesForBank = new HashMap<Config.Resource, Long>();		
-		for(Player player : players) {		
+		HashMap<Resource, Long> resourcesForBank = new HashMap<Config.Resource, Long>();
+		for (Player player : players) {
 			int amountOfResources = getAmountOfResources(player);
-			if(amountOfResources < MIN_AMOUNT_CARDS) continue;
+			if (amountOfResources < MIN_AMOUNT_CARDS)
+				continue;
 			int amountLeft = amountOfResources / 2;
 			int amountToRemove = amountOfResources - amountLeft;
-			
-			for(int i = 0; i < amountToRemove; i++) {
+
+			for (int i = 0; i < amountToRemove; i++) {
 				Resource selectedRandomResource = player.selectRandomResource();
 				Long currentResourceForBank = resourcesForBank.get(selectedRandomResource);
-				if(currentResourceForBank == null) currentResourceForBank = (long)0;
+				if (currentResourceForBank == null)
+					currentResourceForBank = (long) 0;
 				player.setAmountOfResources(selectedRandomResource, 1, false);
 				resourcesForBank.put(selectedRandomResource, currentResourceForBank + 1);
 			}
 		}
 		bank.payCardsToBankStock(resourcesForBank);
 	}
-	
+
 	private int getAmountOfResources(Player player) {
 		HashMap<Config.Resource, Integer> resources = player.getAmountOfResources();
 		int amountOfAllResources = 0;
 		for (Entry<Resource, Integer> resource : resources.entrySet()) {
-			if(resource.getValue() != null) {
+			if (resource.getValue() != null) {
 				amountOfAllResources = amountOfAllResources + resource.getValue();
 			}
 		}
 		return amountOfAllResources;
 	}
-	
+
 	private void generatePlayers(int numberOfPlayers) {
-		
-		if (numberOfPlayers < 2 || numberOfPlayers > 4 ) {
+
+		if (numberOfPlayers < 2 || numberOfPlayers > 4) {
 			throw new IllegalArgumentException();
 		}
-		
-		for(int i = 0; i < numberOfPlayers; i++) {
-			this.players.add(new Player(Faction.values()[i]));			
+
+		for (int i = 0; i < numberOfPlayers; i++) {
+			this.players.add(new Player(Faction.values()[i]));
 		}
 	}
 
@@ -472,30 +494,33 @@ public class SiedlerGame {
 		int currentPoints = player.getNumberOfWinningpoints();
 		player.setNumberOfWinningpoints(currentPoints + increment);
 	}
-	
+
 	private void payForConstruct(Structure structure) {
 		List<Resource> costs = structure.getCosts();
-		for(Resource resource : costs) {
+		for (Resource resource : costs) {
 			currentPlayer.setAmountOfResources(resource, 1, false);
 		}
-		bank.payCardsToBankStock(structure.getCostsAsMap());		
+		bank.payCardsToBankStock(structure.getCostsAsMap());
 	}
-	
+
 	private boolean canPlayerPayForStructure(Structure structure) {
 		List<Resource> costs = structure.getCosts();
-		
+
 		Map<Resource, Integer> currentResources = currentPlayer.getAmountOfResources();
-		if(currentResources == null) return false;
-		
+		if (currentResources == null)
+			return false;
+
 		Integer currentAmountOfResource;
-		for(Resource resource : costs) {
+		for (Resource resource : costs) {
 			currentAmountOfResource = currentResources.get(resource);
-			if(currentAmountOfResource == null) return false;
+			if (currentAmountOfResource == null)
+				return false;
 			currentAmountOfResource--;
-			if(currentAmountOfResource < 0) return false;
+			if (currentAmountOfResource < 0)
+				return false;
 			currentResources.put(resource, currentAmountOfResource);
 		}
 		return true;
 	}
-	
+
 }

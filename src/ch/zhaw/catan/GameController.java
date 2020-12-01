@@ -32,7 +32,7 @@ public class GameController {
 	private Random random;
 	private static final int DICEROLL_ADDITION = 2;
 	private static final int NUMBER_OF_DICESIDES = 6;
-	private static final int WINPOINTS_NEEDED = 5; // Winpoints needed without City Implementation
+	private static final int WINPOINTS_NEEDED = 7;
 	private static final int DICENUMBER_WHICH_TRIGGERS_THIEF = 7;
 	private int numberOfPlayers;
 	private boolean isRunning;

@@ -424,9 +424,8 @@ public class SiedlerGame {
 	 *         placed there (e.g., on water)
 	 */
 	public boolean placeThiefAndStealCard(Point field) {
-		boolean isValidField = siedlerBoard.hasField(field);
-		if (!isValidField)
-			return false;
+		boolean isValidThiefField = siedlerBoard.isValidThiefField(field);
+		if (!isValidThiefField) return false;
 
 		stealResourcesFromPlayers();
 

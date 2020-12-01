@@ -161,6 +161,16 @@ private Point thiefPosition;
 	}
 	
 	/**
+	 * Checks, if a field is a valid position for the thief.
+	 * @param field The point-value, on which field a player desires to set the thief.
+	 * @return True, if the field is not a water field and a valid field on the game board.
+	 */ 
+	public boolean isValidThiefField(Point field) {
+		if(hasField(field) && getField(field) != Config.Land.WATER) return true;
+		return false;	
+	}
+	
+	/**
 	 * Builds a new street between the specified point for the actual player.
 	 * 
 	 * @param start   The point, where the Player wants to start his road.

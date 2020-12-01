@@ -429,7 +429,7 @@ public class SiedlerGame {
 
 		stealResourcesFromPlayers();
 
-		Faction factionWithThief = siedlerBoard.setThief(field);
+		Faction factionWithThief = siedlerBoard.setThief(field, getCurrentPlayerFaction());
 
 		// if faction is null, thief isn't adjacent to a settlement or city
 		if (factionWithThief == null)

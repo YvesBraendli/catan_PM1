@@ -1,9 +1,10 @@
 package ch.zhaw.catan;
 
 import java.util.HashMap;
-
+import java.util.Random;
 import ch.zhaw.catan.Config.Faction;
 import ch.zhaw.catan.Config.Resource;
+import java.util.ArrayList;
 
 /**
  * This class creates a player and holds his specific parameters for the siedler
@@ -78,10 +79,10 @@ public class Player {
 	 */
 	public void setAmountOfResources(Resource resource, int numberOfCards, boolean getsCards) {
 		Integer currentValue = amountOfResources.get(resource);
-		if(currentValue == null) {
+		if (currentValue == null) {
 			currentValue = 0;
 		}
-		
+
 		int newValue = currentValue;
 		if (getsCards) {
 			newValue = currentValue.intValue() + numberOfCards;
@@ -158,6 +159,43 @@ public class Player {
 	 */
 	public Faction getFaction() {
 		return faction;
+	}
+
+	/**
+	 * Selects a random resource, that the player has in his hands
+	 * and returns this resource-value.
+	 * 
+	 * @return An random resource-value, which the player owns cards to. Returns
+	 * null if he owns no cards in his hands.
+	 */
+	public Resource selectRandomResource() {
+		ArrayList<Resource> availableResources = selectAvailableResources();
+		if (availableResources.isEmpty()) return null;
+		Random random = new Random();
+		int index = random.nextInt(availableResources.size());
+		Resource resource = availableResources.get(index);
+		return resource;
+
+	}
+
+	private ArrayList<Resource> selectAvailableResources() {
+		ArrayList<Resource> availableResources = new ArrayList<>();
+		if (amountOfResources.containsKey(Config.Resource.CLAY) && amountOfResources.get(Config.Resource.CLAY) >= 1) {
+			availableResources.add(Resource.CLAY);
+		}
+		if (amountOfResources.containsKey(Config.Resource.GRAIN) && amountOfResources.get(Config.Resource.GRAIN) >= 1) {
+			availableResources.add(Resource.GRAIN);
+		}
+		if (amountOfResources.containsKey(Config.Resource.STONE) && amountOfResources.get(Config.Resource.STONE) >= 1) {
+			availableResources.add(Resource.STONE);
+		}
+		if (amountOfResources.containsKey(Config.Resource.WOOD) && amountOfResources.get(Config.Resource.WOOD) >= 1) {
+			availableResources.add(Resource.WOOD);
+		}
+		if (amountOfResources.containsKey(Config.Resource.WOOL) && amountOfResources.get(Config.Resource.WOOL) >= 1) {
+			availableResources.add(Resource.WOOL);
+		}
+		return availableResources;
 	}
 
 }

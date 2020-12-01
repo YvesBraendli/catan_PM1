@@ -31,7 +31,7 @@ private Point thiefPosition;
 	public SiedlerBoard() {
 		super();
 		createFields();
-		thiefPosition = new Point(7,9);
+		thiefPosition = new Point(7,11);
 
 	}
 
@@ -142,13 +142,19 @@ private Point thiefPosition;
 	 * @return The faction of the player from whom cards are stolen by the thief or null, if there is no
 	 * building around the specified field.
 	 */
-	public Faction setThief(Point field) {
+	public Faction setThief(Point field, Faction factionOfPlayer) {
 		thiefPosition = field;
 		Random random = new Random();
-		List<Settlement> buildingsAroundField = getCornersOfField(field);
-		if (buildingsAroundField.isEmpty()) return null;
-		int index = random.nextInt(buildingsAroundField.size());
-		Faction faction = buildingsAroundField.get(index).getFaction();
+		List<Settlement> allBuildingsAroundField = getCornersOfField(field);
+		List<Settlement> buildingsAroundFieldToStealCardsFrom = new ArrayList<>();
+		for (Settlement settlement: allBuildingsAroundField) {
+			if (settlement.getFaction() != factionOfPlayer) {
+				buildingsAroundFieldToStealCardsFrom.add(settlement);
+			}
+		}
+		if (buildingsAroundFieldToStealCardsFrom.isEmpty()) return null;
+		int index = random.nextInt(buildingsAroundFieldToStealCardsFrom.size());
+		Faction faction = buildingsAroundFieldToStealCardsFrom.get(index).getFaction();
 		return faction;
 	}
 

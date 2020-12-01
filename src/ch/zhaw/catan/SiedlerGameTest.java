@@ -1413,7 +1413,7 @@ public class SiedlerGameTest {
 		int expectedAmountOfResourcesCurrentPlayer = getAmountOfResources() + currentAmountOfOtherPlayer;
 
 		// Act
-		boolean isSuccessful = model.placeThiefAndStealCard(new Point(5, 11));
+		boolean isSuccessful = model.placeThiefAndStealCard(new Point(6, 8));
 		isSuccessful = isSuccessful && model.placeThiefAndStealCard(new Point(5, 11));
 		isSuccessful = isSuccessful && model.placeThiefAndStealCard(new Point(6, 8));
 		isSuccessful = isSuccessful && model.placeThiefAndStealCard(new Point(5, 11));
@@ -1449,6 +1449,60 @@ public class SiedlerGameTest {
 		assertEquals(expectedAmountOfResources, resultAmountOfResources);
 	}
 
+	/**
+	 * Testmethod: placeThiefAndStealCard() Set Thief twice on same land. (invalid)
+	 */
+	@Test
+	public void requirementPlaceThiefAndStealSetThiefOnSameField() {
+		// Arrange
+		initializeSiedlerGame(5, 4);
+
+		// Act
+		boolean isSuccessful = model.placeThiefAndStealCard(new Point(5, 11));
+		isSuccessful = isSuccessful && model.placeThiefAndStealCard(new Point(5, 11));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+
+	/**
+	 * Testmethod: throwDice() Thief is set, player does not get resources, because
+	 * thief blocks field.
+	 */
+	@Test
+	public void requirementThrowDiceThiefIsSetNoResourcesPayedOut() {
+		// Arrange
+		initializeSiedlerGame(5, 4);
+		model.placeInitialSettlement(new Point(5, 9), true);
+		model.placeThiefAndStealCard(new Point(5, 11));
+		
+		// Act
+		Map<Faction, List<Resource>> result = model.throwDice(9);
+		List<Resource> resources = result.get(model.getCurrentPlayerFaction());
+		
+		// Assert
+		assertEquals(0, resources.size());	
+	}
+
+	/**
+	 * Testmethod: throwDice() Thief is set, player gets resources, because
+	 * thief blocks other field.
+	 */
+	@Test
+	public void requirementThrowDiceThiefIsOnOtherFieldSetResourcesPayedOut() {
+		// Arrange
+		initializeSiedlerGame(5, 4);
+		model.placeInitialSettlement(new Point(5, 9), true);
+		model.placeThiefAndStealCard(new Point(9, 11));
+		
+		// Act
+		Map<Faction, List<Resource>> result = model.throwDice(9);
+		List<Resource> resources = result.get(model.getCurrentPlayerFaction());
+		
+		// Assert
+		assertEquals(1, resources.size());	
+	}
+	
 	private void bootstrapTestBoardForThreePlayersStandard(int winpoints) {
 		initializeSiedlerGame(winpoints, PLAYERS);
 

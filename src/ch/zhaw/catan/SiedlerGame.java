@@ -318,11 +318,9 @@ public class SiedlerGame {
 	 * @return true, if the placement was successful
 	 */
 	public boolean buildCity(Point position) {
-		if (currentPlayer.getCurrentNumberOfCities() <= 0)
-			return false;
+		if (currentPlayer.getCurrentNumberOfCities() <= 0) return false;
 		boolean canPayForCity = canPlayerPayForStructure(Structure.CITY);
-		if (!canPayForCity)
-			return false;
+		if (!canPayForCity) return false;
 
 		boolean hasBuildCity = siedlerBoard.createCity(position, getCurrentPlayerFaction());
 

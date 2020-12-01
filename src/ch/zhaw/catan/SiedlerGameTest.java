@@ -1174,14 +1174,14 @@ public class SiedlerGameTest {
 
 	/**
 	 * Testmethod: placeThiefAndStealCard() Tests if thief is set and player gets
-	 * right amount of resources removed and added to bank.
+	 * right amount of resources removed and added to bank. (odd amount of resources)
 	 */
 	@Test
 	public void requirementPlaceThiefAndStealCurrentPlayerHasMoreThanSevenResources() {
 		// Arrange
 		initializeSiedlerGame(5, 4);
-		model.placeInitialSettlement(new Point(6, 6), true);
-		for (int i = 0; i < 10; i++) {
+		model.placeInitialSettlement(new Point(6, 6), false);
+		for (int i = 0; i < 11; i++) {
 			model.throwDice(4);
 		}
 
@@ -1195,6 +1195,88 @@ public class SiedlerGameTest {
 		// Assert
 		assertTrue(isSuccessful);
 		assertEquals(expectedAmountOfResources, resultAmountOfResources);
+	}
+
+	/**
+	 * Testmethod: placeThiefAndStealCard() Tests if thief is set and player gets
+	 * right amount of resources removed and added to bank. CurrentPlayer has
+	 * exactly 8 resources.
+	 */
+	@Test
+	public void requirementPlaceThiefAndStealCurrentPlayerHasEightResources() {
+		// Arrange
+		initializeSiedlerGame(5, 4);
+		model.placeInitialSettlement(new Point(6, 6), false);
+		for (int i = 0; i < 8; i++) {
+			model.throwDice(4);
+		}
+
+		int currentAmountOfResources = getAmountOfResources();
+		int expectedAmountOfResources = currentAmountOfResources / 2;
+
+		// Act
+		boolean isSuccessful = model.placeThiefAndStealCard(new Point(5, 11));
+		int resultAmountOfResources = getAmountOfResources();
+
+		// Assert
+		assertTrue(isSuccessful);
+		assertEquals(expectedAmountOfResources, resultAmountOfResources);
+	}
+
+	/**
+	 * Testmethod: placeThiefAndStealCard() Tests if thief is set and player gets
+	 * right amount of resources removed and added to bank. CurrentPlayer has
+	 * exactly 7 resources. No Resources are taken away.
+	 */
+	@Test
+	public void requirementPlaceThiefAndStealCurrentPlayerHasSevenResources() {
+		// Arrange
+		initializeSiedlerGame(5, 4);
+		model.placeInitialSettlement(new Point(6, 6), false);
+		for (int i = 0; i < 7; i++) {
+			model.throwDice(4);
+		}
+
+		int currentAmountOfResources = getAmountOfResources();
+		int expectedAmountOfResources = currentAmountOfResources;
+
+		// Act
+		boolean isSuccessful = model.placeThiefAndStealCard(new Point(5, 11));
+		int resultAmountOfResources = getAmountOfResources();
+
+		// Assert
+		assertTrue(isSuccessful);
+		assertEquals(expectedAmountOfResources, resultAmountOfResources);
+	}
+
+	/**
+	 * Testmethod: placeThiefAndStealCard() Tests if thief is set and player gets
+	 * right amount of resources removed. All two player have more than seven
+	 * resources.
+	 */
+	@Test
+	public void requirementPlaceThiefAndSteaTwoHasMoreThanSevenResources() {
+		// Arrange
+		initializeSiedlerGame(5, 2);
+		model.placeInitialSettlement(new Point(6, 6), true);
+		model.switchToNextPlayer();
+		model.placeInitialSettlement(new Point(6, 10), true);
+		for (int i = 0; i < 10; i++) {
+			model.throwDice(4);
+		}
+
+		int currentAmountOfResources = getAmountOfResources();
+		int expectedAmountOfResources = currentAmountOfResources / 2;
+
+		// Act
+		boolean isSuccessful = model.placeThiefAndStealCard(new Point(5, 11));
+		int resultAmountOfResourcesPlayerOne = getAmountOfResources();
+		int resultAmountOfResourcesPlayerTwo = getAmountOfResources();
+
+		// Assert
+		assertTrue(isSuccessful);
+		assertEquals(expectedAmountOfResources, resultAmountOfResourcesPlayerOne);
+		assertEquals(expectedAmountOfResources, resultAmountOfResourcesPlayerTwo);
 	}
 
 	/**
@@ -1218,7 +1300,30 @@ public class SiedlerGameTest {
 		assertFalse(isSuccessful);
 		assertEquals(currentAmountOfResources, resultAmountOfResources);
 	}
-	
+
+	/**
+	 * Testmethod: placeThiefAndStealCard() Tests if thief is set, field is invalid.
+	 * thief is set on water.
+	 */
+	@Test
+	public void requirementPlaceThiefAndStealPositionOnWater() {
+		// Arrange
+		initializeSiedlerGame(5, 4);
+		model.placeInitialSettlement(new Point(6, 6), true);
+		for (int i = 0; i < 10; i++) {
+			model.throwDice(4);
+		}
+
+		int currentAmountOfResources = getAmountOfResources();
+		// Act
+		boolean isSuccessful = model.placeThiefAndStealCard(new Point(0, 10));
+		int resultAmountOfResources = getAmountOfResources();
+
+		// Assert
+		assertFalse(isSuccessful);
+		assertEquals(currentAmountOfResources, resultAmountOfResources);
+	}
+
 	private void bootstrapTestBoardForThreePlayersStandard(int winpoints) {
 		initializeSiedlerGame(winpoints, PLAYERS);
 

@@ -18,7 +18,7 @@ import ch.zhaw.hexboard.HexBoard;
  * - Initialize the fields for a siedler game.
  * - Get all buildings around a field.
  * - Get, set and save the field-value for the position of the thief.
- * @author Moser Nadine, Meier Robin, Brändli Yves
+ * @author Moser Nadine, Meier Robin, Brï¿½ndli Yves
  * @version 1.0
  *
  */
@@ -172,7 +172,7 @@ private Point thiefPosition;
 	 * @return True, if the field is not a water field and a valid field on the game board.
 	 */ 
 	public boolean isValidThiefField(Point field) {
-		if(hasField(field) && getField(field) != Config.Land.WATER && thiefPosition != field) return true;
+		if(hasField(field) && getField(field) != Config.Land.WATER && !thiefPosition.equals(field)) return true;
 		return false;	
 	}
 	

@@ -172,7 +172,7 @@ private Point thiefPosition;
 	 * @return True, if the field is not a water field and a valid field on the game board.
 	 */ 
 	public boolean isValidThiefField(Point field) {
-		if(hasField(field) && getField(field) != Config.Land.WATER) return true;
+		if(hasField(field) && getField(field) != Config.Land.WATER && thiefPosition != field) return true;
 		return false;	
 	}
 	

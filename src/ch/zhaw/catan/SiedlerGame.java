@@ -502,10 +502,11 @@ public class SiedlerGame {
 	private boolean canPlayerPayForStructure(Structure structure) {
 		List<Resource> costs = structure.getCosts();
 
-		Map<Resource, Integer> currentResources = currentPlayer.getAmountOfResources();
-		if (currentResources == null)
-			return false;
-
+		Map<Resource, Integer> currentResources = new HashMap<Config.Resource, Integer>();
+		for(Entry<Resource, Integer> resources : currentPlayer.getAmountOfResources().entrySet()) {
+			currentResources.put(resources.getKey(), resources.getValue());
+		}
+		
 		Integer currentAmountOfResource;
 		for (Resource resource : costs) {
 			currentAmountOfResource = currentResources.get(resource);

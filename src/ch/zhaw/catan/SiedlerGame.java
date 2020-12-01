@@ -29,6 +29,7 @@ import java.util.Set;
  */
 public class SiedlerGame {
 	private static final int MIN_AMOUNT_CARDS = 8;
+	private static final int MIN_AMOUNT_FOR_OFFER = 4;
 	private Player currentPlayer;
 	private ArrayList<Player> players;
 	private int winPoints;
@@ -98,7 +99,6 @@ public class SiedlerGame {
 	 * @return the list with player's factions
 	 */
 	public List<Faction> getPlayerFactions() {
-		// todo: auch oke, da in zweiterrunde in die andere richtung gesielt wird?
 		List<Faction> factions = new ArrayList<Faction>();
 		for (Player player : players) {
 			factions.add(player.getFaction());
@@ -235,12 +235,12 @@ public class SiedlerGame {
 				for(Map.Entry<Faction, ArrayList<Settlement>> faction : factionsWithSettlementAroundField.entrySet()) {
 					if(player.getFaction() == faction.getKey()) {
 						Map<Resource, Integer> payoutResources = new HashMap<>();
-						int sum = getAmountOfResourcesForPayout(faction.getValue());
-						payoutResources.put(currentResource, sum);
+						int amountOfCurrentResource = getAmountOfResourcesForPayout(faction.getValue());
+						payoutResources.put(currentResource, amountOfCurrentResource);
 						boolean isPayoutSuccessful = bank.payoutToDiceThrows(payoutResources);	
 						if(isPayoutSuccessful) {
-							player.setAmountOfResources(currentResource, sum, true);
-							for(int i = 0; i < sum; i++) {
+							player.setAmountOfResources(currentResource, amountOfCurrentResource, true);
+							for(int i = 0; i < amountOfCurrentResource; i++) {
 								addedResources.add(currentResource);
 							}
 						}				
@@ -369,11 +369,11 @@ public class SiedlerGame {
 			resourcesToOffer = 0;
 		}
 		
-		boolean hasResourcesToTradeWith = resourcesToOffer >= 4;
+		boolean hasResourcesToTradeWith = resourcesToOffer >= MIN_AMOUNT_FOR_OFFER;
 		if(hasResourcesToTradeWith) {
 			boolean isTradingSuccessful = bank.trade(offer, want);
 			if(isTradingSuccessful) {
-				currentPlayer.setAmountOfResources(offer, 4, false);
+				currentPlayer.setAmountOfResources(offer, MIN_AMOUNT_FOR_OFFER, false);
 				currentPlayer.setAmountOfResources(want, 1, true);
 				return true;
 			}
@@ -453,13 +453,13 @@ public class SiedlerGame {
 	
 	private int getAmountOfResources(Player player) {
 		HashMap<Config.Resource, Integer> resources = player.getAmountOfResources();
-		int sum = 0;
+		int amountOfAllResources = 0;
 		for (Entry<Resource, Integer> resource : resources.entrySet()) {
 			if(resource.getValue() != null) {
-				sum = sum + resource.getValue();
+				amountOfAllResources = amountOfAllResources + resource.getValue();
 			}
 		}
-		return sum;
+		return amountOfAllResources;
 	}
 	
 	private void generatePlayers(int numberOfPlayers) {

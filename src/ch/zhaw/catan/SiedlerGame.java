@@ -406,25 +406,19 @@ public class SiedlerGame {
 	 *         placed there (e.g., on water)
 	 */
 	public boolean placeThiefAndStealCard(Point field) {
-		// TODO: Implement (or longest road functionality)
-		
-		// ist feld ok? nicht - auch nicht abziehen, gleich zurück
 		boolean isValidField = siedlerBoard.hasField(field);
 		if(!isValidField) return false;
 		
 		stealResourcesFromPlayers();
 		
-		//set Thief
-		Faction factionWithThief = getCurrentPlayerFaction();
-		// Faction factionWithThief = siedlerBoard.setThief(field);
+		Faction factionWithThief = siedlerBoard.setThief(field);
 		
 		// if faction is null, thief isn't adjacent to a settlement or city
 		if(factionWithThief == null) return true;
 		
 		for(Player player : players) {
 			if(player.getFaction() == factionWithThief && player != currentPlayer) {
-				Resource resource = Resource.CLAY;
-				// Resource resource = player.getRandomResource();
+				Resource resource = player.selectRandomResource();
 				player.setAmountOfResources(resource, 1, false);
 				currentPlayer.setAmountOfResources(resource, 1, true);
 				break;
@@ -435,16 +429,17 @@ public class SiedlerGame {
 
 	private void stealResourcesFromPlayers() {
 		HashMap<Resource, Long> resourcesForBank = new HashMap<Config.Resource, Long>();		
-		for(Player player : players) {
+		for(Player player : players) {		
 			int amountOfResources = getAmountOfResources(player);
 			if(amountOfResources < MIN_AMOUNT_CARDS) continue;
-			int amountToRemove = amountOfResources / 2;
+			int amountLeft = amountOfResources / 2;
+			int amountToRemove = amountOfResources - amountLeft;
 			
 			for(int i = 0; i < amountToRemove; i++) {
-				Resource selectedRandomResource = Resource.STONE;
-				//Resource selectedRandomResource = player.getRandomResource();
+				Resource selectedRandomResource = player.selectRandomResource();
 				Long currentResourceForBank = resourcesForBank.get(selectedRandomResource);
 				if(currentResourceForBank == null) currentResourceForBank = (long)0;
+				player.setAmountOfResources(selectedRandomResource, 1, false);
 				resourcesForBank.put(selectedRandomResource, currentResourceForBank + 1);
 			}
 		}
@@ -500,7 +495,6 @@ public class SiedlerGame {
 			if(currentAmountOfResource < 0) return false;
 			currentResources.put(resource, currentAmountOfResource);
 		}
-		
 		return true;
 	}
 	

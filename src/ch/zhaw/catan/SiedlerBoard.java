@@ -139,9 +139,9 @@ private Point thiefPosition;
 		return faction;
 	}
 
-//	public Point getThief () {
-//		
-//	}
+	public Point getThief () {
+		return thiefPosition;
+	}
 	
 	/**
 	 * Builds a new street between the specified point for the actual player.

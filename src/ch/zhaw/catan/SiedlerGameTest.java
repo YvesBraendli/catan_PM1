@@ -1096,6 +1096,31 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Testmethod: GetWinner() Tests if there is a winner. player has settlements
+	 * and a city
+	 */
+	@Test
+	public void requirementGetWinnerWithOneWinnerWithCities() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		// place Settlement with payout to get necessary resources to build new
+		// city
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 9), true);
+		model.throwDice(10);
+		model.throwDice(4);
+		model.throwDice(4);
+		model.buildCity(new Point(4, 12));
+		Faction currentFaction = model.getCurrentPlayerFaction();
+
+		// Arrange
+		Faction winnerFaction = model.getWinner();
+
+		// Assert
+		assertEquals(currentFaction, winnerFaction);
+	}
+
+	/**
 	 * Testmethod: GetWinner() Tests if there is a winner. Expected: Winner Faction
 	 * returned and is equals to faction from current Player.
 	 */
@@ -1475,18 +1500,18 @@ public class SiedlerGameTest {
 		initializeSiedlerGame(5, 4);
 		model.placeInitialSettlement(new Point(5, 9), true);
 		model.placeThiefAndStealCard(new Point(5, 11));
-		
+
 		// Act
 		Map<Faction, List<Resource>> result = model.throwDice(9);
 		List<Resource> resources = result.get(model.getCurrentPlayerFaction());
-		
+
 		// Assert
-		assertEquals(0, resources.size());	
+		assertEquals(0, resources.size());
 	}
 
 	/**
-	 * Testmethod: throwDice() Thief is set, player gets resources, because
-	 * thief blocks other field.
+	 * Testmethod: throwDice() Thief is set, player gets resources, because thief
+	 * blocks other field.
 	 */
 	@Test
 	public void requirementThrowDiceThiefIsOnOtherFieldSetResourcesPayedOut() {
@@ -1494,15 +1519,15 @@ public class SiedlerGameTest {
 		initializeSiedlerGame(5, 4);
 		model.placeInitialSettlement(new Point(5, 9), true);
 		model.placeThiefAndStealCard(new Point(9, 11));
-		
+
 		// Act
 		Map<Faction, List<Resource>> result = model.throwDice(9);
 		List<Resource> resources = result.get(model.getCurrentPlayerFaction());
-		
+
 		// Assert
-		assertEquals(1, resources.size());	
+		assertEquals(1, resources.size());
 	}
-	
+
 	private void bootstrapTestBoardForThreePlayersStandard(int winpoints) {
 		initializeSiedlerGame(winpoints, PLAYERS);
 

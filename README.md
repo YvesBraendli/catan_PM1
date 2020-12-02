@@ -40,6 +40,8 @@ Below, you can find the class diagramm for the siedler project. It shows you all
 ## Test Protocol
 In the pdf you can find all information about the junit tests for the siedlerGame.java class.
 
+you can find the pdf here: doc/testing/testing-siedlerGame-documentation.pdf
+
 ### Screenshots
 ![Screenshots JUnit](doc/testing/tests-1.PNG)
 ![Screenshots JUnit2](doc/testing/tests-2.PNG)

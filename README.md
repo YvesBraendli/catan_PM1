@@ -62,3 +62,4 @@ Positive
 15. Robbery more than one player has 7 resources
 18. Thief placement at field with one settlement around
 22. Player structures left to build
+

@@ -50,9 +50,11 @@ Negative
 17. Thief placement at field with no settlements around
 20. Resources are payed out
 21. No Resources are payed out
+
 23. player has no structures left to build
 
 Positive
+
 2. Legal placement position
 
 4. Build with enough resources

@@ -42,13 +42,21 @@ Below, you can find the equivalence partitionings for the siedlerGame class. Mor
 
 Negative
 1. Illegal placement position
+
 3. Build with not enough resources
+
 8. Trade where player does not have enough resources
+
 9. Trade where bank does not have enough resources
+
 10. No player has won game
+
 13. Robbery no player has more than 7 resources
+
 17. Thief placement at field with no settlements around
+
 20. Resources are payed out
+
 21. No Resources are payed out
 
 23. player has no structures left to build

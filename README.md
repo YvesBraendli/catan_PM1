@@ -38,46 +38,5 @@ Below, you can find the class diagramm for the siedler project. It shows you all
 ![Class Diagramm](doc/Klassendiagramm.png)
 
 ## Test Protocol
-Below, you can find the equivalence partitionings for the siedlerGame class. More informations can be found in the pdf.
-
-Negative
-1. Illegal placement position
-
-3. Build with not enough resources
-
-8. Trade where player does not have enough resources
-
-9. Trade where bank does not have enough resources
-
-10. No player has won game
-
-13. Robbery no player has more than 7 resources
-
-17. Thief placement at field with no settlements around
-
-20. Resources are payed out
-
-21. No Resources are payed out
-
-23. player has no structures left to build
-
-Positive
-
-2. Legal placement position
-
-4. Build with enough resources
-
-7. Trade where player and bank have enough resources
-
-11. One player has won game
-
-12. More than one player has won game
-
-14. Robbery one player has more than 7 resources
-
-15. Robbery more than one player has 7 resources
-
-18. Thief placement at field with one settlement around
-
-22. Player structures left to build
+In the pdf you can find all information about the junit tests for the siedlerGame.java class.
 

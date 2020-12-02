@@ -133,11 +133,9 @@ public class SiedlerGame {
 	 */
 	public int getCurrentPlayerResourceStock(Resource resource) {
 		HashMap<Resource, Integer> resources = currentPlayer.getAmountOfResources();
-		if (resources == null)
-			return 0;
+		if (resources == null) return 0;
 		Integer resourceStock = resources.get(resource);
-		if (resourceStock == null)
-			return 0;
+		if (resourceStock == null) return 0;
 		return resourceStock;
 	}
 
@@ -156,12 +154,10 @@ public class SiedlerGame {
 	 * @return true, if the placement was successful
 	 */
 	public boolean placeInitialSettlement(Point position, boolean payout) {
-		if (currentPlayer.getCurrentNumberOfSettlements() <= 0)
-			return false;
+		if (currentPlayer.getCurrentNumberOfSettlements() <= 0) return false;
 
 		boolean hasBuildSettlement = siedlerBoard.createInitialSettlement(position, getCurrentPlayerFaction());
-		if (!hasBuildSettlement)
-			return false;
+		if (!hasBuildSettlement) return false;
 
 		currentPlayer.setCurrentNumberOfSettlements(1);
 		increaseWinningPoints(currentPlayer, 1);
@@ -187,8 +183,7 @@ public class SiedlerGame {
 	 * @return true, if the placement was successful
 	 */
 	public boolean placeInitialRoad(Point roadStart, Point roadEnd) {
-		if (currentPlayer.getCurrentNumberOfRoads() <= 0)
-			return false;
+		if (currentPlayer.getCurrentNumberOfRoads() <= 0) return false;
 		boolean hasBuildRoad = siedlerBoard.createStreet(roadStart, roadEnd, getCurrentPlayerFaction());
 		if (hasBuildRoad) {
 			currentPlayer.setCurrentNumberOfRoads(1);
@@ -264,8 +259,6 @@ public class SiedlerGame {
 	private int getAmountOfResourcesForPayout(List<Settlement> buildings) {
 		int sum = 0;
 		for (Settlement building : buildings) {
-			// todo: scip if thief is next to building
-			// siedlerboard.getthiefposition();
 			sum = sum + building.getNumberOfResourcesForPayout();
 		}
 		return sum;
@@ -286,11 +279,9 @@ public class SiedlerGame {
 	 * @return true, if the placement was successful
 	 */
 	public boolean buildSettlement(Point position) {
-		if (currentPlayer.getCurrentNumberOfSettlements() <= 0)
-			return false;
+		if (currentPlayer.getCurrentNumberOfSettlements() <= 0) return false;
 		boolean canPayForSettlement = canPlayerPayForStructure(Structure.SETTLEMENT);
-		if (!canPayForSettlement)
-			return false;
+		if (!canPayForSettlement) return false;
 
 		boolean hasBuildSettlement = siedlerBoard.createSettlement(position, getCurrentPlayerFaction());
 
@@ -349,11 +340,9 @@ public class SiedlerGame {
 	 * @return true, if the placement was successful
 	 */
 	public boolean buildRoad(Point roadStart, Point roadEnd) {
-		if (currentPlayer.getCurrentNumberOfRoads() <= 0)
-			return false;
+		if (currentPlayer.getCurrentNumberOfRoads() <= 0) return false;
 		boolean canPayForRoad = canPlayerPayForStructure(Structure.ROAD);
-		if (!canPayForRoad)
-			return false;
+		if (!canPayForRoad) return false;
 
 		boolean hasBuildRoad = siedlerBoard.createStreet(roadStart, roadEnd, getCurrentPlayerFaction());
 
@@ -376,8 +365,7 @@ public class SiedlerGame {
 	 *         successful
 	 */
 	public boolean tradeWithBankFourToOne(Resource offer, Resource want) {
-		if (currentPlayer.getAmountOfResources() == null)
-			return false;
+		if (currentPlayer.getAmountOfResources() == null) return false;
 		Integer resourcesToOffer = currentPlayer.getAmountOfResources().get(offer);
 		if (resourcesToOffer == null) {
 			resourcesToOffer = 0;
@@ -428,8 +416,7 @@ public class SiedlerGame {
 		Faction factionWithThief = siedlerBoard.setThief(field, getCurrentPlayerFaction());
 
 		// if faction is null, thief isn't adjacent to a settlement or city
-		if (factionWithThief == null)
-			return true;
+		if (factionWithThief == null) return true;
 
 		for (Player player : players) {
 			if (player.getFaction() == factionWithThief) {
@@ -447,16 +434,16 @@ public class SiedlerGame {
 		HashMap<Resource, Long> resourcesForBank = new HashMap<Config.Resource, Long>();
 		for (Player player : players) {
 			int amountOfResources = getAmountOfResources(player);
-			if (amountOfResources < MIN_AMOUNT_CARDS)
-				continue;
+			if (amountOfResources < MIN_AMOUNT_CARDS) continue;
 			int amountLeft = amountOfResources / 2;
 			int amountToRemove = amountOfResources - amountLeft;
 
 			for (int i = 0; i < amountToRemove; i++) {
 				Resource selectedRandomResource = player.selectRandomResource();
 				Long currentResourceForBank = resourcesForBank.get(selectedRandomResource);
-				if (currentResourceForBank == null)
+				if (currentResourceForBank == null) {
 					currentResourceForBank = (long) 0;
+				}
 				player.setAmountOfResources(selectedRandomResource, 1, false);
 				resourcesForBank.put(selectedRandomResource, currentResourceForBank + 1);
 			}
@@ -510,11 +497,9 @@ public class SiedlerGame {
 		Integer currentAmountOfResource;
 		for (Resource resource : costs) {
 			currentAmountOfResource = currentResources.get(resource);
-			if (currentAmountOfResource == null)
-				return false;
+			if (currentAmountOfResource == null) return false;
 			currentAmountOfResource--;
-			if (currentAmountOfResource < 0)
-				return false;
+			if (currentAmountOfResource < 0) return false;
 			currentResources.put(resource, currentAmountOfResource);
 		}
 		return true;

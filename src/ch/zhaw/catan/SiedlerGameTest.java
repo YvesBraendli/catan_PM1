@@ -17,7 +17,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 /**
- * This class test the methods from SiedlerGame.java.
+ * This class test the public methods from SiedlerGame.java.
  * 
  * @author Moser Nadine, Meier Robin, Brändli Yves
  *
@@ -71,6 +71,10 @@ public class SiedlerGameTest {
 			Map.of(Resource.GRAIN, 1, Resource.WOOL, 1, Resource.STONE, 1), Faction.values()[2],
 			Map.of(Resource.CLAY, 1));
 
+	/**
+	 * Test method: switchToNextPlayer() and switchToPreviousPlayer()
+	 * already given tests.
+	 */
 	@Test
 	public void requirementPlayerSwitching() {
 		for (int players : List.of(2, 3, 4)) {
@@ -93,6 +97,10 @@ public class SiedlerGameTest {
 		}
 	}
 
+	/**
+	 * tests if the board is correctly set up at the beginning of the game.
+	 * already given tests.
+	 */
 	@Test
 	public void requirementSetupTestBoardUsedWithTheTests() {
 		requirementPlayerSwitching();
@@ -116,6 +124,11 @@ public class SiedlerGameTest {
 		}
 	}
 
+	/**
+	 * Test method: throwDice()
+	 * tests if logik for every dice throw is correct inkl. payout.
+	 * already given tests.
+	 */
 	@Test
 	public void requirementResourcePayoutAndReturnValueForDiceThrow() {
 		requirementSetupTestBoardUsedWithTheTests();
@@ -159,7 +172,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeInitialSettlement() Tests if initial Settlement has been
+	 * Test method: placeInitialSettlement() Tests if initial Settlement has been
 	 * build and no resource were added.
 	 */
 	@Test
@@ -178,8 +191,8 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeInitialSettlement() Tests if initial Settlement is not
-	 * build, when position is invalid. (Position is in water) Expected: not build
+	 * Test method: placeInitialSettlement() Tests if initial Settlement is not
+	 * build, when position is invalid. (Position is in water)
 	 */
 	@Test
 	public void requirementPlaceInitialSettlementInWaterNoPayout() {
@@ -197,7 +210,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeInitialSettlement() Tests if initial Settlement is build,
+	 * Test method: placeInitialSettlement() Tests if initial Settlement is build,
 	 * when position is valid. no payout (Position next to water)
 	 */
 	@Test
@@ -216,12 +229,12 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeInitialSettlement() Tests if initial Settlement is build,
+	 * Test method: placeInitialSettlement() Tests if initial Settlement is build,
 	 * when position is valid and check if payout is correct.
 	 */
 	@Test
 	public void requirementPlaceInitialSettlementValidPositionWithPayout() {
-		// Arrange<
+		// Arrange
 		initializeSiedlerGame(4, 3);
 		int stockBefore = getAmountOfResources();
 		int expectedStock = stockBefore + 3;
@@ -236,7 +249,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeInitialRoad() Tests if initial Road is build, when position
+	 * Test method: placeInitialRoad() Tests if initial Road is build, when position
 	 * is valid and own house is adjacent
 	 */
 	@Test
@@ -253,8 +266,8 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeInitialRoad() Tests if initial Road is build, when position
-	 * is valid and own house is adjacent. Checks if it doesn't mather if start or
+	 * Test method: placeInitialRoad() Tests if initial Road is build, when position
+	 * is valid and own house is adjacent. Checks if it doesn't matter if start or
 	 * end point is first mentioned.
 	 */
 	@Test
@@ -271,7 +284,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeInitialRoad() Tests if initial Road is build, when position
+	 * Test method: placeInitialRoad() Tests if initial Road is build, when position
 	 * is valid but no house is adjacent
 	 */
 	@Test
@@ -287,8 +300,8 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeInitialRoad() Tests if initial Road is build, when position
-	 * is valid but only house from toher players are ajacent.
+	 * Test method: placeInitialRoad() Tests if initial Road is build, when position
+	 * is valid but only house from other players are adjacent.
 	 * 
 	 */
 	@Test
@@ -306,8 +319,8 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeInitialRoad() Tests if initial Road is build, when position
-	 * is allready used from other road.
+	 * Test method: placeInitialRoad() Tests if initial Road is build, when position
+	 * is already used from other road.
 	 */
 	public void requirementPlaceInitialRoadPlaceAlreadyUsed() {
 		// Arrange
@@ -324,7 +337,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeInitialRoad() Tests if initial Road is build, when position
+	 * Test method: placeInitialRoad() Tests if initial Road is build, when position
 	 * is in the sea (not valid).
 	 */
 	public void requirementPlaceInitialRoadPositionInWater() {
@@ -340,8 +353,8 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeInitialRoad() Tests if initial Road is build, whe start and
-	 * end point arent possible for a road.
+	 * Test method: placeInitialRoad() Tests if initial Road is build, when start and
+	 * end point aren't possible for a road.
 	 */
 	@Test
 	public void requirementPlaceInitialRoadInvalidStartAndEnd() {
@@ -357,7 +370,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildSettlement() Test if Settlement can be build at a valid
+	 * Test method: buildSettlement() Test if Settlement can be build at a valid
 	 * position and player has Resources.
 	 */
 	@Test
@@ -381,7 +394,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildSettlement() Test if Settlement can be build at a valid
+	 * Test method: buildSettlement() Test if Settlement can be build at a valid
 	 * position but player has no Resources.
 	 */
 	@Test
@@ -400,7 +413,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildSettlement() Test if Settlement can be build at a valid
+	 * Test method: buildSettlement() Test if Settlement can be build at a valid
 	 * position but player has no settlements left to build.
 	 */
 	@Test
@@ -424,7 +437,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildSettlement() Test if Settlement can be build at a valid
+	 * Test method: buildSettlement() Test if Settlement can be build at a valid
 	 * position and player has Resources, but no adjacent road.
 	 */
 	@Test
@@ -445,7 +458,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildSettlement() Test if Settlement can be build at a invalid
+	 * Test method: buildSettlement() Test if Settlement can be build at a invalid
 	 * position and player has Resources, but all adjacentRoads are from other
 	 * players.
 	 */
@@ -472,7 +485,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildSettlement() Test if Settlement can be build at a valid
+	 * Test method: buildSettlement() Test if Settlement can be build at a valid
 	 * position but player has no Roads left to build.
 	 */
 	@Test
@@ -509,7 +522,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildSettlement() Test if Settlement can be build at an invalid
+	 * Test method: buildSettlement() Test if Settlement can be build at an invalid
 	 * position.
 	 */
 	@Test
@@ -529,8 +542,8 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildSettlement() Test if Settlement can be build when oponent
-	 * settlment is adjacent.
+	 * Test method: buildSettlement() Test if Settlement can be build when opponent
+	 * settlement is adjacent.
 	 */
 	@Test
 	public void requirementBuildSettlementOponentSettlementAdjacent() {
@@ -556,7 +569,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildSettlement() Test if Settlement can be build when own
+	 * Test method: buildSettlement() Test if Settlement can be build when own
 	 * settlement is adjacent.
 	 */
 	@Test
@@ -580,7 +593,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildSettlement() Test if Settlement can be build when settlement
+	 * Test method: buildSettlement() Test if Settlement can be build when settlement
 	 * is already build at chosen position.
 	 */
 	@Test
@@ -604,7 +617,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildCity() Test if City can be build at a valid position and
+	 * Test method: buildCity() Test if City can be build at a valid position and
 	 * player has Resources.
 	 */
 	@Test
@@ -629,7 +642,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildCity() Test if City can be build at a invalid position
+	 * Test method: buildCity() Test if City can be build at a invalid position
 	 * because city is already there.
 	 */
 	@Test
@@ -660,7 +673,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildCity() Test if City can be build at a valid position and
+	 * Test method: buildCity() Test if City can be build at a valid position and
 	 * player has not enough Resources.
 	 */
 	@Test
@@ -682,7 +695,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildCity() Test if City can be build at invalid position. (Has
+	 * Test method: buildCity() Test if City can be build at invalid position. (Has
 	 * no Settlement at position)
 	 */
 	@Test
@@ -706,7 +719,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildCity() Test if City can be build at valid position but user
+	 * Test method: buildCity() Test if City can be build at valid position but user
 	 * has already build all cities possible.
 	 */
 	@Test
@@ -738,7 +751,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildRoad() Test if Road can be build when position is valid and
+	 * Test method: buildRoad() Test if Road can be build when position is valid and
 	 * player has the resources.
 	 */
 	@Test
@@ -758,7 +771,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildRoad() Test if Road can be build when position is valid and
+	 * Test method: buildRoad() Test if Road can be build when position is valid and
 	 * player has the resources.
 	 */
 	@Test
@@ -779,7 +792,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildRoad() Test if Road can be build when position is invalid,
+	 * Test method: buildRoad() Test if Road can be build when position is invalid,
 	 * because only adjacent road is from other player. and no own settlement is
 	 * adjacent.
 	 */
@@ -802,7 +815,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildRoad() Test if Road can be build when position is valid and
+	 * Test method: buildRoad() Test if Road can be build when position is valid and
 	 * player has the resources but no adjacent settlement or road.
 	 */
 	@Test
@@ -821,7 +834,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildRoad() Test if Road can be build when position is valid, has
+	 * Test method: buildRoad() Test if Road can be build when position is valid, has
 	 * adjacent road but player has not the resources.
 	 */
 	@Test
@@ -839,7 +852,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildRoad() Test if Road can be build when position is valid, has
+	 * Test method: buildRoad() Test if Road can be build when position is valid, has
 	 * adjacent settlement but player has not the resources.
 	 */
 	@Test
@@ -856,7 +869,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildRoad() Test if Road can be build in water, has adjacent
+	 * Test method: buildRoad() Test if Road can be build in water, has adjacent
 	 * settlement.
 	 */
 	@Test
@@ -876,7 +889,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildRoad() Test if Road can be build in water, has adjacent
+	 * Test method: buildRoad() Test if Road can be build in water, has adjacent
 	 * road.
 	 */
 	@Test
@@ -897,7 +910,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: buildRoad() Test if Road can be build, another road is already
+	 * Test method: buildRoad() Test if Road can be build, another road is already
 	 * build at position.
 	 */
 	@Test
@@ -905,7 +918,7 @@ public class SiedlerGameTest {
 		// Arrange
 		initializeSiedlerGame(4, 2);
 		model.placeInitialSettlement(new Point(6, 6), false);
-		boolean inital = model.placeInitialRoad(new Point(6, 6), new Point(6, 4));
+		model.placeInitialRoad(new Point(6, 6), new Point(6, 4));
 
 		// place Settlement with payout to get necessary resources to build new Road
 		model.placeInitialSettlement(new Point(4, 12), true);
@@ -918,7 +931,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: tradeWithBankFourToOne() Tests if trading with bank is well
+	 * Test method: tradeWithBankFourToOne() Tests if trading with bank is well
 	 * executed.
 	 */
 	@Test
@@ -959,7 +972,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: tradeWithBankFourToOne() Tests if trading with bank is well
+	 * Test method: tradeWithBankFourToOne() Tests if trading with bank is well
 	 * executed. Trades 4 resources for one resource of same type.
 	 */
 	@Test
@@ -1001,7 +1014,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: tradeWithBankFourToOne() Tests if trading with bank is well
+	 * Test method: tradeWithBankFourToOne() Tests if trading with bank is well
 	 * executed. Bank has no resource from this type left.
 	 */
 	@Test
@@ -1041,7 +1054,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: tradeWithBankFourToOne() Tests if trading with bank is well
+	 * Test method: tradeWithBankFourToOne() Tests if trading with bank is well
 	 * executed. Player has not enough resource from this type.
 	 */
 	@Test
@@ -1077,7 +1090,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: GetWinner() Tests if there is a winner. Expected: No FAction
+	 * Test method: GetWinner() Tests if there is a winner. Expected: No Faction
 	 * returned, because there is no winner yet.
 	 */
 	@Test
@@ -1096,7 +1109,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: GetWinner() Tests if there is a winner. player has settlements
+	 * Test method: GetWinner() Tests if there is a winner. player has settlements
 	 * and a city
 	 */
 	@Test
@@ -1121,7 +1134,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: GetWinner() Tests if there is a winner. Expected: Winner Faction
+	 * Test method: GetWinner() Tests if there is a winner. Expected: Winner Faction
 	 * returned and is equals to faction from current Player.
 	 */
 	@Test
@@ -1144,9 +1157,10 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: GetWinner() Tests if there is a winner. Case: Multiple Winner,
+	 * Test method: GetWinner() Tests if there is a winner. Case: Multiple Winner,
 	 * faction from first Player in row is returned. Expected: Winner Faction from
-	 * first Player returned and is not equals to faction from current Player.
+	 * first Player returned and is not equals to faction from current Player 
+	 * (when current player is not the first winner).
 	 */
 	@Test
 	public void requirementGetWinnerWithMultipleWinner() {
@@ -1176,7 +1190,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeThiefAndStealCard() Tests if thief is set and player gets
+	 * Test method: placeThiefAndStealCard() Tests if thief is set and player gets
 	 * right amount of resources removed and added to bank, but no player has enough
 	 * resources.
 	 */
@@ -1198,7 +1212,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeThiefAndStealCard() Tests if thief is set and player gets
+	 * Test method: placeThiefAndStealCard() Tests if thief is set and player gets
 	 * right amount of resources removed and added to bank. (odd amount of
 	 * resources)
 	 */
@@ -1224,7 +1238,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeThiefAndStealCard() Tests if thief is set and player gets
+	 * Test method: placeThiefAndStealCard() Tests if thief is set and player gets
 	 * right amount of resources removed and added to bank. CurrentPlayer has
 	 * exactly 8 resources.
 	 */
@@ -1250,7 +1264,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeThiefAndStealCard() Tests if thief is set and player gets
+	 * Test method: placeThiefAndStealCard() Tests if thief is set and player gets
 	 * right amount of resources removed and added to bank. CurrentPlayer has
 	 * exactly 7 resources. No Resources are taken away.
 	 */
@@ -1276,7 +1290,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeThiefAndStealCard() Tests if thief is set and player gets
+	 * Test method: placeThiefAndStealCard() Tests if thief is set and player gets
 	 * right amount of resources removed. All two player have more than seven
 	 * resources.
 	 */
@@ -1306,7 +1320,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeThiefAndStealCard() Tests if thief is set, field is invalid.
+	 * Test method: placeThiefAndStealCard() Tests if thief is set, field is invalid.
 	 */
 	@Test
 	public void requirementPlaceThiefAndStealInvalidThiefPosition() {
@@ -1328,7 +1342,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeThiefAndStealCard() Tests if thief is set, field is invalid.
+	 * Test method: placeThiefAndStealCard() Tests if thief is set, field is invalid.
 	 * thief is set on water.
 	 */
 	@Test
@@ -1351,7 +1365,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeThiefAndStealCard() Tests if thief is set, and only own
+	 * Test method: placeThiefAndStealCard() Tests if thief is set, and only own
 	 * settlement is around field with thief.
 	 * 
 	 */
@@ -1372,7 +1386,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeThiefAndStealCard() Tests if thief is set, and resource is
+	 * Test method: placeThiefAndStealCard() Tests if thief is set, and resource is
 	 * stolen from other player.
 	 * 
 	 */
@@ -1398,7 +1412,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeThiefAndStealCard() Tests if thief is set, and resource is
+	 * Test method: placeThiefAndStealCard() Tests if thief is set, and resource is
 	 * stolen from other player. other player has no resources.
 	 */
 	@Test
@@ -1423,7 +1437,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeThiefAndStealCard() Tests if thief is set, and resource is
+	 * Test method: placeThiefAndStealCard() Tests if thief is set, and resource is
 	 * stolen from other player. other player has no more resources (they were
 	 * already stolen).
 	 */
@@ -1455,7 +1469,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeThiefAndStealCard() Tests if thief is set and player gets
+	 * Test method: placeThiefAndStealCard() Tests if thief is set and player gets
 	 * right amount of resources removed and added to bank. No Settlements are
 	 * around thief field.
 	 */
@@ -1475,7 +1489,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: placeThiefAndStealCard() Set Thief twice on same land. (invalid)
+	 * Test method: placeThiefAndStealCard() Set Thief twice on same land. (invalid)
 	 */
 	@Test
 	public void requirementPlaceThiefAndStealSetThiefOnSameField() {
@@ -1491,7 +1505,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: throwDice() Thief is set, player does not get resources, because
+	 * Test method: throwDice() Thief is set, player does not get resources, because
 	 * thief blocks field.
 	 */
 	@Test
@@ -1510,7 +1524,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
-	 * Testmethod: throwDice() Thief is set, player gets resources, because thief
+	 * Test method: throwDice() Thief is set, player gets resources, because thief
 	 * blocks other field.
 	 */
 	@Test

@@ -23,7 +23,7 @@ They then need to build a road from their settlement to an adjacent corner. The 
 the player wants to build his street needs to be free.
 ##### Second Settlement
 When the last player has build his first settlement, he can directly set his second settlement. It then goes the other way around, until every person
-has build two settlements and two roads. The building regulations stay the same as with the first settlement.
+has build two settlements and two roads. The players gain directly after they've build there second settlement resource cards for the adjacent resource fields of the second settlement. The building regulations stay the same as with the first settlement.
 
 #### Phase 2: Playing Phase
 After the foundation phase, each player can follow the float chart below for when it's his turn.

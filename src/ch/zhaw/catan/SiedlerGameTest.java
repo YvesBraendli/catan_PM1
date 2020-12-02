@@ -18,6 +18,34 @@ import org.junit.jupiter.api.Test;
 
 /**
  * This class test the public methods from SiedlerGame.java.
+ * Following Equivalence Partitionings are tested:
+ * 
+ * Negative
+ * 		1	Illegal placement position
+ *		3	Build with not enough resources
+ *		6	Trade where player does not have enough resources
+ *		7	Trade where bank does not have enough resources
+ *		8	No player has won game
+ *		11	Robbery no player has more than 7 resources
+ *		14	Thief placement at field with no settlements around
+ *		16	Resources are payed out
+ *		17	No Resources are payed out
+ *		19	player has no structures left to build
+ * 
+ * Positive
+ * 		2	Legal placement position
+ * 		4	Build with enough resources
+ * 		5	Trade where player and bank have enough resources
+ * 		9	One player has won game
+ * 		10	More than one player has won game
+ * 		12	Robbery one player has more than 7 resources
+ * 		13	Robbery more than one player has 7 resources
+ * 		15	Thief placement at field with one settlement around
+ * 		18	Player strucutres left to build
+ * 		20	initialize board
+ * 		21  player switch to next player
+ * 		22  player switch to previous player
+ * 
  * 
  * @author Moser Nadine, Meier Robin, Brändli Yves
  *
@@ -72,6 +100,7 @@ public class SiedlerGameTest {
 			Map.of(Resource.CLAY, 1));
 
 	/**
+	 * Equivalence Partitioning	21,22
 	 * Test method: switchToNextPlayer() and switchToPreviousPlayer()
 	 * already given tests.
 	 */
@@ -98,6 +127,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	20
 	 * tests if the board is correctly set up at the beginning of the game.
 	 * already given tests.
 	 */
@@ -125,6 +155,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	16
 	 * Test method: throwDice()
 	 * tests if logik for every dice throw is correct inkl. payout.
 	 * already given tests.
@@ -172,6 +203,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	2,17
 	 * Test method: placeInitialSettlement() Tests if initial Settlement has been
 	 * build and no resource were added.
 	 */
@@ -191,6 +223,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	1,17
 	 * Test method: placeInitialSettlement() Tests if initial Settlement is not
 	 * build, when position is invalid. (Position is in water)
 	 */
@@ -210,6 +243,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	1,17
 	 * Test method: placeInitialSettlement() Tests if initial Settlement is build,
 	 * when position is valid. no payout (Position next to water)
 	 */
@@ -229,6 +263,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	2,16
 	 * Test method: placeInitialSettlement() Tests if initial Settlement is build,
 	 * when position is valid and check if payout is correct.
 	 */
@@ -249,6 +284,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	2
 	 * Test method: placeInitialRoad() Tests if initial Road is build, when position
 	 * is valid and own house is adjacent
 	 */
@@ -266,6 +302,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	2
 	 * Test method: placeInitialRoad() Tests if initial Road is build, when position
 	 * is valid and own house is adjacent. Checks if it doesn't matter if start or
 	 * end point is first mentioned.
@@ -284,6 +321,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	1
 	 * Test method: placeInitialRoad() Tests if initial Road is build, when position
 	 * is valid but no house is adjacent
 	 */
@@ -300,6 +338,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	1
 	 * Test method: placeInitialRoad() Tests if initial Road is build, when position
 	 * is valid but only house from other players are adjacent.
 	 * 
@@ -319,9 +358,11 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	1
 	 * Test method: placeInitialRoad() Tests if initial Road is build, when position
 	 * is already used from other road.
 	 */
+	@Test
 	public void requirementPlaceInitialRoadPlaceAlreadyUsed() {
 		// Arrange
 		initializeSiedlerGame(5, 2);
@@ -337,9 +378,11 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	1
 	 * Test method: placeInitialRoad() Tests if initial Road is build, when position
 	 * is in the sea (not valid).
 	 */
+	@Test
 	public void requirementPlaceInitialRoadPositionInWater() {
 		// Arrange
 		initializeSiedlerGame(5, 2);
@@ -353,6 +396,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	1
 	 * Test method: placeInitialRoad() Tests if initial Road is build, when start and
 	 * end point aren't possible for a road.
 	 */
@@ -370,6 +414,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	2,4,16,18
 	 * Test method: buildSettlement() Test if Settlement can be build at a valid
 	 * position and player has Resources.
 	 */
@@ -394,6 +439,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	3
 	 * Test method: buildSettlement() Test if Settlement can be build at a valid
 	 * position but player has no Resources.
 	 */
@@ -413,6 +459,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	19
 	 * Test method: buildSettlement() Test if Settlement can be build at a valid
 	 * position but player has no settlements left to build.
 	 */
@@ -437,6 +484,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	1
 	 * Test method: buildSettlement() Test if Settlement can be build at a valid
 	 * position and player has Resources, but no adjacent road.
 	 */
@@ -458,6 +506,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	1
 	 * Test method: buildSettlement() Test if Settlement can be build at a invalid
 	 * position and player has Resources, but all adjacentRoads are from other
 	 * players.
@@ -485,6 +534,266 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	1
+	 * Test method: buildSettlement() Test if Settlement can be build at an invalid
+	 * position.
+	 */
+	@Test
+	public void requirementBuildSettlementInWater() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		// place Settlement with payout to get necessary resources to build new
+		// settlement
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 15), true);
+
+		// Act
+		boolean isSuccessful = model.buildSettlement(new Point(1, 10));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+
+	/**
+	 * Equivalence Partitioning	1
+	 * Test method: buildSettlement() Test if Settlement can be build when opponent
+	 * settlement is adjacent.
+	 */
+	@Test
+	public void requirementBuildSettlementOponentSettlementAdjacent() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+
+		model.placeInitialSettlement(new Point(8, 12), true);
+		model.switchToNextPlayer();
+
+		model.placeInitialSettlement(new Point(9, 9), false);
+		model.placeInitialRoad(new Point(9, 9), new Point(8, 10));
+
+		// place Settlement with payout to get necessary resources to build new
+		// settlement
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 15), true);
+
+		// Act
+		boolean isSuccessful = model.buildSettlement(new Point(8, 10));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+
+	/**
+	 * Equivalence Partitioning	1
+	 * Test method: buildSettlement() Test if Settlement can be build when own
+	 * settlement is adjacent.
+	 */
+	@Test
+	public void requirementBuildSettlementOwnSettlementAdjacent() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		model.placeInitialSettlement(new Point(8, 12), true);
+		model.placeInitialSettlement(new Point(9, 9), false);
+		model.placeInitialRoad(new Point(9, 9), new Point(8, 10));
+
+		// place Settlement with payout to get necessary resources to build new
+		// settlement
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 15), true);
+
+		// Act
+		boolean isSuccessful = model.buildSettlement(new Point(8, 10));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+
+	/**
+	 * Equivalence Partitioning	1
+	 * Test method: buildSettlement() Test if Settlement can be build when settlement
+	 * is already build at chosen position.
+	 */
+	@Test
+	public void requirementBuildSettlementPositionAllreadyUsed() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+
+		model.placeInitialSettlement(new Point(8, 10), true);
+		model.placeInitialRoad(new Point(8, 10), new Point(8, 12));
+		model.switchToNextPlayer();
+		// place Settlement with payout to get necessary resources to build new
+		// settlement
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 15), true);
+
+		// Act
+		boolean isSuccessful = model.buildSettlement(new Point(8, 12));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+
+	/**
+	 * Equivalence Partitioning	2,4,18
+	 * Test method: buildCity() Test if City can be build at a valid position and
+	 * player has Resources.
+	 */
+	@Test
+	public void requirementBuildCityValidPosition() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		model.placeInitialRoad(new Point(6, 6), new Point(6, 4));
+
+		// place Settlement with payout to get necessary resources to build new
+		// city
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 9), true);
+		model.throwDice(10);
+		model.throwDice(4);
+		model.throwDice(4);
+
+		// Act
+		boolean isSuccessful = model.buildCity(new Point(4, 12));
+
+		// Assert
+		assertTrue(isSuccessful);
+	}
+
+	/**
+	 * Equivalence Partitioning	1
+	 * Test method: buildCity() Test if City can be build at a invalid position
+	 * because city is already there.
+	 */
+	@Test
+	public void requirementBuildCityAlreadyBuildCityAtPosition() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		model.placeInitialRoad(new Point(6, 6), new Point(6, 4));
+
+		// place Settlement with payout to get necessary resources to build new
+		// city
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 9), true);
+		model.throwDice(10);
+		model.throwDice(4);
+		model.throwDice(4);
+		model.throwDice(10);
+		model.throwDice(4);
+		model.throwDice(4);
+		model.throwDice(10);
+		model.throwDice(4);
+		model.throwDice(4);
+		model.buildCity(new Point(4, 12));
+		// Act
+		boolean isSuccessful = model.buildCity(new Point(4, 12));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+
+	/**
+	 * Equivalence Partitioning	3
+	 * Test method: buildCity() Test if City can be build at a valid position and
+	 * player has not enough Resources.
+	 */
+	@Test
+	public void requirementBuildCityNotEnoughResources() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		model.placeInitialRoad(new Point(6, 6), new Point(6, 4));
+
+		// place Settlement with payout to get necessary resources to build new
+		// city
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 9), true);
+
+		// Act
+		boolean isSuccessful = model.buildCity(new Point(4, 12));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+
+	/**
+	 * Equivalence Partitioning	1
+	 * Test method: buildCity() Test if City can be build at invalid position. (Has
+	 * no Settlement at position)
+	 */
+	@Test
+	public void requirementBuildCityInvalidPosition() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+
+		// place Settlement with payout to get necessary resources to build new
+		// city
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 9), true);
+		model.throwDice(10);
+		model.throwDice(4);
+		model.throwDice(4);
+
+		// Act
+		boolean isSuccessful = model.buildCity(new Point(6, 6));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+
+	/**
+	 * Equivalence Partitioning	19
+	 * Test method: buildCity() Test if City can be build at valid position but user
+	 * has already build all cities possible.
+	 */
+	@Test
+	public void requirementBuildCityNoCitiesLeftToBuild() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		model.placeInitialSettlement(new Point(8, 12), false);
+		model.placeInitialSettlement(new Point(7, 9), false);
+		model.placeInitialSettlement(new Point(9, 15), false);
+
+		// place Settlement with payout to get necessary resources to build new
+		// city
+		model.placeInitialSettlement(new Point(4, 12), true);
+		model.placeInitialSettlement(new Point(5, 9), true);
+		model.throwDice(10);
+		model.throwDice(4);
+		model.throwDice(4);
+
+		model.buildCity(new Point(8, 12));
+		model.buildCity(new Point(7, 9));
+		model.buildCity(new Point(9, 15));
+		model.buildCity(new Point(4, 12));
+
+		// Act
+		boolean isSuccessful = model.buildCity(new Point(5, 9));
+
+		// Assert
+		assertFalse(isSuccessful);
+	}
+
+	/**
+	 * Equivalence Partitioning	2,4,18
+	 * Test method: buildRoad() Test if Road can be build when position is valid and
+	 * player has the resources.
+	 */
+	@Test
+	public void requirementBuildRoadValidPositionAdjacentSettlement() {
+		// Arrange
+		initializeSiedlerGame(4, 2);
+		model.placeInitialSettlement(new Point(8, 10), true);
+
+		// place Settlement with payout to get necessary resources to build new Road
+		model.placeInitialSettlement(new Point(4, 12), true);
+
+		// Act
+		boolean isSuccessful = model.buildRoad(new Point(8, 10), new Point(8, 12));
+
+		// Assert
+		assertTrue(isSuccessful);
+	}
+
+	/**
+	 * Equivalence Partitioning	19
 	 * Test method: buildSettlement() Test if Settlement can be build at a valid
 	 * position but player has no Roads left to build.
 	 */
@@ -521,256 +830,9 @@ public class SiedlerGameTest {
 		assertFalse(isSuccessful);
 	}
 
+	
 	/**
-	 * Test method: buildSettlement() Test if Settlement can be build at an invalid
-	 * position.
-	 */
-	@Test
-	public void requirementBuildSettlementInWater() {
-		// Arrange
-		initializeSiedlerGame(4, 2);
-		// place Settlement with payout to get necessary resources to build new
-		// settlement
-		model.placeInitialSettlement(new Point(4, 12), true);
-		model.placeInitialSettlement(new Point(5, 15), true);
-
-		// Act
-		boolean isSuccessful = model.buildSettlement(new Point(1, 10));
-
-		// Assert
-		assertFalse(isSuccessful);
-	}
-
-	/**
-	 * Test method: buildSettlement() Test if Settlement can be build when opponent
-	 * settlement is adjacent.
-	 */
-	@Test
-	public void requirementBuildSettlementOponentSettlementAdjacent() {
-		// Arrange
-		initializeSiedlerGame(4, 2);
-
-		model.placeInitialSettlement(new Point(8, 12), true);
-		model.switchToNextPlayer();
-
-		model.placeInitialSettlement(new Point(9, 9), false);
-		model.placeInitialRoad(new Point(9, 9), new Point(8, 10));
-
-		// place Settlement with payout to get necessary resources to build new
-		// settlement
-		model.placeInitialSettlement(new Point(4, 12), true);
-		model.placeInitialSettlement(new Point(5, 15), true);
-
-		// Act
-		boolean isSuccessful = model.buildSettlement(new Point(8, 10));
-
-		// Assert
-		assertFalse(isSuccessful);
-	}
-
-	/**
-	 * Test method: buildSettlement() Test if Settlement can be build when own
-	 * settlement is adjacent.
-	 */
-	@Test
-	public void requirementBuildSettlementOwnSettlementAdjacent() {
-		// Arrange
-		initializeSiedlerGame(4, 2);
-		model.placeInitialSettlement(new Point(8, 12), true);
-		model.placeInitialSettlement(new Point(9, 9), false);
-		model.placeInitialRoad(new Point(9, 9), new Point(8, 10));
-
-		// place Settlement with payout to get necessary resources to build new
-		// settlement
-		model.placeInitialSettlement(new Point(4, 12), true);
-		model.placeInitialSettlement(new Point(5, 15), true);
-
-		// Act
-		boolean isSuccessful = model.buildSettlement(new Point(8, 10));
-
-		// Assert
-		assertFalse(isSuccessful);
-	}
-
-	/**
-	 * Test method: buildSettlement() Test if Settlement can be build when settlement
-	 * is already build at chosen position.
-	 */
-	@Test
-	public void requirementBuildSettlementPositionAllreadyUsed() {
-		// Arrange
-		initializeSiedlerGame(4, 2);
-
-		model.placeInitialSettlement(new Point(8, 10), true);
-		model.placeInitialRoad(new Point(8, 10), new Point(8, 12));
-		model.switchToNextPlayer();
-		// place Settlement with payout to get necessary resources to build new
-		// settlement
-		model.placeInitialSettlement(new Point(4, 12), true);
-		model.placeInitialSettlement(new Point(5, 15), true);
-
-		// Act
-		boolean isSuccessful = model.buildSettlement(new Point(8, 12));
-
-		// Assert
-		assertFalse(isSuccessful);
-	}
-
-	/**
-	 * Test method: buildCity() Test if City can be build at a valid position and
-	 * player has Resources.
-	 */
-	@Test
-	public void requirementBuildCityValidPosition() {
-		// Arrange
-		initializeSiedlerGame(4, 2);
-		model.placeInitialRoad(new Point(6, 6), new Point(6, 4));
-
-		// place Settlement with payout to get necessary resources to build new
-		// city
-		model.placeInitialSettlement(new Point(4, 12), true);
-		model.placeInitialSettlement(new Point(5, 9), true);
-		model.throwDice(10);
-		model.throwDice(4);
-		model.throwDice(4);
-
-		// Act
-		boolean isSuccessful = model.buildCity(new Point(4, 12));
-
-		// Assert
-		assertTrue(isSuccessful);
-	}
-
-	/**
-	 * Test method: buildCity() Test if City can be build at a invalid position
-	 * because city is already there.
-	 */
-	@Test
-	public void requirementBuildCityAlreadyBuildCityAtPosition() {
-		// Arrange
-		initializeSiedlerGame(4, 2);
-		model.placeInitialRoad(new Point(6, 6), new Point(6, 4));
-
-		// place Settlement with payout to get necessary resources to build new
-		// city
-		model.placeInitialSettlement(new Point(4, 12), true);
-		model.placeInitialSettlement(new Point(5, 9), true);
-		model.throwDice(10);
-		model.throwDice(4);
-		model.throwDice(4);
-		model.throwDice(10);
-		model.throwDice(4);
-		model.throwDice(4);
-		model.throwDice(10);
-		model.throwDice(4);
-		model.throwDice(4);
-		model.buildCity(new Point(4, 12));
-		// Act
-		boolean isSuccessful = model.buildCity(new Point(4, 12));
-
-		// Assert
-		assertFalse(isSuccessful);
-	}
-
-	/**
-	 * Test method: buildCity() Test if City can be build at a valid position and
-	 * player has not enough Resources.
-	 */
-	@Test
-	public void requirementBuildCityNotEnoughResources() {
-		// Arrange
-		initializeSiedlerGame(4, 2);
-		model.placeInitialRoad(new Point(6, 6), new Point(6, 4));
-
-		// place Settlement with payout to get necessary resources to build new
-		// city
-		model.placeInitialSettlement(new Point(4, 12), true);
-		model.placeInitialSettlement(new Point(5, 9), true);
-
-		// Act
-		boolean isSuccessful = model.buildCity(new Point(4, 12));
-
-		// Assert
-		assertFalse(isSuccessful);
-	}
-
-	/**
-	 * Test method: buildCity() Test if City can be build at invalid position. (Has
-	 * no Settlement at position)
-	 */
-	@Test
-	public void requirementBuildCityInvalidPosition() {
-		// Arrange
-		initializeSiedlerGame(4, 2);
-
-		// place Settlement with payout to get necessary resources to build new
-		// city
-		model.placeInitialSettlement(new Point(4, 12), true);
-		model.placeInitialSettlement(new Point(5, 9), true);
-		model.throwDice(10);
-		model.throwDice(4);
-		model.throwDice(4);
-
-		// Act
-		boolean isSuccessful = model.buildCity(new Point(6, 6));
-
-		// Assert
-		assertFalse(isSuccessful);
-	}
-
-	/**
-	 * Test method: buildCity() Test if City can be build at valid position but user
-	 * has already build all cities possible.
-	 */
-	@Test
-	public void requirementBuildCityNoCitiesLeftToBuild() {
-		// Arrange
-		initializeSiedlerGame(4, 2);
-		model.placeInitialSettlement(new Point(8, 12), false);
-		model.placeInitialSettlement(new Point(7, 9), false);
-		model.placeInitialSettlement(new Point(9, 15), false);
-
-		// place Settlement with payout to get necessary resources to build new
-		// city
-		model.placeInitialSettlement(new Point(4, 12), true);
-		model.placeInitialSettlement(new Point(5, 9), true);
-		model.throwDice(10);
-		model.throwDice(4);
-		model.throwDice(4);
-
-		model.buildCity(new Point(8, 12));
-		model.buildCity(new Point(7, 9));
-		model.buildCity(new Point(9, 15));
-		model.buildCity(new Point(4, 12));
-
-		// Act
-		boolean isSuccessful = model.buildCity(new Point(5, 9));
-
-		// Assert
-		assertFalse(isSuccessful);
-	}
-
-	/**
-	 * Test method: buildRoad() Test if Road can be build when position is valid and
-	 * player has the resources.
-	 */
-	@Test
-	public void requirementBuildRoadValidPositionAdjacentSettlement() {
-		// Arrange
-		initializeSiedlerGame(4, 2);
-		model.placeInitialSettlement(new Point(8, 10), true);
-
-		// place Settlement with payout to get necessary resources to build new Road
-		model.placeInitialSettlement(new Point(4, 12), true);
-
-		// Act
-		boolean isSuccessful = model.buildRoad(new Point(8, 10), new Point(8, 12));
-
-		// Assert
-		assertTrue(isSuccessful);
-	}
-
-	/**
+	 * Equivalence Partitioning	1
 	 * Test method: buildRoad() Test if Road can be build when position is valid and
 	 * player has the resources.
 	 */
@@ -792,6 +854,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	1
 	 * Test method: buildRoad() Test if Road can be build when position is invalid,
 	 * because only adjacent road is from other player. and no own settlement is
 	 * adjacent.
@@ -815,6 +878,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	1
 	 * Test method: buildRoad() Test if Road can be build when position is valid and
 	 * player has the resources but no adjacent settlement or road.
 	 */
@@ -834,6 +898,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	3
 	 * Test method: buildRoad() Test if Road can be build when position is valid, has
 	 * adjacent road but player has not the resources.
 	 */
@@ -852,6 +917,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	3
 	 * Test method: buildRoad() Test if Road can be build when position is valid, has
 	 * adjacent settlement but player has not the resources.
 	 */
@@ -869,6 +935,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	1
 	 * Test method: buildRoad() Test if Road can be build in water, has adjacent
 	 * settlement.
 	 */
@@ -889,6 +956,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	1
 	 * Test method: buildRoad() Test if Road can be build in water, has adjacent
 	 * road.
 	 */
@@ -910,6 +978,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	1
 	 * Test method: buildRoad() Test if Road can be build, another road is already
 	 * build at position.
 	 */
@@ -931,6 +1000,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	5
 	 * Test method: tradeWithBankFourToOne() Tests if trading with bank is well
 	 * executed.
 	 */
@@ -972,6 +1042,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	5
 	 * Test method: tradeWithBankFourToOne() Tests if trading with bank is well
 	 * executed. Trades 4 resources for one resource of same type.
 	 */
@@ -1014,6 +1085,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	6
 	 * Test method: tradeWithBankFourToOne() Tests if trading with bank is well
 	 * executed. Bank has no resource from this type left.
 	 */
@@ -1054,6 +1126,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	7
 	 * Test method: tradeWithBankFourToOne() Tests if trading with bank is well
 	 * executed. Player has not enough resource from this type.
 	 */
@@ -1090,6 +1163,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	8
 	 * Test method: GetWinner() Tests if there is a winner. Expected: No Faction
 	 * returned, because there is no winner yet.
 	 */
@@ -1109,6 +1183,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	9
 	 * Test method: GetWinner() Tests if there is a winner. player has settlements
 	 * and a city
 	 */
@@ -1134,6 +1209,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	9
 	 * Test method: GetWinner() Tests if there is a winner. Expected: Winner Faction
 	 * returned and is equals to faction from current Player.
 	 */
@@ -1157,6 +1233,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	10
 	 * Test method: GetWinner() Tests if there is a winner. Case: Multiple Winner,
 	 * faction from first Player in row is returned. Expected: Winner Faction from
 	 * first Player returned and is not equals to faction from current Player 
@@ -1190,6 +1267,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	11
 	 * Test method: placeThiefAndStealCard() Tests if thief is set and player gets
 	 * right amount of resources removed and added to bank, but no player has enough
 	 * resources.
@@ -1212,6 +1290,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	12
 	 * Test method: placeThiefAndStealCard() Tests if thief is set and player gets
 	 * right amount of resources removed and added to bank. (odd amount of
 	 * resources)
@@ -1238,6 +1317,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	12
 	 * Test method: placeThiefAndStealCard() Tests if thief is set and player gets
 	 * right amount of resources removed and added to bank. CurrentPlayer has
 	 * exactly 8 resources.
@@ -1264,6 +1344,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	11
 	 * Test method: placeThiefAndStealCard() Tests if thief is set and player gets
 	 * right amount of resources removed and added to bank. CurrentPlayer has
 	 * exactly 7 resources. No Resources are taken away.
@@ -1290,6 +1371,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	13
 	 * Test method: placeThiefAndStealCard() Tests if thief is set and player gets
 	 * right amount of resources removed. All two player have more than seven
 	 * resources.
@@ -1320,6 +1402,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	1
 	 * Test method: placeThiefAndStealCard() Tests if thief is set, field is invalid.
 	 */
 	@Test
@@ -1342,6 +1425,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	1
 	 * Test method: placeThiefAndStealCard() Tests if thief is set, field is invalid.
 	 * thief is set on water.
 	 */
@@ -1365,6 +1449,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	15
 	 * Test method: placeThiefAndStealCard() Tests if thief is set, and only own
 	 * settlement is around field with thief.
 	 * 
@@ -1386,6 +1471,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	15
 	 * Test method: placeThiefAndStealCard() Tests if thief is set, and resource is
 	 * stolen from other player.
 	 * 
@@ -1412,6 +1498,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	15
 	 * Test method: placeThiefAndStealCard() Tests if thief is set, and resource is
 	 * stolen from other player. other player has no resources.
 	 */
@@ -1437,6 +1524,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	15
 	 * Test method: placeThiefAndStealCard() Tests if thief is set, and resource is
 	 * stolen from other player. other player has no more resources (they were
 	 * already stolen).
@@ -1469,6 +1557,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	14
 	 * Test method: placeThiefAndStealCard() Tests if thief is set and player gets
 	 * right amount of resources removed and added to bank. No Settlements are
 	 * around thief field.
@@ -1489,6 +1578,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	1
 	 * Test method: placeThiefAndStealCard() Set Thief twice on same land. (invalid)
 	 */
 	@Test
@@ -1505,6 +1595,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	16
 	 * Test method: throwDice() Thief is set, player does not get resources, because
 	 * thief blocks field.
 	 */
@@ -1524,6 +1615,7 @@ public class SiedlerGameTest {
 	}
 
 	/**
+	 * Equivalence Partitioning	17
 	 * Test method: throwDice() Thief is set, player gets resources, because thief
 	 * blocks other field.
 	 */

@@ -54,20 +54,12 @@ Negative
 
 Positive
 2. Legal placement position
-
 4. Build with enough resources
-
 7. Trade where player and bank have enough resources
-
 11. One player has won game
-
 12. More than one player has won game
-
 14. Robbery one player has more than 7 resources
-
 15. Robbery more than one player has 7 resources
-
 18. Thief placement at field with one settlement around
-
 22. Player structures left to build
 

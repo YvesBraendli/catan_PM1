@@ -43,7 +43,7 @@ input is invalid and what you have to correct, to create a valid command.
 
 ![Playing Phases](doc/GameDiagramm.png)
 
-If you want to have additional informations, you can check the original rule book by clicking on this link: [Original rule book](file:///C:/Users/yvesb/Downloads/4002051693602_catan_-_das_spiel_0%20(5).pdf). Please mention, that the rules for this game have been slightly changed. The changes are:
+If you want to have additional informations, you can check the original rule book by clicking on this link: [Original rule book](doc/originalRulebook.pdf). Please mention, that the rules for this game have been slightly changed. The changes are:
 * You can not trade with other players.
 * You can't choose, from which faction you steal cards, if you can place the thief.
 * If a seven is rolled and you have to many cards, the resources to throw away are selected randomly.

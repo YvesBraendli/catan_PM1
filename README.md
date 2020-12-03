@@ -2,7 +2,7 @@
 Project catan from group fischbein is a multiplayer game. It is based on the original *Siedler von Catan* board game.
 It implements a game with 2-4 players where the players play against each other. 
 They have the original board with 19 fields to build different structures.
-Players can build roads, settlements and citie, where settlements and cities donate points to the players. The first player who reaches 7 points wins the game.
+Players can build roads, settlements and cities, where settlements and cities donate points to the players. The first player who reaches 7 points wins the game.
 
 ## Siedler Game
 ### Basic Informations
@@ -17,7 +17,7 @@ Players can build roads, settlements and citie, where settlements and cities don
 * CITIES: two Grain and three Stone.
 
 ### Start
-To start a new game, aou have to start the main-method in the class gameController. 
+To start a new game, you have to start the main-method in the class gameController. 
 #### Initialize
 If you do so, a new window pops out and you are asked, how many players want to play. 
 Please enter there a number between 2 and 4. If you have entered the right number, the game starts

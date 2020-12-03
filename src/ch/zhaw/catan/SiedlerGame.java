@@ -240,7 +240,7 @@ public class SiedlerGame {
 						Map<Resource, Integer> payoutResources = new HashMap<>();
 						int amountOfCurrentResource = getAmountOfResourcesForPayout(faction.getValue());
 						payoutResources.put(currentResource, amountOfCurrentResource);
-						boolean isPayoutSuccessful = bank.payoutToDiceThrows(payoutResources);
+						boolean isPayoutSuccessful = bank.removeCardsFromBankStock(payoutResources);
 						if (isPayoutSuccessful) {
 							player.setAmountOfResources(currentResource, amountOfCurrentResource, true);
 							for (int i = 0; i < amountOfCurrentResource; i++) {

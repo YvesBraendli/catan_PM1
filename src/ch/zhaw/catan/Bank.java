@@ -52,7 +52,7 @@ public class Bank {
 	 * 							paid out to the player.
 	 * @return A boolean which tells true, if the subtraction was successful.
 	 */
-	public boolean payoutToDiceThrows (Map<Resource, Integer> resourcesWanted) {
+	public boolean removeCardsFromBankStock (Map<Resource, Integer> resourcesWanted) {
 		boolean successful = false;
 		if ((resourcesWanted.containsKey(Config.Resource.CLAY) && 
 				amountOfResources.get(Config.Resource.CLAY) >= resourcesWanted.get(Config.Resource.CLAY))
@@ -67,15 +67,15 @@ public class Bank {
 			successful = true;
 			if (resourcesWanted.containsKey(Config.Resource.CLAY)) {
 				amountOfResources.put(Config.Resource.CLAY, amountOfResources.get(Config.Resource.CLAY) - resourcesWanted.get(Config.Resource.CLAY));
-			} else if (resourcesWanted.containsKey(Config.Resource.GRAIN)) {
+			} if (resourcesWanted.containsKey(Config.Resource.GRAIN)) {
 				amountOfResources.put(Config.Resource.GRAIN, amountOfResources.get(Config.Resource.GRAIN) - resourcesWanted.get(Config.Resource.GRAIN));
-			} else if (resourcesWanted.containsKey(Config.Resource.CLAY)) {
+			} if (resourcesWanted.containsKey(Config.Resource.CLAY)) {
 				amountOfResources.put(Config.Resource.CLAY, amountOfResources.get(Config.Resource.CLAY) - resourcesWanted.get(Config.Resource.CLAY));
-			} else if (resourcesWanted.containsKey(Config.Resource.STONE)) {
+			} if (resourcesWanted.containsKey(Config.Resource.STONE)) {
 				amountOfResources.put(Config.Resource.STONE, amountOfResources.get(Config.Resource.STONE) - resourcesWanted.get(Config.Resource.STONE));
-			} else if (resourcesWanted.containsKey(Config.Resource.WOOD)) {
+			} if (resourcesWanted.containsKey(Config.Resource.WOOD)) {
 				amountOfResources.put(Config.Resource.WOOD, amountOfResources.get(Config.Resource.WOOD) - resourcesWanted.get(Config.Resource.WOOD));
-			} else if (resourcesWanted.containsKey(Config.Resource.WOOL)) {
+			} if (resourcesWanted.containsKey(Config.Resource.WOOL)) {
 				amountOfResources.put(Config.Resource.WOOL, amountOfResources.get(Config.Resource.WOOL) - resourcesWanted.get(Config.Resource.WOOL));
 			}
 			

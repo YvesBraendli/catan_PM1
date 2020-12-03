@@ -29,7 +29,6 @@ import java.util.Set;
  *
  */
 public class SiedlerGame {
-	private static final int MIN_AMOUNT_CARDS = 8;
 	private static final int MIN_AMOUNT_FOR_OFFER = 4;
 	private Player currentPlayer;
 	private ArrayList<Player> players;
@@ -434,7 +433,7 @@ public class SiedlerGame {
 		HashMap<Resource, Long> resourcesForBank = new HashMap<Config.Resource, Long>();
 		for (Player player : players) {
 			int amountOfResources = getAmountOfResources(player);
-			if (amountOfResources < MIN_AMOUNT_CARDS) continue;
+			if (amountOfResources <= Config.MAX_CARDS_IN_HAND_NO_DROP) continue;
 			int amountLeft = amountOfResources / 2;
 			int amountToRemove = amountOfResources - amountLeft;
 

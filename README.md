@@ -16,6 +16,9 @@ Players can build roads, settlements and cities, where settlements and cities do
 * SETTLEMENTS: one Wood, one Clay, one Grain and one Wool.
 * CITIES: two Grain and three Stone.
 
+Here you can see a view of the coordinates with the valid x-, and y-values for the siedler game.
+![Coordinate-Cheat-Sheet](doc/Coordinates-Cheat-Sheet.svg)
+
 ### Start
 To start a new game, you have to start the main-method in the class gameController. 
 #### Initialize

@@ -142,7 +142,7 @@ public class Output {
 	public void printPlayerResources(int amountOfWood, int amountOfStone,
 			int amountOfWool, int amountOfClay, int amountOfGrain) {
 		textTerminal.println("Resources Owned:\n" + amountOfGrain + " Grain, " + amountOfWool + " Wool, " + amountOfWood
-				+ " Wood " + amountOfStone + " Stone, " + amountOfClay + " Clay");
+				+ " Wood, " + amountOfStone + " Stone, " + amountOfClay + " Clay");
 	}
 
 	/**

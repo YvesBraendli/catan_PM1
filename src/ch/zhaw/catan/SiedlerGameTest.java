@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Test;
  * 		12	Robbery one player has more than 7 resources
  * 		13	Robbery more than one player has 7 resources
  * 		15	Thief placement at field with one settlement around
- * 		18	Player strucutres left to build
+ * 		18	Player structures left to build
  * 		20	initialize board
  * 		21  player switch to next player
  * 		22  player switch to previous player

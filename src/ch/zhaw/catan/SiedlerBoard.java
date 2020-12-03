@@ -72,7 +72,7 @@ private Point thiefPosition;
 			for (Faction faction: factions) {
 				ArrayList<Settlement> buildingsForFaction = new ArrayList<>();
 				for (Settlement building: buildingsAroundField) {
-					if (building.toString().equals(faction.toString())) {
+					if (building.toString().toLowerCase().equals(faction.toString())) {
 						buildingsForFaction.add(building);
 					}
 				}
@@ -254,3 +254,4 @@ private Point thiefPosition;
 		}
 	}
 }
+

@@ -17,6 +17,9 @@ Players can build roads, settlements and cities, where settlements and cities do
 * CITIES: two Grain and three Stone.
 
 Here you can see a view of the coordinates with the valid x-, and y-values for the siedler game.
+It also shows you, which resource each field gives to you and which numbers are associated with the different fields.
+The fields with the value ~~ are water fields and the field in the middle with the value of -- is the dessert field.
+This fields will not give any resources to buildings around them. Water fields are not a valid construction side.
 ![Coordinate-Cheat-Sheet](doc/Coordinates-Cheat-Sheet.svg)
 
 ### Start

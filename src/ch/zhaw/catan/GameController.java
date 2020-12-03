@@ -36,6 +36,7 @@ public class GameController {
 	private static final int DICENUMBER_WHICH_TRIGGERS_THIEF = 7;
 	private int numberOfPlayers;
 	private boolean isRunning;
+	private boolean isUsersTurn;
 	private boolean isSettlementBuilt;
 	private boolean isRoadBuilt;
 	private Point position;
@@ -85,7 +86,7 @@ public class GameController {
 		// Phase 3
 		while (isRunning) {
 
-			boolean isUsersTurn = true;
+			isUsersTurn = true;
 			int rolledNumber = rollDice();
 			output.printPreTurnInfo(siedlerGame.throwDice(rolledNumber), rolledNumber);
 			if(rolledNumber == DICENUMBER_WHICH_TRIGGERS_THIEF ) {
@@ -202,6 +203,8 @@ public class GameController {
 		}
 		else {
 			isRunning = isStillRunning();
+			isUsersTurn = isRunning;
+			
 		}
 	}
 

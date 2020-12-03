@@ -5,6 +5,17 @@ They have the original board with 19 fields to build different structures.
 Players can build roads, settlements and citie, where settlements and cities donate points to the players. The first player who reaches 7 points wins the game.
 
 ## Siedler Game
+### Basic Informations
+**How structures are illustrated on the game board**
+* ROADS: With the lowercase expression of the player's faction. *Ex.: rr*
+* SETTLEMENTS: With the lowercase expression of the player's faction. *Ex.: rr*
+* CITIES: With the uppercase expression of the player's faction. *Ex.: RR*
+
+**How much costs the different structures**
+* ROADS: one Wood and one Clay.
+* SETTLEMENTS: one Wood, one Clay, one Grain and one Wool.
+* CITIES: two Grain and three Stone.
+
 ### Start
 To start a new game, aou have to start the main-method in the class gameController. 
 #### Initialize
@@ -31,6 +42,11 @@ The window, where you can enter your commands will lead you through the game. It
 input is invalid and what you have to correct, to create a valid command.
 
 ![Playing Phases](doc/GameDiagramm.png)
+
+If you want to have additional informations, you can check the original rule book by clicking on this link: [Original rule book](doc/originalRulebook.pdf). Please mention, that the rules for this game have been slightly changed. The changes are:
+* You can not trade with other players.
+* You can't choose, from which faction you steal cards, if you can place the thief.
+* If a seven is rolled and you have to many cards, the resources to throw away are selected randomly.
 
 ## Class Diagramm
 Below, you can find the class diagramm for the siedler project. It shows you all our classes and their datafields and methods.
